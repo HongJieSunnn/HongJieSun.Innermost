@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6444b4bc-ee09-4efd-9531-6ddba8422eb6</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+	
+	<ItemGroup>
+		<Protobuf Include="..\..\Innermost.MusicHub\Innermost.MusicHub.API\Grpc\Protos\musichub.proto" GrpcServices="Client" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="6.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.3" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.4" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.42.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.42.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.44.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Innermost.IdempotentCommand">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application\DomainEventHandlers\LifeRecordUpdated\" />
+    <Folder Include="Application\IntegrationEventHandlers\" />
+    <Folder Include="Migrations\IntegrationEventRecord\" />
+    <Folder Include="Migrations\LifeRecord\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventRecord\IntegrationEventRecord.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\TypeExtensions\TypeExtensions.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\WebHost\WebHost.Extensions\WebHost.CustomExtensions.csproj" />
+    <ProjectReference Include="..\Innermost.LogLife.Infrastructure\Innermost.LogLife.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
