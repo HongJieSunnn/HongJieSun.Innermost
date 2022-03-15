@@ -1,4 +1,6 @@
-﻿namespace Innermost.LogLife.API
+﻿using TagS.Microservices.Client.Microsoft.DependencyInjection;
+
+namespace Innermost.LogLife.API
 {
     public class Startup
     {
@@ -27,7 +29,8 @@
                 .AddGrpcServices(Configuration)
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
-                .AddCustomConfig(Configuration);
+                .AddCustomConfig(Configuration)
+                .AddTagSClient();
 
 
             services.AddSwaggerGen(c =>
@@ -227,25 +230,7 @@
 
                 //options.AddMaps(new Type[] { typeof(MusicDetailDTO), typeof(MusicDetail) ,typeof(CreateOneRecordCommand),typeof(UpdateOneRecordCommand),typeof(LifeRecord) });
 
-                options.CreateMap<MusicDetailDTO, MusicDetail>();
-
-                options.CreateMap<CreateOneRecordCommand, LifeRecord>()
-                        .IgnoreAllPropertiesWithAnInaccessibleSetter()
-                        .ConstructUsing((src, resolution) => new LifeRecord(
-                                identityService.GetUserId(), src.Title, src.Text, src.TextTypeId,
-                                src.LocationId, src.MusicRecordId, src.IsShared, src.Path, DateTime.Now,
-                                src.EmotionTags?.Select(estr => EmotionTag.GetFromName(estr))
-                                )
-                        );
-
-                options.CreateMap<UpdateOneRecordCommand, LifeRecord>()
-                        .IgnoreAllPropertiesWithAnInaccessibleSetter()
-                        .ConstructUsing((src, resolution) => new LifeRecord(
-                            identityService.GetUserId(), src.Title, src.Text, src.TextTypeId,
-                            src.LocationId, src.MusicRecordId, src.IsShared, src.Path, DateTime.Now,
-                            src.EmotionTags?.Select(estr => EmotionTag.GetFromName(estr))
-                            )
-                        );
+                
             }, Assembly.GetExecutingAssembly());
 
             return services;

@@ -15,7 +15,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\Innermost.LogLife\Innermost.LogLife.API\Innermost.LogLife.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Innermost.IdempotentCommand">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.MongoDBContext">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Server">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server\bin\Debug\net6.0\TagS.Microservices.Server.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="TagS.Microservices.Server.Microsoft.AspNetCore.Http">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.AspNetCore.Http\bin\Debug\net6.0\TagS.Microservices.Server.Microsoft.AspNetCore.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Server.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Server.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

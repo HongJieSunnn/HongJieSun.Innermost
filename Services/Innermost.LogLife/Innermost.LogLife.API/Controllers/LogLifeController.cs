@@ -96,5 +96,48 @@
 
             return Ok();
         }
+
+        [HttpGet]
+        [Route("records")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetAllRecordsAsync()
+        { 
+            var records =await _lifeRecordQueries.GetAllRecordsAsync()??new List<LifeRecordDTO>();
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("records/{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByIdAsync(int id)
+        {
+            var records = await _lifeRecordQueries.FindRecordByRecordId(id);
+            if(records is null)
+                return BadRequest($"The record with id:{id} is not existed.");
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("records/{tagId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string tagId)
+        {
+            var records = await _lifeRecordQueries.FindRecordsByTagIdAsync(tagId)??new List<LifeRecordDTO>();
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("records")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string year,string month,string day,string findType)
+        {
+            var dateTimeToFind=new DateTimeToFind(year,month,day,findType);
+            Validator.ValidateObject(dateTimeToFind,new ValidationContext(dateTimeToFind));
+            var records = await _lifeRecordQueries.FindRecordsByCreateTimeAsync(dateTimeToFind) ?? new List<LifeRecordDTO>();
+            return Ok(records);
+        }
     }
 }

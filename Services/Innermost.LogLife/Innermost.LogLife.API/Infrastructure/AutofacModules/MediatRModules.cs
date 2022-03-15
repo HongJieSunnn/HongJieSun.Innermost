@@ -1,4 +1,6 @@
-﻿namespace Innemost.LogLife.API.Infrastructure.AutofacModules
+﻿using Innermost.LogLife.API.Application.DomainEventHandlers.LifeRecordSetShared;
+
+namespace Innemost.LogLife.API.Infrastructure.AutofacModules
 {
     /// <summary>
     /// This Autofac module is for MediatR to use IOC by Autofac.
@@ -17,10 +19,10 @@
                 return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
             });
 
-            builder.RegisterAssemblyTypes(typeof(CreateOneRecordCommand).GetTypeInfo().Assembly)
+            builder.RegisterAssemblyTypes(typeof(CreateRecordCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            //builder.RegisterAssemblyTypes(typeof()) //TODO INotificationHandler
+            builder.RegisterAssemblyTypes(typeof(LifeRecordSetSharedDomainEventHandler).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(INotificationHandler<>));
 
             builder.RegisterGeneric(typeof(TransactionBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         }

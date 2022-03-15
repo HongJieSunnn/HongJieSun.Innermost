@@ -5,6 +5,7 @@
         public string? Title { get; set; }
         public string Text { get; set; }
         public string? UserId { get; set; }
+        public bool IsShared { get; set; }
 
         public string? LocationUId { get; set; }
         public string? LocationName { get; set; }
@@ -26,7 +27,7 @@
 
         public List<(string TagId, string TagName)> TagSummaries { get; set; }
 
-        public CreateRecordCommand(string userId, string? title, string text,
+        public CreateRecordCommand(string userId, string? title, string text,bool isShared,
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
@@ -36,6 +37,7 @@
             UserId=userId;
             Title=title;
             Text=text;
+            IsShared=isShared;
             LocationUId=locationUId;
             LocationName=locationName;
             Province=province;

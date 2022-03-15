@@ -22,8 +22,8 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         /// <summary>
         /// Mid is the music id get by music api.
         /// </summary>
-        private string? _mId;
-        public string? MId => _mId;
+        private string? _musicRecordMId;
+        public string? MusicRecordMId => _musicRecordMId;
         public MusicRecord? MusicRecord { get; set; }
 
         public List<ImagePath>? ImagePaths { get; set; }
@@ -44,7 +44,7 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             string text,
             string? locationUId,
             string? mId,
-            DateTime publishTime,
+            DateTime createTime,
             DateTime? updateTime,
             DateTime? deleteTime,
             bool isShared,
@@ -56,8 +56,8 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             Title=title;
             Text=text;
             _locationUId=locationUId;
-            _mId=mId;
-            CreateTime=publishTime;
+            _musicRecordMId=mId;
+            CreateTime= createTime;
             UpdateTime = updateTime;
             DeleteTime = deleteTime;
             ImagePaths=imagePaths;
@@ -84,7 +84,7 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
                     MusicRecord?.Id,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
                     ImagePaths?.Select(i=>i.Path).ToList(),
                     CreateTime,UpdateTime,DeleteTime,
-                    Tags.Select(t=>(t.TagId,t.Name)).ToList()
+                    Tags.Select(t=>(t.TagId,t.TagName)).ToList()
                     ));
             }
         }

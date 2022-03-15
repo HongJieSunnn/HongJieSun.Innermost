@@ -33,14 +33,14 @@
                 .IsRequired();
 
             builder
-                .Property("_locationId")
-                .HasColumnName("LocationId")
+                .Property("_locationUId")
+                .HasColumnName("LocationUId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .IsRequired();
 
             builder
-                .Property("_mId")
-                .HasColumnName("MusicId")
+                .Property("_musicRecordMId")
+                .HasColumnName("MusicRecordMId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .IsRequired();
 
@@ -69,14 +69,14 @@
             builder
                 .HasOne(l => l.Location)
                 .WithMany()
-                .HasForeignKey("_locationId")
+                .HasForeignKey("_locationUId")
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
             builder
                 .HasOne(l=>l.MusicRecord)
                 .WithMany()
-                .HasForeignKey("_musicRecordId")
+                .HasForeignKey("_musicRecordMId")
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
         }
