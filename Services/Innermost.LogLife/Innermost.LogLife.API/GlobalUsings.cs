@@ -30,7 +30,6 @@ global using EventBusServiceBus;
 global using HealthChecks.UI.Client;
 global using Innemost.LogLife.API.Infrastructure.AutofacModules;
 global using Innemost.LogLife.API.Queries;
-global using Innemost.LogLife.API.Services.GprcServices;
 global using Innermost.LogLife.API.Application.Filter;
 global using Innermost.LogLife.API.Application.IntegrationEvents;
 global using Innermost.LogLife.API.Services.IntegrationEventServices;

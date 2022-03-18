@@ -35,7 +35,7 @@ namespace CommonService.Behaviors
             try
             {
                 if (_session.IsInTransaction)
-                    await next();
+                    return await next();
 
                 _session.StartTransaction();//TODO options
 
@@ -45,7 +45,7 @@ namespace CommonService.Behaviors
 
                 await _session.CommitTransactionAsync();
             }
-            catch (Exception)//TODO 
+            catch (Exception ex)//TODO 
             {
                 _session.AbortTransaction();
                 throw;

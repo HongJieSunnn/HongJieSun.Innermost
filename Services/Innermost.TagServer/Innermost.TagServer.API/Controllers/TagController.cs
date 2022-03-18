@@ -24,6 +24,14 @@ namespace Innermost.TagServer.API.Controllers
         }
 
         [HttpGet]
+        [Route("first")]
+        public async Task<ActionResult<IEnumerable<Tag>>> GetFirstLevelTagAsync()
+        {
+            var tags=await _tagQueries.GetAllFirstLevelTagsAsync();
+            return Ok(tags);
+        }
+
+        [HttpGet]
         [Route("next/{tagId}")]
         public async Task<ActionResult<IEnumerable<Tag>>> GetNextTagsAsync(string tagId)
         {

@@ -46,7 +46,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpPost]
         [Route("pass")]
-        [Authorize(Policy ="Admin")]
+        //[Authorize(Policy ="Admin")]
         public async Task<IActionResult> PassReviewedTagAsync([FromBody] PassReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;
@@ -67,7 +67,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpPost]
         [Route("refuse")]
-        [Authorize(Policy = "Admin")]
+        //[Authorize(Policy = "Admin")]
         public async Task<IActionResult> RefuseReviewedTagAsync([FromBody] RefuseReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;

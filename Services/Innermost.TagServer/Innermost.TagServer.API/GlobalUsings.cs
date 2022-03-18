@@ -1,6 +1,5 @@
 ﻿global using Autofac;
 global using Autofac.Extensions.DependencyInjection;
-global using Innermost.LogLife.API.Models;
 global using TagS.Microservices.Server.AutofacExtensions;
 global using TagS.Microservices.Server.Microsoft.AspNetCore.Http;
 global using TagS.Microservices.Server.Microsoft.DependencyInjection;
@@ -11,3 +10,5 @@ global using TagS.Microservices.Server.Commands;
 global using CommonService.IdentityService;
 global using Innermost.IdempotentCommand;
 global using TagS.Microservices.Server.Models;
+global using MongoDB.Driver.GeoJsonObjectModel;
+global using TagS.Microservices.Client.Models;

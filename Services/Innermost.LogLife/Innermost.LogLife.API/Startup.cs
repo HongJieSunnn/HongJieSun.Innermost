@@ -91,8 +91,7 @@ namespace Innermost.LogLife.API
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
 
-            eventBus.Subscribe<ToMakeRecordPrivateIntegrationEvent, IIntegrationEventHandler<ToMakeRecordPrivateIntegrationEvent>>();
-            eventBus.Subscribe<ToMakeRecordSharedIntegrationEvent, IIntegrationEventHandler<ToMakeRecordSharedIntegrationEvent>>();
+            //TODO Register the Handlers.
         }
     }
 
@@ -178,7 +177,7 @@ namespace Innermost.LogLife.API
                 var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
                 var lifescope = sp.GetRequiredService<ILifetimeScope>();
 
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope);
+                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
             });
 
             services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
@@ -212,12 +211,7 @@ namespace Innermost.LogLife.API
 
         public static IServiceCollection AddGrpcServices(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddScoped<IMusicHubGrpcService, MusicHubGrpcService>();
-
-            service.AddGrpcClient<MusicHubGrpc.MusicHubGrpcClient>((services, options) =>
-            {
-                options.Address = new Uri("");//TODO
-            });
+            
 
             return service;
         }
@@ -240,7 +234,11 @@ namespace Innermost.LogLife.API
         {
             var connectionString = configuration.GetConnectionString("ConnectMySQL");
 
-            services.AddScoped<ILifeRecordQueries, LifeRecordQueries>(sp => new LifeRecordQueries(connectionString));
+            services.AddScoped<ILifeRecordQueries, LifeRecordQueries>(sp =>
+            {
+                var identityServer = sp.GetRequiredService<IIdentityService>();
+                return new LifeRecordQueries(connectionString, identityServer);
+            });
 
             services.AddScoped<ILifeRecordRepository, LifeRecordRepository>();
 

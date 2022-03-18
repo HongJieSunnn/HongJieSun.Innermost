@@ -5,7 +5,9 @@
         private readonly IPasswordHasher<InnermostUser> _passwordHasher = new PasswordHasher<InnermostUser>();
         public async Task SeedAsync(InnermostIdentityDbContext context, IConfiguration configuration)
         {
-            var userToAdd = DefaultUsers().Where(user => !context.Users.Any(existedUser => user.UserName == existedUser.UserName));
+            if (context.Users.Any())
+                return;
+            var userToAdd = DefaultUsers();
 
             await context.Users.AddRangeAsync(userToAdd);
             await context.SaveChangesAsync();

@@ -10,10 +10,19 @@
         {
             return new List<ApiResource>
             {
-                new ApiResource("loglife","LogLife Api")
+                new ApiResource("loglife","LogLife Service Api")
                 {
                     Scopes={"loglife"}
                 },
+                new ApiResource("meet","Meet Service Api")
+                {
+                    Scopes={ "meet" }
+                },
+                new ApiResource("tagserver","TagServer Service Api")
+                {
+                    Scopes={ "tagserver" }
+                },
+                
             };
         }
 
@@ -22,6 +31,8 @@
             return new List<ApiScope>
             {
                 new ApiScope("loglife"),
+                new ApiScope("meet"),
+                new ApiScope("tagserver"),
             };
         }
 
@@ -60,7 +71,9 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "loglife"
+                        "loglife",
+                        "meet",
+                        "tagserver",
                     },
                     AccessTokenLifetime=60*60*3,
                     IdentityTokenLifetime=60*60*3,
@@ -81,7 +94,9 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "loglife"
+                        "loglife",
+                        "meet",
+                        "tagserver",
                     },
                     AccessTokenLifetime=60*60*12,
                     IdentityTokenLifetime=60*60*12,
@@ -106,7 +121,9 @@
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "loglife"
+                        "loglife",
+                        "meet",
+                        "tagserver",
                     },
                 }
             };

@@ -56,6 +56,7 @@
     <Folder Include="Application\IntegrationEventHandlers\" />
     <Folder Include="Migrations\IntegrationEventRecord\" />
     <Folder Include="Migrations\LifeRecord\" />
+    <Folder Include="Services\GprcServices\" />
   </ItemGroup>
 
   <ItemGroup>

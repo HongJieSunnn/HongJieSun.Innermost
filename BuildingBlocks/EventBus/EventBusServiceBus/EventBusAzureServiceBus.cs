@@ -12,6 +12,7 @@ namespace EventBusServiceBus
         private readonly ServiceBusProcessor _serviceBusProcessor;
         private readonly ServiceBusAdministrationClient _serviceBusAdministrationClient;
         private readonly ILifetimeScope _autofac;
+        private readonly string _subscriptionName;
         private readonly string AUTOFAC_SCOPE_NAME = "innermost_event_bus";
         /// <summary>
         /// 对于所有继承于IntegrationEvent的事件，都以该后缀结尾
@@ -22,7 +23,7 @@ namespace EventBusServiceBus
         private bool _disposed;
 
         public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, ILogger<EventBusAzureServiceBus> logger,
-            IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac)
+            IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac,string subscriptionClientName)
         {
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
@@ -36,6 +37,7 @@ namespace EventBusServiceBus
             );
             _serviceBusAdministrationClient = _serviceBusPersisterConnection.CreateAdministrationModel();
             _autofac = autofac;
+            _subscriptionName = subscriptionClientName;
 
             RemoveDefaultFilter().GetAwaiter().GetResult();
             RegisterProcessorMessageHandler();
@@ -65,14 +67,13 @@ namespace EventBusServiceBus
             where TH : IIntegrationEventHandler<T>
         {
             var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
-            var subscriptionName = typeof(TH).Name;
 
             var containsEvent = _subscriptionManager.HasSubscriptionForEvent<T>();
             if (!containsEvent)
             {
                 try
                 {
-                    await _serviceBusAdministrationClient.CreateRuleAsync(TOPIC_NAME, subscriptionName, new CreateRuleOptions
+                    await _serviceBusAdministrationClient.CreateRuleAsync(TOPIC_NAME, _subscriptionName, new CreateRuleOptions
                     {
                         Filter = new CorrelationRuleFilter { Subject = eventName },//添加筛选器，碰到 Subject 为 {eventName} 的消息，就会接受
                         Name = eventName
@@ -94,11 +95,10 @@ namespace EventBusServiceBus
             where TH : IIntegrationEventHandler
         {
             var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
-            var subscriptionName = typeof(TH).Name;
 
             try
             {
-                await _serviceBusAdministrationClient.DeleteRuleAsync(TOPIC_NAME, subscriptionName, eventName);
+                await _serviceBusAdministrationClient.DeleteRuleAsync(TOPIC_NAME, _subscriptionName, eventName);
             }
             catch (ServiceBusException)
             {
@@ -112,13 +112,9 @@ namespace EventBusServiceBus
 
         private async Task RemoveDefaultFilter()
         {
-            var subscriptions = _serviceBusAdministrationClient.GetSubscriptionsAsync(TOPIC_NAME).GetAsyncEnumerator();
             try
             {
-                while (await subscriptions.MoveNextAsync())
-                {
-                    await _serviceBusAdministrationClient.DeleteRuleAsync(TOPIC_NAME, subscriptions.Current.SubscriptionName, CreateRuleOptions.DefaultRuleName);
-                }
+                await _serviceBusAdministrationClient.DeleteRuleAsync(TOPIC_NAME, _subscriptionName, CreateRuleOptions.DefaultRuleName);
             }
             catch (ServiceBusException)
             {
@@ -132,6 +128,7 @@ namespace EventBusServiceBus
         {
             _serviceBusProcessor.ProcessMessageAsync += ProcessMessage;
             _serviceBusProcessor.ProcessErrorAsync += ProcessError;
+            _serviceBusProcessor.StartProcessingAsync().GetAwaiter().GetResult();
         }
 
         private async Task ProcessMessage(ProcessMessageEventArgs messageArgs)

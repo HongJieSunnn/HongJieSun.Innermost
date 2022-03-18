@@ -107,10 +107,10 @@
         }
 
         [HttpGet]
-        [Route("records/{id:int}")]
+        [Route("record/{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByIdAsync(int id)
+        public async Task<ActionResult<LifeRecordDTO>> GetRecordByIdAsync(int id)
         {
             var records = await _lifeRecordQueries.FindRecordByRecordId(id);
             if(records is null)
@@ -129,10 +129,10 @@
         }
 
         [HttpGet]
-        [Route("records")]
+        [Route("records/datetime/")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string year,string month,string day,string findType)
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year,string month,string day,string findType)
         {
             var dateTimeToFind=new DateTimeToFind(year,month,day,findType);
             Validator.ValidateObject(dateTimeToFind,new ValidationContext(dateTimeToFind));

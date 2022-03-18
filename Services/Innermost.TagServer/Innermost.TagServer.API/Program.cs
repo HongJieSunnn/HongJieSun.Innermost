@@ -1,57 +1,27 @@
+using Innermost.TagServer.API;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 IConfiguration configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services
-    .AddTagSServer(config =>
-    {
-        config.WithConnectionString(builder.Configuration.GetConnectionString("MongoDB"));
-        config.WithDatabase("Innermost.TagServer");
-    });
-
-builder.Host
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory(container =>
-    {
-        container.Populate(builder.Services);
-        container.RegisterTagSMicroservicesServerTypes();
-    }))//Use Autofac to Provider IServiceProvider.
-    .UseSerilog();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-ConfigureTagSServer(app);
+var app = CreateWebHostBuilder(configuration, args);
 
 app.Run();
 
+IHost CreateWebHostBuilder(IConfiguration configuration, string[] args) => Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>().CaptureStartupErrors(false);
+                })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSerilog()
+                .Build();
 
-void ConfigureTagSServer(IApplicationBuilder builder)
-{
-    builder.AddReferrerDiscriminator<LifeRecordReferrer>();
-    builder.AddLocationIndexFroReferrer("BaiduPOI");
-}
 
 Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
 {
@@ -61,15 +31,14 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", AppName)
         .Enrich.FromLogContext()
-        .WriteTo.Console()
+        .WriteTo.Console(theme: AnsiConsoleTheme.Code)
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }
 
 partial class Program
 {
-    public static string Namespace => typeof(Program).Namespace;
-    public static string AppName => Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+    public static string AppName => "Innermost.TagServer";
     public static IConfiguration GetConfiguration()
     {
         var builder = new ConfigurationBuilder()

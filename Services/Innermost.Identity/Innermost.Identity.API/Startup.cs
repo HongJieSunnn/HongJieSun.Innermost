@@ -87,6 +87,13 @@
                     });
             });
 
+            //Add Authorization Policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("User", policy => policy.RequireClaim(ClaimTypes.Role, "User"));
+            });
+
             //对账号密码等信息配置
             services.Configure<IdentityOptions>(options =>
             {

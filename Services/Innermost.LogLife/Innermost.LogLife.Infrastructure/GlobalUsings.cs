@@ -6,7 +6,6 @@ global using System.Threading.Tasks;
 global using DomainSeedWork;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Entities;
-global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Enumerations;
 global using MediatR;
 global using MediatRExtensions;
 global using Microsoft.EntityFrameworkCore;
