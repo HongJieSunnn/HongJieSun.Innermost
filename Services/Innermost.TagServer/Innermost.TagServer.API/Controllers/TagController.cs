@@ -17,7 +17,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetAllTagsAsync()
+        public async Task<ActionResult<IEnumerable<Tag>>> GetAllTagsAsync()//TODO can select from TagReferrer
         {
             var tags=await _tagQueries.GetAllTagsAsync();
             return Ok(tags);
@@ -25,7 +25,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("first")]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetFirstLevelTagAsync()
+        public async Task<ActionResult<IEnumerable<Tag>>> GetFirstLevelTagAsync()//TODO FirstLevelTagDTO
         {
             var tags=await _tagQueries.GetAllFirstLevelTagsAsync();
             return Ok(tags);
@@ -33,14 +33,14 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("next/{tagId}")]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetNextTagsAsync(string tagId)
+        public async Task<ActionResult<IEnumerable<Tag>>> GetNextTagsAsync(string tagId)//TODO fisrtLevelId and previousTagId
         {
             var tags = await _tagQueries.GetNextTagsAsync(tagId);
             return Ok(tags);
         }
 
         [HttpGet]
-        [Route("{name}")]
+        [Route("name/{name}")]
         public async Task<ActionResult<Tag>> GetTagByNameAsync(string name)
         {
             var tags = await _tagQueries.GetTagByPreferredNameAsync(name);
@@ -48,10 +48,10 @@ namespace Innermost.TagServer.API.Controllers
         }
 
         [HttpGet]
-        [Route("{synonym}")]
+        [Route("synonym/{synonym}")]
         public async Task<ActionResult<Tag>> GetTagBySynonymAsync(string synonym)
         {
-            var tags = await _tagQueries.GetTagBySynonymAsync(synonym);
+            var tags = await _tagQueries.GetTagBySynonymAsync(synonym);//TODO now will call The expression tree is not supported: {document}.Synonyms. List Synonyms is ok but IReadOnlyCollection Synonyms is not ok.
             return Ok(tags);
         }
     }

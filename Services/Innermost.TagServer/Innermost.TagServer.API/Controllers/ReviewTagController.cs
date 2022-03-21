@@ -40,13 +40,13 @@ namespace Innermost.TagServer.API.Controllers
             }
 
             if (!commandSuccess)
-                return BadRequest();
+                return BadRequest($"Tag with PreferredName{command.PreferredTagName} is already existed.");
             return Ok();
         }
 
         [HttpPost]
         [Route("pass")]
-        //[Authorize(Policy ="Admin")]
+        //[Authorize(Policy ="Admin")]//TODO uncomment
         public async Task<IActionResult> PassReviewedTagAsync([FromBody] PassReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;

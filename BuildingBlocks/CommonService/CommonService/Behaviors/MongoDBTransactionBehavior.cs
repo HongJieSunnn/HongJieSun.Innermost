@@ -47,7 +47,8 @@ namespace CommonService.Behaviors
             }
             catch (Exception ex)//TODO 
             {
-                _session.AbortTransaction();
+                if(_session.IsInTransaction)
+                    _session.AbortTransaction();
                 throw;
             }
 
