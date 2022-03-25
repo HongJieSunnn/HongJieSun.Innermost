@@ -14,6 +14,7 @@ namespace Innermost.TagServer.API.Infrastructure.AutofacModules
                 var componentContext = context.Resolve<IComponentContext>();
                 return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
             });
+
             builder.RegisterTagSMicroservicesServerTypes();
         }
     }

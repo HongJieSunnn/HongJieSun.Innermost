@@ -1,4 +1,5 @@
 ﻿using DomainSeedWork;
+using DomainSeedWork.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace MediatRExtensions
             where TDbContext : DbContext
         {
             var entities = context.ChangeTracker
-                .Entries<Entity>()
+                .Entries<Entity<int>>()
                 .Where(e => e.Entity.DomainEvents != null && e.Entity.DomainEvents.Any());
 
             var domainEvents = entities.SelectMany(e => e.Entity.DomainEvents).ToList();

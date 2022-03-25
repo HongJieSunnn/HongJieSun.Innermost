@@ -23,10 +23,21 @@ namespace IntegrationEventRecord.Services
                         .UseMySql(_dbConnection, new MySqlServerVersion(new Version(5, 7)))
                         .Options);
 
-            _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var tagClientAssembly = entryAssembly.GetReferencedAssemblies().FirstOrDefault(a=>a.Name== "TagS.Microservices.Client");
+            _eventTypes = Assembly.Load(entryAssembly.FullName)
                 .GetTypes()
                 .Where(t => t.Name.EndsWith("IntegrationEvent"))
                 .ToList();
+
+            if(tagClientAssembly is not null)
+            {
+                _eventTypes.AddRange(
+                    Assembly.Load(tagClientAssembly.FullName)
+                    .GetTypes()
+                    .Where(t => t.Name.EndsWith("IntegrationEvent"))
+                );
+            }
         }
 
         public async Task<IEnumerable<IntegrationEventRecordModel>> RetrieveEventsByEventContentsToPublishAsync(Guid transactionId)

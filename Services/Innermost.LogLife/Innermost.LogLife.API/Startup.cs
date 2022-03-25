@@ -1,4 +1,5 @@
-﻿using TagS.Microservices.Client.Microsoft.DependencyInjection;
+﻿using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using TagS.Microservices.Client.Microsoft.DependencyInjection;
 
 namespace Innermost.LogLife.API
 {
@@ -30,13 +31,30 @@ namespace Innermost.LogLife.API
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
                 .AddCustomConfig(Configuration)
-                .AddTagSClient();
-
+                .AddTagSClient()
+                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>();
+    
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Innemost.LogLife.API", Version = "v1" });
                 c.CustomSchemaIds(t => t.FullName);
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        Implicit = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri($"{Configuration["IdentityServerUrl"]}/connect/authorize"),
+                            TokenUrl = new Uri($"{Configuration["IdentityServerUrl"]}/connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                { "loglife", "LogLife API" }
+                            }
+                        }
+                    }
+                });
             });
 
             var container = new ContainerBuilder();
@@ -89,7 +107,7 @@ namespace Innermost.LogLife.API
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
-            var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
+            //var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
 
             //TODO Register the Handlers.
         }
@@ -154,7 +172,8 @@ namespace Innermost.LogLife.API
         {
             services.AddTransient<IntegrationEventRecordServiceFactory>();
             services.AddTransient<ILogLifeIntegrationEventService, LogLifeIntegrationEventService>();
-
+            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();//TODO maybe we should not inject ILogLifeIntegrationEventService.
+            
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
                 var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
@@ -220,7 +239,7 @@ namespace Innermost.LogLife.API
         {
             services.AddAutoMapper((sp, options) =>
             {
-                var identityService = sp.GetService<IIdentityService>();
+                //var identityService = sp.GetService<IIdentityService>();
 
                 //options.AddMaps(new Type[] { typeof(MusicDetailDTO), typeof(MusicDetail) ,typeof(CreateOneRecordCommand),typeof(UpdateOneRecordCommand),typeof(LifeRecord) });
 

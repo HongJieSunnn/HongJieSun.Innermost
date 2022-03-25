@@ -1,4 +1,6 @@
-﻿using TagS.Microservices.Server.Queries.TagReviewedQueries;
+﻿using Innermost.TagReferrers;
+using TagS.Microservices.Server.Queries.TagReviewedQueries;
+using TagS.Microservices.Server.Repositories.TagWithReferrerRepository;
 
 namespace Innermost.TagServer.API.Controllers
 {
@@ -88,7 +90,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<IEnumerable<TagReviewed>>> GetAllToBeReviewedTagsAsync()
+        public async Task<ActionResult<IEnumerable<TagReviewedDTO>>> GetAllToBeReviewedTagsAsync()
         {
             var tags=await _tagReviewedQueries.GetTobeReviewedTagsAsync();
             return Ok(tags);

@@ -1,4 +1,5 @@
-﻿using TagS.Microservices.Client.DomainSeedWork;
+﻿using Innermost.TagReferrers;
+using TagS.Microservices.Client.DomainSeedWork;
 using TagS.Microservices.Client.Models;
 
 namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
@@ -29,7 +30,7 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         public List<ImagePath>? ImagePaths { get; set; }
 
         private bool _isShared;
-
+        
         public DateTime CreateTime { get; private set; }
         public DateTime? UpdateTime { get; private set; }
         public DateTime? DeleteTime { get; private set; }
@@ -93,7 +94,15 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
 
         protected override IReferrer ToReferrer()
         {
-            throw new NotImplementedException();//TODO
+            var referrer = new LifeRecordReferrer(
+                Id,UserId,Title,Text,
+                LocationUId,Location?.Name,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
+                MusicRecordMId,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
+                ImagePaths?.Select(i=>i.Path).ToList(),
+                CreateTime,UpdateTime,DeleteTime
+            );
+
+            return referrer;
         }
     }
 }

@@ -16,7 +16,10 @@ namespace IntegrationEventRecordMongoDB.Extensions.Microsoft.DependencyInjection
             {
                 var context=s.GetRequiredService<MongoDBContextBase>();
                 var database=context.Database;
-                return new IntegrationEventRecordMongoDBService(database);
+
+                var session=s.GetRequiredService<IClientSessionHandle>();
+
+                return new IntegrationEventRecordMongoDBService(database,session);
             });
 
             return services;

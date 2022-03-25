@@ -35,9 +35,9 @@
 
                 try
                 {
-                    await _integrationEventRecordService.MarkEventAsInProcessAsync(transactionId);
-                    await _eventBus.Publish(record.IntegrationEvent);
-                    await _integrationEventRecordService.MarkEventAsPublishedAsync(transactionId);
+                    await _integrationEventRecordService.MarkEventAsInProcessAsync(record.EventId);
+                    await _eventBus.Publish(record.IntegrationEvent??throw new ArgumentNullException($"Integration event in IntegrationEventRecord with eventId({record.EventId}) is null"));
+                    await _integrationEventRecordService.MarkEventAsPublishedAsync(record.EventId);
                 }
                 catch (Exception ex)
                 {

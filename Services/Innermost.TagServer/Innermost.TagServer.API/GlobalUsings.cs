@@ -12,3 +12,4 @@ global using Innermost.IdempotentCommand;
 global using TagS.Microservices.Server.Models;
 global using MongoDB.Driver.GeoJsonObjectModel;
 global using TagS.Microservices.Client.Models;
+global using TagS.Microservices.Server.Queries.Models;

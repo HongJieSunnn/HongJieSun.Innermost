@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+    <ProjectReference Include="..\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

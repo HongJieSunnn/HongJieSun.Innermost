@@ -14,7 +14,7 @@ namespace EventBusCommon
         public IntegrationEvent()
         {
             Id = Guid.NewGuid();
-            CreationDate = DateTime.UtcNow;
+            CreationDate = DateTime.Now;
         }
 
         [JsonConstructor]

@@ -1,4 +1,5 @@
 ﻿using Innermost.LogLife.API.Application.DomainEventHandlers.LifeRecordSetShared;
+using TagS.Microservices.Client.AutofacExtensions;
 
 namespace Innemost.LogLife.API.Infrastructure.AutofacModules
 {
@@ -25,6 +26,8 @@ namespace Innemost.LogLife.API.Infrastructure.AutofacModules
             builder.RegisterAssemblyTypes(typeof(LifeRecordSetSharedDomainEventHandler).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(INotificationHandler<>));
 
             builder.RegisterGeneric(typeof(TransactionBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+
+            builder.RegisterTagSMicroservicesClientTypes();
         }
     }
 }

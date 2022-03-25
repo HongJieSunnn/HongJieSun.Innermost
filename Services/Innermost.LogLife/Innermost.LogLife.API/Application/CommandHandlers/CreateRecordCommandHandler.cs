@@ -13,8 +13,8 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
         public async Task<bool> Handle(CreateRecordCommand request, CancellationToken cancellationToken)
         {
             List<ImagePath>? imagePaths = request.ImagePaths?.Select(i => new ImagePath(i)).ToList();
-            List<TagSummary<int, LifeRecord>> tagSummaries = request.TagSummaries!.Select(t => new TagSummary<int, LifeRecord>(t.TagId, t.TagName)).ToList();//at least one emotion tag.
-            LifeRecord lifeRecord = new LifeRecord(request.UserId!, request.Title, request.Text, null, null, request.CreateTime, null, null, request.IsShared, imagePaths, tagSummaries);
+            List<TagSummary<int, LifeRecord>> tagSummaries = request.TagSummaries!.Select(t => new TagSummary<int, LifeRecord>(t.Key, t.Value)).ToList();//at least one emotion tag.
+            LifeRecord lifeRecord = new LifeRecord(request.UserId!, request.Title, request.Text, request.LocationUId, request.MusicId, request.CreateTime, null, null, request.IsShared, imagePaths, tagSummaries);
 
             if(request.LocationUId is not null)
             {
@@ -44,7 +44,14 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
             }
 
             await _lifeRecordRepository.AddAsync(lifeRecord);
-            return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await _lifeRecordRepository.UnitOfWork.SaveChangesAsync();
+
+            foreach (var tag in lifeRecord.Tags)
+            {
+                lifeRecord.AddDomainEventForAddingTag(tag);
+            }
+
+            return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken,false);
         }
     }
 

@@ -9,6 +9,7 @@ namespace EventBusServiceBus
         private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
         private readonly ILogger<EventBusAzureServiceBus> _logger;
         private readonly IEventBusSubscriptionManager _subscriptionManager;
+        private readonly ServiceBusSender _sender;
         private readonly ServiceBusProcessor _serviceBusProcessor;
         private readonly ServiceBusAdministrationClient _serviceBusAdministrationClient;
         private readonly ILifetimeScope _autofac;
@@ -21,6 +22,10 @@ namespace EventBusServiceBus
         private const string TOPIC_NAME = "innermost_event_bus_topic";
         private const string QUEUE_NAME = "innermost_event_bus_queue";
         private bool _disposed;
+        /// <summary>
+        /// To ensure deserialization successful while use polumorphic.
+        /// </summary>
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { TypeNameHandling=TypeNameHandling.Auto};
 
         public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, ILogger<EventBusAzureServiceBus> logger,
             IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac,string subscriptionClientName)
@@ -28,17 +33,19 @@ namespace EventBusServiceBus
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
             _subscriptionManager = subscriptionManager ?? new InMemoryEventBusSubscriptionsManager();
+            _sender = _serviceBusPersisterConnection.CreateModel().CreateSender(TOPIC_NAME);
             _serviceBusProcessor = _serviceBusPersisterConnection.CreateModel().CreateProcessor(TOPIC_NAME, subscriptionName,
                 new ServiceBusProcessorOptions
                 {
                     MaxConcurrentCalls = 10,
-                    AutoCompleteMessages = false
+                    AutoCompleteMessages = false,
                 }
             );
             _serviceBusAdministrationClient = _serviceBusPersisterConnection.CreateAdministrationModel();
             _autofac = autofac;
             _subscriptionName = subscriptionClientName;
 
+            CreateSubscriptionIfNotExisted();
             RemoveDefaultFilter().GetAwaiter().GetResult();
             RegisterProcessorMessageHandler();
         }
@@ -46,7 +53,7 @@ namespace EventBusServiceBus
         public async Task Publish(IntegrationEvent @event)
         {
             var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
-            var eventJsonStr = JsonConvert.SerializeObject(@event);
+            var eventJsonStr = JsonConvert.SerializeObject(@event,_jsonSerializerSettings);
             var messageBody = new BinaryData(eventJsonStr);
 
             ServiceBusMessage message = new ServiceBusMessage
@@ -56,10 +63,7 @@ namespace EventBusServiceBus
                 Subject = eventName
             };
 
-            await using (var sender = _serviceBusPersisterConnection.CreateModel().CreateSender(TOPIC_NAME))
-            {
-                await sender.SendMessageAsync(message);
-            }
+            await _sender.SendMessageAsync(message);
         }
 
         public async Task Subscribe<T, TH>()
@@ -110,13 +114,25 @@ namespace EventBusServiceBus
             _subscriptionManager.RemoveSubScription<T, TH>();
         }
 
+        private void CreateSubscriptionIfNotExisted()
+        {
+            try
+            {
+                var sub =_serviceBusAdministrationClient.GetSubscriptionAsync(TOPIC_NAME,_subscriptionName).GetAwaiter().GetResult();
+            }
+            catch (ServiceBusException ex) when (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
+            {
+                _serviceBusAdministrationClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, _subscriptionName) { MaxDeliveryCount=300}).GetAwaiter().GetResult();
+            }
+        }
+
         private async Task RemoveDefaultFilter()
         {
             try
             {
                 await _serviceBusAdministrationClient.DeleteRuleAsync(TOPIC_NAME, _subscriptionName, CreateRuleOptions.DefaultRuleName);
             }
-            catch (ServiceBusException)
+            catch (ServiceBusException ex) when (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
             {
                 _logger.LogWarning("The messaging entity {DefaultRuleName} Could not be found.", CreateRuleOptions.DefaultRuleName);
             }
@@ -141,29 +157,43 @@ namespace EventBusServiceBus
             {
                 await messageArgs.CompleteMessageAsync(messageArgs.Message);
             }
+            else
+            {
+                await messageArgs.DeadLetterMessageAsync(messageArgs.Message);
+            }
         }
 
         private async Task<bool> ProcessEvent(string eventName, string messageData)
         {
+            _logger.LogInformation("Enter ProcessEvent Delegate for event({eventName})",eventName);
             bool processed = false;
 
-            if (_subscriptionManager.HasSubscriptionForEvent(eventName))
+            try
             {
-                using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
+                if (_subscriptionManager.HasSubscriptionForEvent(eventName))
                 {
-                    var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
-                    foreach (var subscription in subscriptions)
+                    using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
                     {
-                        //得到 handler 实例->获取正确的泛型类型->正确的类型通过 handler 实例调用 Handle 函数。
-                        var handler = scope.ResolveOptional(subscription);
-                        if (handler == null) continue;
-                        var eventType = _subscriptionManager.GetEventTypeByName(eventName)!;//因为模板实现的handler类需要对应事件的类型，通过Publish时发送的Json存储的EventName获得EventType，Body反序列化得到对应事件 not null
-                        var integrationEvent = JsonConvert.DeserializeObject(messageData, eventType);
-                        var handlerConcreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);//将对应事件的类型填入模板组成完整的handler类型
-                        await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                        var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
+                        foreach (var subscription in subscriptions)
+                        {
+                            //得到 handler 实例->获取正确的泛型类型->正确的类型通过 handler 实例调用 Handle 函数。
+                            var handler = scope.ResolveOptional(subscription);
+                            if (handler == null) continue;
+                            _logger.LogInformation("EventHandler for event({eventName}) is not null",eventName);
+                            var eventType = _subscriptionManager.GetEventTypeByName(eventName)!;//因为模板实现的handler类需要对应事件的类型，通过Publish时发送的Json存储的EventName获得EventType，Body反序列化得到对应事件 not null
+                            var integrationEvent = JsonConvert.DeserializeObject(messageData, eventType,_jsonSerializerSettings);
+                            var handlerConcreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);//将对应事件的类型填入模板组成完整的handler类型
+                            await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                        }
                     }
+                    processed = true;
                 }
-                processed = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return true;
             }
             return processed;
         }
@@ -185,7 +215,6 @@ namespace EventBusServiceBus
             _subscriptionManager.Clear();
             try
             {
-                await _serviceBusPersisterConnection.DisposeAsync();
                 if (!_serviceBusProcessor.IsClosed)
                 {
                     await _serviceBusProcessor.CloseAsync();

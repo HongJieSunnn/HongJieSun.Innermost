@@ -1,4 +1,5 @@
 ﻿using DomainSeedWork.Abstractions;
+using Innermost.IdempotentCommand.Infrastructure.EntityConfigurations;
 
 namespace Innermost.LogLife.Infrastructure
 {
@@ -8,6 +9,7 @@ namespace Innermost.LogLife.Infrastructure
         public DbSet<MusicRecord> MusicRecords { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ImagePath> ImagePaths { get; set; }
+        public DbSet<TagSummary<int,LifeRecord>> TagSummaries { get; set; }
 
         private readonly IMediator _mediator;
 
@@ -23,6 +25,8 @@ namespace Innermost.LogLife.Infrastructure
             modelBuilder.ApplyConfiguration(new LocationEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new MusicRecordEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ImagePathEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CommandRequestEntityTypeConfiguration());
+            modelBuilder.Entity("TagS.Microservices.Client.Models.TagSummary<int, Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.LifeRecord>").ToTable("TagSummaries");
         }
         /// <summary>
         /// Used for factory
@@ -38,11 +42,12 @@ namespace Innermost.LogLife.Infrastructure
             _mediator = mediatR ?? throw new ArgumentNullException(nameof(mediatR));
         }
 
-        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken),bool saveChanges=true)
         {
-            await _mediator.DisPatchDomainEvents(this);
+            if(saveChanges)
+                await base.SaveChangesAsync(cancellationToken);
 
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await _mediator.DisPatchDomainEvents(this);
 
             return true;
         }

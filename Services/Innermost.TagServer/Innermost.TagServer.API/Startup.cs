@@ -1,12 +1,12 @@
 ﻿using EventBusCommon;
 using EventBusCommon.Abstractions;
 using EventBusServiceBus;
+using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
-using Innermost.TagServer.API.Referrers;
 using IServiceCollectionExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 
 namespace Innermost.TagServer.API
 {
@@ -49,7 +49,7 @@ namespace Innermost.TagServer.API
 
             services.AddMongoDBSession();
 
-            //services.AddEventBus(Configuration);
+            services.AddEventBus(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -72,7 +72,7 @@ namespace Innermost.TagServer.API
                     }
                 });
             });
-            
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -98,7 +98,7 @@ namespace Innermost.TagServer.API
             });
 
             ConfigureTagSServer(app);
-            //app.ConfigureTagServerEventBus();
+            app.ConfigureTagServerEventBus();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -118,7 +118,7 @@ namespace Innermost.TagServer.API
 
     internal static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddEventBus(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             var subcriptionName = configuration["SubscriptionClientName"];
 

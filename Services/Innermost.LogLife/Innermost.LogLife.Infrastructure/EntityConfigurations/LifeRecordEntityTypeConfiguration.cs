@@ -36,27 +36,30 @@
                 .Property("_locationUId")
                 .HasColumnName("LocationUId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property("_musicRecordMId")
                 .HasColumnName("MusicRecordMId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(l => l.CreateTime)
+                .HasColumnType("DateTime")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnName("CreateTime")
                 .IsRequired();
 
             builder
                 .Property(l => l.UpdateTime)
+                .HasColumnType("DateTime")
                 .HasColumnName("UpdateTime")
                 .IsRequired(false);
 
             builder
                 .Property(l => l.DeleteTime)
+                .HasColumnType("DateTime")
                 .HasColumnName("DeleteTime")
                 .IsRequired(false);
 
@@ -71,14 +74,16 @@
                 .WithMany()
                 .HasForeignKey("_locationUId")
                 .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .HasOne(l=>l.MusicRecord)
                 .WithMany()
                 .HasForeignKey("_musicRecordMId")
                 .OnDelete(DeleteBehavior.NoAction)
-                .IsRequired();
+                .IsRequired(false);
+
+            builder.HasMany(l => l.Tags).WithMany(t => t.Entities).UsingEntity("LifeRecordTagSummary");
         }
     }
 }

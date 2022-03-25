@@ -14,3 +14,4 @@ global using Microsoft.EntityFrameworkCore.Storage;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 global using Innermost.LogLife.Infrastructure.EntityConfigurations;
+global using TagS.Microservices.Client.Models;

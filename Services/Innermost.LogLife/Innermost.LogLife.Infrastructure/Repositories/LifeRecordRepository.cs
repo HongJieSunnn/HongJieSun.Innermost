@@ -1,4 +1,6 @@
-﻿namespace Innermost.LogLife.Infrastructure.Repositories
+﻿using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.ValueObjects;
+
+namespace Innermost.LogLife.Infrastructure.Repositories
 {
     public class LifeRecordRepository
         : ILifeRecordRepository
@@ -12,12 +14,12 @@
 
         public async Task<LifeRecord> AddAsync(LifeRecord lifeRecord)
         {
-            var addLocationTask=AddLocationAsync(lifeRecord);
-            var addMusicRecordTask=AddMusicRecordAsync(lifeRecord);
-            await addLocationTask;
-            await addMusicRecordTask;
+            var entry=_context.Update(lifeRecord);
 
-            var entry=await _context.LifeRecords.AddAsync(lifeRecord);
+            await AddLocationAsync(lifeRecord);
+            await AddMusicRecordAsync(lifeRecord);
+            await AddTagSummariesAsync(lifeRecord);
+
             return entry.Entity;
         }
 
@@ -45,8 +47,14 @@
             {
                 var existed=await _context.Locations.ContainsAsync(lifeRecord.Location);
 
-                if (existed)
-                    lifeRecord.Location = null;//set null and will not be added by efcore and will not call duplicate primary error.
+                if(!existed)
+                {
+                    var location = _context.ChangeTracker.Entries<Location>().First(e => e.Entity.Id == lifeRecord.LocationUId && e.State == EntityState.Modified);
+                    var baiduPOI = _context.ChangeTracker.Entries<BaiduPOI>().First(e => e.Properties.FirstOrDefault(p => p.CurrentValue == lifeRecord.LocationUId) is not null && e.State == EntityState.Modified);
+
+                    location.State = EntityState.Added;
+                    baiduPOI.State = EntityState.Added;
+                }
             }
         }
 
@@ -56,8 +64,23 @@
             {
                 var existed = await _context.MusicRecords.ContainsAsync(lifeRecord.MusicRecord);
 
-                if (existed)
-                    lifeRecord.MusicRecord = null;//set null and will not be added by efcore and will not call duplicate primary error.
+                if (!existed)
+                {
+                    var musicRecord = _context.ChangeTracker.Entries<MusicRecord>().First(e => e.Entity.Id == lifeRecord.MusicRecordMId && e.State == EntityState.Modified);
+                    
+                    musicRecord.State = EntityState.Added;
+                }
+            }
+        }
+
+        private async Task AddTagSummariesAsync(LifeRecord lifeRecord)
+        {
+            var tagSummariesExisted =await _context.TagSummaries.Where(t => lifeRecord.Tags.Contains(t)).ToListAsync();
+            var tagSummariesTrackers = _context.ChangeTracker.Entries<TagSummary<int, LifeRecord>>().Where(t => !tagSummariesExisted.Contains(t.Entity));
+
+            foreach(var tagSummary in tagSummariesTrackers)
+            {
+                tagSummary.State= EntityState.Added;
             }
         }
     }
