@@ -3,6 +3,8 @@
     public class CreateRecordCommand:IRequest<bool>
     {
         public string? Title { get; set; }
+
+        [StringLength(3000,MinimumLength = 1)]
         public string Text { get; set; }
         public string? UserId { get; set; }
         public bool IsShared { get; set; }
@@ -23,7 +25,7 @@
 
         public List<string>? ImagePaths { get; set; }
 
-        public DateTime CreateTime { get; set; }
+        public DateTime? CreateTime { get; set; }
 
         public Dictionary<string,string> TagSummaries { get; set; }
 
@@ -31,7 +33,7 @@
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
-            DateTime createTime,
+            DateTime? createTime,
             Dictionary<string, string> tagSummaries)
         {
             UserId=userId;
@@ -51,7 +53,7 @@
             Singer=singer;
             Album=album;
             ImagePaths=imagePaths;
-            CreateTime=createTime;
+            CreateTime=createTime??DateTime.Now;
             TagSummaries=tagSummaries;
         }
     }

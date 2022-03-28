@@ -31,7 +31,6 @@ namespace Innermost.LogLife.API
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
                 .AddCustomConfig(Configuration)
-                .AddTagSClient()
                 .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>();
     
 
@@ -143,7 +142,7 @@ namespace Innermost.LogLife.API
                 .AddDbContext<LifeRecordDbContext>(options =>
                 {
                     options
-                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(5, 7)), options =>
+                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(8, 0)), options =>
                         {
                             options.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
 
@@ -155,7 +154,7 @@ namespace Innermost.LogLife.API
                 .AddDbContext<IntegrationEventRecordDbContext>(options =>
                 {
                     options
-                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(5, 7)), options =>
+                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(8, 0)), options =>
                         {
                             options.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
 

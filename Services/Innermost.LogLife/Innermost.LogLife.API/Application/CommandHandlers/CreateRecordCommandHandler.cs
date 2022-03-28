@@ -14,7 +14,7 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
         {
             List<ImagePath>? imagePaths = request.ImagePaths?.Select(i => new ImagePath(i)).ToList();
             List<TagSummary<int, LifeRecord>> tagSummaries = request.TagSummaries!.Select(t => new TagSummary<int, LifeRecord>(t.Key, t.Value)).ToList();//at least one emotion tag.
-            LifeRecord lifeRecord = new LifeRecord(request.UserId!, request.Title, request.Text, request.LocationUId, request.MusicId, request.CreateTime, null, null, request.IsShared, imagePaths, tagSummaries);
+            LifeRecord lifeRecord = new LifeRecord(request.UserId!, request.Title, request.Text, request.LocationUId, request.MusicId, request.CreateTime!.Value, null, null, request.IsShared, imagePaths, tagSummaries);
 
             if(request.LocationUId is not null)
             {

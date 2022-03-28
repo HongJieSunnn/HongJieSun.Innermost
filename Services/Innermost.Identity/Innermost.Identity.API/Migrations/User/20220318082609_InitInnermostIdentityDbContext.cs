@@ -54,8 +54,8 @@ namespace Innermost.Identity.API.Migrations.User
                     Birthday = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false, defaultValue: "2000-01-01")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateTime = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UpdateTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    DeleteTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    UpdateTime = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    DeleteTime = table.Column<DateTime>(type: "DATETIME", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -71,7 +71,7 @@ namespace Innermost.Identity.API.Migrations.User
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: true)
+                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 20, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),

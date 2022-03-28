@@ -54,7 +54,8 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime>("DeleteTime")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("DATETIME")
+                        .IsRequired(false);
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -91,7 +92,7 @@ namespace Innermost.Identity.API.Migrations.User
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
@@ -120,7 +121,8 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("DATETIME");
+                        .HasColumnType("DATETIME")
+                        .IsRequired(false);
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

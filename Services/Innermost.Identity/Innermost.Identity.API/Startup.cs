@@ -19,7 +19,7 @@
             services.AddDbContext<InnermostIdentityDbContext>(options =>
                 options.UseMySql(
                     sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
@@ -67,7 +67,7 @@
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseMySql(sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
@@ -78,7 +78,7 @@
             .AddOperationalStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseMySql(sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);

@@ -45,7 +45,7 @@ global using Serilog;
 global using Microsoft.AspNetCore;
 global using System.Runtime.Serialization;
 global using System.Text.Json.Serialization;
-global using Innermost.LogLife.Domain.Events.LifeRecord;
+global using Innermost.LogLife.Domain.Events.LifeRecordEvents;
 global using Innermost.LogLife.API.Application.Commands;
 global using TagS.Microservices.Client.Models;
 global using Innemost.LogLife.API.Queries.Model;

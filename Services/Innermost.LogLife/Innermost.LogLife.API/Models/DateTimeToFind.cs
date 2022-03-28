@@ -14,12 +14,12 @@
         [RegularExpression(@"(2)\d{3}")]
         public string Year { get; init; }
         [RegularExpression(@"(1[0-2]|0[1-9])")]
-        public string Month { get; init; }
+        public string? Month { get; init; }
         [RegularExpression(@"(0[1-9]|[1-2][0-9]|3[0-1])")]
-        public string Day { get; init; }
+        public string? Day { get; init; }
         public string FindType { get; init; }
         public static IEnumerable<string> AllowedFindTypes => new List<string>() { FindByYear, FindByMonth, FindByDay };
-        public DateTimeToFind(string year, string month, string day, string findType)
+        public DateTimeToFind(string year, string? month, string? day, string findType)
         {
             Year = year;
             Month = month;

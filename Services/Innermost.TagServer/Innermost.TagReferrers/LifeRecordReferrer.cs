@@ -1,9 +1,7 @@
 ﻿namespace Innermost.TagReferrers
 {
-    public class LifeRecordReferrer : IReferrer
+    public class LifeRecordReferrer : ReferrerBase
     {
-        public string ReferrerName => "LifeRecord";
-        public int Id { get; set; }
         public string UserId { get; set; }
         public string? Title { get; set; }
         public string Text { get; set; }
@@ -35,9 +33,9 @@
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
-            DateTime createTime, DateTime? updateTime, DateTime? deleteTime)
+            DateTime createTime, DateTime? updateTime, DateTime? deleteTime):base(recordId)
         {
-            Id = recordId; UserId = userId; Title = title; Text = text;
+            UserId = userId; Title = title; Text = text;
 
             LocationUId = locationUId; LocationName = locationName; Province = province; City = city; District = district; Address = address;
             BaiduPOI = (longitude is null || latitude is null) ? null : new GeoJsonPointGeoJson2DGeographicCoordinates(new GeoJson2DGeographicCoordinates(longitude.Value, latitude.Value));

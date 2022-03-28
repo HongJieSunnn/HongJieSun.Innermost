@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.LogLife.API.Migrations.LifeRecord
 {
     [DbContext(typeof(LifeRecordDbContext))]
-    [Migration("20220324092055_InitLifeRecordDbContext")]
+    [Migration("20220328082919_InitLifeRecordDbContext")]
     partial class InitLifeRecordDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,7 +122,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.HasKey("Id");
 
-                    b.ToTable("MusicRecord", (string)null);
+                    b.ToTable("MusicRecords", (string)null);
                 });
 
             modelBuilder.Entity("Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.LifeRecord", b =>

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
 {
     [DbContext(typeof(IntegrationEventRecordDbContext))]
-    [Migration("20220323071207_InitIntegrationEventRecordDbContext")]
+    [Migration("20220328083636_InitIntegrationEventRecordDbContext")]
     partial class InitIntegrationEventRecordDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
 
                     b.HasKey("EventId");
 
-                    b.ToTable("IntegrationEventRecord", (string)null);
+                    b.ToTable("IntegrationEventRecords", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -34,7 +34,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 {
                     Id = table.Column<string>(type: "varchar(95)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    LocationName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Province = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -54,7 +54,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MusicRecord",
+                name: "MusicRecords",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(95)", nullable: false)
@@ -68,7 +68,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MusicRecord", x => x.Id);
+                    table.PrimaryKey("PK_MusicRecords", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -117,9 +117,9 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                         principalTable: "Locations",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_LifeRecords_MusicRecord_MusicRecordMId",
+                        name: "FK_LifeRecords_MusicRecords_MusicRecordMId",
                         column: x => x.MusicRecordMId,
-                        principalTable: "MusicRecord",
+                        principalTable: "MusicRecords",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -225,7 +225,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "MusicRecord");
+                name: "MusicRecords");
         }
     }
 }

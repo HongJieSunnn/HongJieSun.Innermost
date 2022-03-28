@@ -61,7 +61,7 @@
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
             {
-                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(new DeleteRecordCommand(recordId), guid);
+                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(new DeleteRecordCommand(recordId,_identityService.GetUserId()), guid);
 
                 _logger.LogInformation("");//TODO
 
@@ -69,7 +69,7 @@
             }
 
             if (!commandResult)
-                return BadRequest($"Record with Id {recordId} is not existed.");
+                return BadRequest($"Record with Id {recordId} is not existed or has been deleted.");
 
             return Ok();
         }
@@ -119,7 +119,7 @@
         }
 
         [HttpGet]
-        [Route("records/{tagId}")]
+        [Route("records/tag")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string tagId)
@@ -129,10 +129,10 @@
         }
 
         [HttpGet]
-        [Route("records/datetime/")]
+        [Route("records/datetime")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year,string month,string day,string findType)
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year,string? month,string? day,string findType)
         {
             var dateTimeToFind=new DateTimeToFind(year,month,day,findType);
             Validator.ValidateObject(dateTimeToFind,new ValidationContext(dateTimeToFind));

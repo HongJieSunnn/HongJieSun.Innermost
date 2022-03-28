@@ -1,4 +1,5 @@
 ﻿using Innermost.TagReferrers;
+using TagS.Microservices.Client.DomainEvents;
 using TagS.Microservices.Client.DomainSeedWork;
 using TagS.Microservices.Client.Models;
 
@@ -72,6 +73,10 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         {
             DeleteTime = DateTime.Now;
             AddDomainEvent(new LifeRecordDeletedDomainEvent(Id,UserId));
+            foreach (var tagSummary in Tags)
+            {
+                AddDomainEventForRemovingTag(tagSummary);
+            }
         }
 
         public void SetShared()
@@ -81,7 +86,7 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
                 _isShared = true;
                 AddDomainEvent(new LifeRecordSetSharedDomainEvent(
                     Id,UserId,Title,Text,
-                    _locationUId,Location?.Name,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
+                    _locationUId,Location?.LocationName,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
                     MusicRecord?.Id,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
                     ImagePaths?.Select(i=>i.Path).ToList(),
                     CreateTime,UpdateTime,DeleteTime,
@@ -92,11 +97,11 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
 
         //TODO UpdateFunctions
 
-        protected override IReferrer ToReferrer()
+        public override IReferrer ToReferrer()
         {
             var referrer = new LifeRecordReferrer(
                 Id,UserId,Title,Text,
-                LocationUId,Location?.Name,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
+                LocationUId,Location?.LocationName,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
                 MusicRecordMId,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
                 ImagePaths?.Select(i=>i.Path).ToList(),
                 CreateTime,UpdateTime,DeleteTime

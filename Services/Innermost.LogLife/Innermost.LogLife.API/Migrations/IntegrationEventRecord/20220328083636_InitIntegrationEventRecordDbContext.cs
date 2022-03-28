@@ -13,7 +13,7 @@ namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "IntegrationEventRecord",
+                name: "IntegrationEventRecords",
                 columns: table => new
                 {
                     EventId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -29,7 +29,7 @@ namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IntegrationEventRecord", x => x.EventId);
+                    table.PrimaryKey("PK_IntegrationEventRecords", x => x.EventId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -37,7 +37,7 @@ namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IntegrationEventRecord");
+                name: "IntegrationEventRecords");
         }
     }
 }

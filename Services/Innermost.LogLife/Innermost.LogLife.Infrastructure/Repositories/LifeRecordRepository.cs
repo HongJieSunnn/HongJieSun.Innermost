@@ -29,16 +29,21 @@ namespace Innermost.LogLife.Infrastructure.Repositories
             return entry.Entity;
         }
 
-        public async Task<LifeRecord> DeleteAsync(int id)
+        public async Task<LifeRecord?> DeleteAsync(int id, string userId)
         {
-            var record=await GetRecordByIdAsync(id);//if id is not existed.The mothod GetRecordByIdAsync which call FirstAsync will throw exceptions.
-            record.SetDeleted();
+            var records=await _context.LifeRecords.Where(l=>l.Id == id&&l.DeleteTime == null).Include(l=>l.Tags).ToListAsync();
+            var record=records.FirstOrDefault(l=>l.UserId==userId);//if record is not existed.The First method will throw exceptions.
+            record?.SetDeleted();
             return record;
         }
 
-        public Task<LifeRecord> GetRecordByIdAsync(int id)
+        public async Task<LifeRecord?> GetRecordByIdAsync(int id, string userId)
         {
-            return _context.LifeRecords.FirstAsync(l => l.Id == id);
+            //if we return _context.LifeRecords.FirstOrDefaultAsync(l => l.Id == id&&l.UserId==userId)
+            //there calls error : Translation of member 'UserId' on entity type 'LifeRecord' failed. This commonly occurs when the specified member is unmapped.
+            //I guess that we mapped _userId field instead of UserId property,so efcore can not transalate that expression to SQL.see https://docs.microsoft.com/zh-cn/ef/core/querying/client-eval
+            var records =await _context.LifeRecords.Where(l => l.Id == id).ToListAsync();
+            return records.FirstOrDefault(r=>r.UserId== userId);
         }
 
         private async Task AddLocationAsync(LifeRecord lifeRecord)

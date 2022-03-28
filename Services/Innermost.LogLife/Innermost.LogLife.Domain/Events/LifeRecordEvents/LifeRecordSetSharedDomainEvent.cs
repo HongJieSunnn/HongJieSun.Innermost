@@ -1,4 +1,4 @@
-﻿namespace Innermost.LogLife.Domain.Events.LifeRecord
+﻿namespace Innermost.LogLife.Domain.Events.LifeRecordEvents
 {
     public class LifeRecordSetSharedDomainEvent:INotification
     {

@@ -48,7 +48,7 @@ namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
 
                     b.HasKey("EventId");
 
-                    b.ToTable("IntegrationEventRecord", (string)null);
+                    b.ToTable("IntegrationEventRecords", (string)null);
                 });
 #pragma warning restore 612, 618
         }

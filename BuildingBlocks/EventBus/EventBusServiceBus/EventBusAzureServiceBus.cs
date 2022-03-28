@@ -156,10 +156,12 @@ namespace EventBusServiceBus
             if (await ProcessEvent(eventClassName, messageData))
             {
                 await messageArgs.CompleteMessageAsync(messageArgs.Message);
+                _logger.LogInformation("Complete Integration Event(MessageId:{MessageId})", messageArgs.Message.MessageId);
             }
             else
             {
                 await messageArgs.DeadLetterMessageAsync(messageArgs.Message);
+                _logger.LogWarning("Errors occur while handling Message(MessageId:{id}),now this message is setted to dead letter message.", messageArgs.Message.MessageId);
             }
         }
 

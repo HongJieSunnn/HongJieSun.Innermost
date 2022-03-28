@@ -80,10 +80,10 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                         .HasColumnType("longtext")
                         .HasColumnName("District");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LocationName")
                         .IsRequired()
                         .HasColumnType("longtext")
-                        .HasColumnName("Name");
+                        .HasColumnName("LocationName");
 
                     b.Property<string>("Province")
                         .IsRequired()
@@ -120,7 +120,7 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.HasKey("Id");
 
-                    b.ToTable("MusicRecord", (string)null);
+                    b.ToTable("MusicRecords", (string)null);
                 });
 
             modelBuilder.Entity("Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.LifeRecord", b =>

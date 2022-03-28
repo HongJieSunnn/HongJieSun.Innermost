@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<IntegrationEventRecordModel> builder)
         {
-            builder.ToTable("IntegrationEventRecord");
+            builder.ToTable("IntegrationEventRecords");
 
             builder.HasKey(i => i.EventId);
 
