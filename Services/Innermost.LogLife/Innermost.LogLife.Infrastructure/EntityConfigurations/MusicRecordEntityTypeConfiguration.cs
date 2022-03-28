@@ -5,7 +5,7 @@
     {
         public void Configure(EntityTypeBuilder<MusicRecord> builder)
         {
-            builder.ToTable("MusicRecord");
+            builder.ToTable("MusicRecords");
 
             builder.HasKey(m => m.Id);
 

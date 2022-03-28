@@ -1,76 +1,63 @@
-﻿using LifeRecord = Innemost.LogLife.API.Queries.Model.LifeRecord;
-using Location = Innemost.LogLife.API.Queries.Model.Location;
-using MusicRecord = Innemost.LogLife.API.Queries.Model.MusicRecord;
-using TextType = Innemost.LogLife.API.Queries.Model.TextType;
-
-namespace Innemost.LogLife.API.Queries.Models
+﻿namespace Innemost.LogLife.API.Queries.Models
 {
     public class QueryModelMapper
     {
-        public static LifeRecord MapLifeRecordQueryModel([NotNull] dynamic record)
+        public static LifeRecordDTO MapToLifeRecordDTO(dynamic record)
         {
-            //TODO 可以继续修改，将新建各个 Model 分开来，但未必需要public 类似于 MapTextTypeQueryModel
-            LifeRecord lifeRecord = new LifeRecord
-            {
-                Id = record.Id,
-                Title = record.Title,
-                Text = record.Text,
-                TextType = MapTextTypeQueryModel(record),
-                Location = MapLocationQueryModel(record),
-                PublishTime = record.PublishTime,
-                MusicRecord = MapMusicRecordQueryModel(record),
-                Path = record.Path,
-                IsShared = record.IsShared
-            };
-            return lifeRecord;
+            return new LifeRecordDTO(
+                record.Id, record.TiTle, record.Text, record.IsShared,
+                MapToLocationDTO(record),
+                MapToMusicRecordDTO(record),
+                record.ImagePaths?.Split(","),
+                record.CreateTime,
+                MapToTagSummaryDTOs(record)
+            );
         }
 
-        public static IEnumerable<LifeRecord> MapLifeRecordQueryModel([NotNull] IEnumerable<dynamic> records)
+        public static IEnumerable<LifeRecordDTO> MapToLifeRecordDTOs(IEnumerable<dynamic> records)
         {
-            List<LifeRecord> ans = new List<LifeRecord>();
-            var recordEnumerator = records.GetEnumerator();
-            while (recordEnumerator.MoveNext())
-            {
-                var record = MapLifeRecordQueryModel(recordEnumerator.Current);
-                ans.Add(record);
-            }
-            return ans;
+            return records.Select<dynamic, LifeRecordDTO>(r => MapToLifeRecordDTO(r)).ToList();
         }
 
-        static TextType MapTextTypeQueryModel([NotNull] dynamic record)
+        private static LocationDTO? MapToLocationDTO(dynamic record)
         {
-            TextType textType = new TextType
-            {
-                TextTypeName = record.TextTypeName
-            };
-
-            return textType;
+            if (record.LocationUId is null)
+                return null;
+            return new LocationDTO(
+                record.LocationUId,
+                record.LocationName,
+                record.Province,
+                record.City,
+                record.District,
+                record.Address,
+                record.Longitude,
+                record.Latitude
+            );
         }
 
-        static Location MapLocationQueryModel([NotNull] dynamic record)
+        private static MusicRecordDTO? MapToMusicRecordDTO(dynamic record)
         {
-            Location location = new Location
-            {
-                Province = record.Province,
-                City = record.City,
-                County = record.County,
-                Town = record.Town,
-                Place = record.Place
-            };
-
-            return location;
+            if (record.MusicRecordMId is null)
+                return null;
+            return new MusicRecordDTO(
+                record.MusicRecordMId,
+                record.MusicRecordName,
+                record.Singer,
+                record.Album
+            );
         }
 
-        static MusicRecord MapMusicRecordQueryModel(dynamic record)
+        private static List<TagSummaryDTO> MapToTagSummaryDTOs(dynamic record)
         {
-            MusicRecord musicRecord = new MusicRecord
-            {
-                MusicName = record.MusicName,
-                Singer = record.Singer,
-                Album = record.Album
-            };
-
-            return musicRecord;
+            var tagSummaries = record.Tags.Split(",") as IEnumerable<string>;
+            return tagSummaries is not null ? 
+                tagSummaries.Select(t =>
+                {
+                    var kv = t.Split('-');
+                    return new TagSummaryDTO(kv[0], kv[1]);
+                }).ToList()
+                :
+                throw new ArgumentException("One record must have at least one Tag,but read null now.(record:{@record})", record);
         }
     }
 }

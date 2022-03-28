@@ -14,13 +14,12 @@
         [RegularExpression(@"(2)\d{3}")]
         public string Year { get; init; }
         [RegularExpression(@"(1[0-2]|0[1-9])")]
-        public string Month { get; init; }
+        public string? Month { get; init; }
         [RegularExpression(@"(0[1-9]|[1-2][0-9]|3[0-1])")]
-        public string Day { get; init; }
-        [Required]
+        public string? Day { get; init; }
         public string FindType { get; init; }
         public static IEnumerable<string> AllowedFindTypes => new List<string>() { FindByYear, FindByMonth, FindByDay };
-        public DateTimeToFind(string year, string month, string day, string findType)
+        public DateTimeToFind(string year, string? month, string? day, string findType)
         {
             Year = year;
             Month = month;
@@ -40,7 +39,7 @@
             return _getTimePairDitionary[FindType].Invoke();
         }
 
-        private (DateTime, DateTime) GetStartAndEndTimePairYearType()
+        private (DateTime startTime, DateTime endTime) GetStartAndEndTimePairYearType()
         {
             DateTime startTime = new DateTime(year: int.Parse(Year), 01, 01);
             DateTime endTime = new DateTime(year: int.Parse(Year), 12, 31, 23, 59, 59);
@@ -48,7 +47,7 @@
             return (startTime, endTime);
         }
 
-        private (DateTime, DateTime) GetStartAndEndTimePairMonthType()
+        private (DateTime startTime, DateTime endTime) GetStartAndEndTimePairMonthType()
         {
             DateTime startTime = new DateTime(year: int.Parse(Year), int.Parse(Month), 01);
             DateTime endTime = new DateTime(year: int.Parse(Year), int.Parse(Month) + 1, 1, 23, 59, 59);
@@ -57,7 +56,7 @@
             return (startTime, endTime);
         }
 
-        private (DateTime, DateTime) GetStartAndEndTimePairDayType()
+        private (DateTime startTime, DateTime endTime) GetStartAndEndTimePairDayType()
         {
             DateTime startTime = new DateTime(year: int.Parse(Year), int.Parse(Month), int.Parse(Day));
             DateTime endTime = new DateTime(year: int.Parse(Year), int.Parse(Month), int.Parse(Day), 23, 59, 59);

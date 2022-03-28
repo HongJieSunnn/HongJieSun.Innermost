@@ -10,12 +10,54 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+    <ProjectReference Include="..\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EventBusCommon">
+      <HintPath>..\..\..\BuildingBlocks\EventBus\IntegrationEventRecordMongoDB\bin\Debug\net6.0\EventBusCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.IdempotentCommand">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.MongoDBContext">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
+    </Reference>
+    <Reference Include="IServiceCollectionExtensions">
+      <HintPath>..\..\..\BuildingBlocks\Extensions\IServiceCollectionExtensions\bin\Debug\net6.0\IServiceCollectionExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Server">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server\bin\Debug\net6.0\TagS.Microservices.Server.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="TagS.Microservices.Server.Microsoft.AspNetCore.Http">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.AspNetCore.Http\bin\Debug\net6.0\TagS.Microservices.Server.Microsoft.AspNetCore.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Server.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Server.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

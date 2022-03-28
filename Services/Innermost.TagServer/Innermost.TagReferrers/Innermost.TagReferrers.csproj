@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -59,23 +59,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationEventRecordMongo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IServiceCollectionExtensions", "BuildingBlocks\Extensions\IServiceCollectionExtensions\IServiceCollectionExtensions.csproj", "{F1F8121F-2ECA-4388-99ED-64DADAAD1F76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.API", "Services\Innermost.Meet\Innermost.Meet.API\Innermost.Meet.API.csproj", "{3BA589EC-9C64-4B09-8098-2BE3C1E668D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Meet.API", "Services\Innermost.Meet\Innermost.Meet.API\Innermost.Meet.API.csproj", "{3BA589EC-9C64-4B09-8098-2BE3C1E668D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.SignalRHub", "Services\Innermost.Meet\Innermost.Meet.SignalRHub\Innermost.Meet.SignalRHub.csproj", "{A9510987-E517-4787-AE6D-12EEF27AADCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Meet.SignalRHub", "Services\Innermost.Meet\Innermost.Meet.SignalRHub\Innermost.Meet.SignalRHub.csproj", "{A9510987-E517-4787-AE6D-12EEF27AADCE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innermost.TagServer", "Innermost.TagServer", "{5287AB16-0117-4FE4-B516-14557F1BEC2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.TagServer.API", "Services\Innermost.TagServer\Innermost.TagServer.API\Innermost.TagServer.API.csproj", "{F5FB65CF-FE5E-4B60-BB26-FD4613EDC0C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.TagServer.API", "Services\Innermost.TagServer\Innermost.TagServer.API\Innermost.TagServer.API.csproj", "{F5FB65CF-FE5E-4B60-BB26-FD4613EDC0C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innermost.Intelligence", "Innermost.Intelligence", "{6274496F-9B2B-4E50-9720-D8C28710F165}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Intelligence.API", "Services\Innermost.Intelligence\Innermost.Intelligence.API\Innermost.Intelligence.API.csproj", "{9AF7D711-DC68-40D2-83BE-EDB4D4692F6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Intelligence.API", "Services\Innermost.Intelligence\Innermost.Intelligence.API\Innermost.Intelligence.API.csproj", "{9AF7D711-DC68-40D2-83BE-EDB4D4692F6E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innermost.FileServer", "Innermost.FileServer", "{4D490A87-36D8-4CE2-BC82-3BBFA386BC71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.FileServer.API", "Services\Innermost.FileServer\Innermost.FileServer.API\Innermost.FileServer.API.csproj", "{D7F42CE5-CC75-49B3-A161-FD794B3455CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.FileServer.API", "Services\Innermost.FileServer\Innermost.FileServer.API\Innermost.FileServer.API.csproj", "{D7F42CE5-CC75-49B3-A161-FD794B3455CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Push.API", "Services\Innermost.Push\Innermost.Push.API\Innermost.Push.API.csproj", "{FC35147B-2599-4503-A2A4-03C66C53BBB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Push.API", "Services\Innermost.Push\Innermost.Push.API\Innermost.Push.API.csproj", "{FC35147B-2599-4503-A2A4-03C66C53BBB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.TagReferrers", "Services\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj", "{C4D34B70-93F1-4689-8AA6-D24F37186E6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +169,10 @@ Global
 		{FC35147B-2599-4503-A2A4-03C66C53BBB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC35147B-2599-4503-A2A4-03C66C53BBB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC35147B-2599-4503-A2A4-03C66C53BBB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -206,6 +212,7 @@ Global
 		{4D490A87-36D8-4CE2-BC82-3BBFA386BC71} = {4B3677F4-5BE6-498F-A14A-5E313D10ED79}
 		{D7F42CE5-CC75-49B3-A161-FD794B3455CF} = {4D490A87-36D8-4CE2-BC82-3BBFA386BC71}
 		{FC35147B-2599-4503-A2A4-03C66C53BBB5} = {DAEA6CC6-05C8-4330-95E4-82D3CE13DFB6}
+		{C4D34B70-93F1-4689-8AA6-D24F37186E6D} = {5287AB16-0117-4FE4-B516-14557F1BEC2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70648EC6-538D-4A92-84DD-4118D732324A}

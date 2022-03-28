@@ -35,11 +35,9 @@
         [Required, Column(TypeName = "DATETIME")]
         public DateTime CreateTime { get; set; }
 
-        [Column(TypeName = "DATETIME")]
-        public DateTime UpdateTime { get; set; }//Default value is 0001-01-01 00:00:00 which is same as defalut value of DateTime type.
+        public DateTime? UpdateTime { get; set; }
 
-        [Column(TypeName = "DATETIME")]
-        public DateTime DeleteTime { get; set; }
+        public DateTime? DeleteTime { get; set; }
         public InnermostUser()
         {
             //TODO

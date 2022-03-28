@@ -1,5 +1,5 @@
 using Innemost.LogLife.API.Infrastructure.SeedDatas;
-
+using Serilog.Sinks.SystemConsole.Themes;
 
 IConfiguration configuration = Program.GetConfiguration();
 
@@ -52,7 +52,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", Program.AppName)
         .Enrich.FromLogContext()
-        .WriteTo.Console()
+        .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }

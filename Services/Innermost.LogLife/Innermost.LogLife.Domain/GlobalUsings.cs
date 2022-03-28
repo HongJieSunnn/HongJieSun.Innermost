@@ -10,4 +10,4 @@ global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Entit
 global using Innermost.LogLife.Domain.AggregatesModels.Extensions;
 global using Innermost.LogLife.Domain.Events;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.ValueObjects;
-global using Innermost.LogLife.Domain.Events.LifeRecord;
+global using Innermost.LogLife.Domain.Events.LifeRecordEvents;

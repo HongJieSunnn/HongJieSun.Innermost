@@ -8,10 +8,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
+    <ProjectReference Include="..\..\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="AggregatesModels\LifeRecordAggregate\Enumerations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
   </ItemGroup>
 
   <ItemGroup>

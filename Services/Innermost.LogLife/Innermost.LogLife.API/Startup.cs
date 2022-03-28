@@ -1,4 +1,7 @@
-﻿namespace Innermost.LogLife.API
+﻿using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using TagS.Microservices.Client.Microsoft.DependencyInjection;
+
+namespace Innermost.LogLife.API
 {
     public class Startup
     {
@@ -27,13 +30,30 @@
                 .AddGrpcServices(Configuration)
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
-                .AddCustomConfig(Configuration);
-
+                .AddCustomConfig(Configuration)
+                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>();
+    
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Innemost.LogLife.API", Version = "v1" });
                 c.CustomSchemaIds(t => t.FullName);
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        Implicit = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri($"{Configuration["IdentityServerUrl"]}/connect/authorize"),
+                            TokenUrl = new Uri($"{Configuration["IdentityServerUrl"]}/connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                { "loglife", "LogLife API" }
+                            }
+                        }
+                    }
+                });
             });
 
             var container = new ContainerBuilder();
@@ -86,10 +106,9 @@
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
-            var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
+            //var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
 
-            eventBus.Subscribe<ToMakeRecordPrivateIntegrationEvent, IIntegrationEventHandler<ToMakeRecordPrivateIntegrationEvent>>();
-            eventBus.Subscribe<ToMakeRecordSharedIntegrationEvent, IIntegrationEventHandler<ToMakeRecordSharedIntegrationEvent>>();
+            //TODO Register the Handlers.
         }
     }
 
@@ -123,7 +142,7 @@
                 .AddDbContext<LifeRecordDbContext>(options =>
                 {
                     options
-                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(5, 7)), options =>
+                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(8, 0)), options =>
                         {
                             options.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
 
@@ -135,7 +154,7 @@
                 .AddDbContext<IntegrationEventRecordDbContext>(options =>
                 {
                     options
-                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(5, 7)), options =>
+                        .UseMySql(configuration.GetConnectionString("ConnectMySQL"), new MySqlServerVersion(new Version(8, 0)), options =>
                         {
                             options.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
 
@@ -152,7 +171,8 @@
         {
             services.AddTransient<IntegrationEventRecordServiceFactory>();
             services.AddTransient<ILogLifeIntegrationEventService, LogLifeIntegrationEventService>();
-
+            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();//TODO maybe we should not inject ILogLifeIntegrationEventService.
+            
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
                 var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
@@ -175,7 +195,7 @@
                 var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
                 var lifescope = sp.GetRequiredService<ILifetimeScope>();
 
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope);
+                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
             });
 
             services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
@@ -209,12 +229,7 @@
 
         public static IServiceCollection AddGrpcServices(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddScoped<IMusicHubGrpcService, MusicHubGrpcService>();
-
-            service.AddGrpcClient<MusicHubGrpc.MusicHubGrpcClient>((services, options) =>
-            {
-                options.Address = new Uri("");//TODO
-            });
+            
 
             return service;
         }
@@ -223,29 +238,11 @@
         {
             services.AddAutoMapper((sp, options) =>
             {
-                var identityService = sp.GetService<IIdentityService>();
+                //var identityService = sp.GetService<IIdentityService>();
 
                 //options.AddMaps(new Type[] { typeof(MusicDetailDTO), typeof(MusicDetail) ,typeof(CreateOneRecordCommand),typeof(UpdateOneRecordCommand),typeof(LifeRecord) });
 
-                options.CreateMap<MusicDetailDTO, MusicDetail>();
-
-                options.CreateMap<CreateOneRecordCommand, LifeRecord>()
-                        .IgnoreAllPropertiesWithAnInaccessibleSetter()
-                        .ConstructUsing((src, resolution) => new LifeRecord(
-                                identityService.GetUserId(), src.Title, src.Text, src.TextTypeId,
-                                src.LocationId, src.MusicRecordId, src.IsShared, src.Path, DateTime.Now,
-                                src.EmotionTags?.Select(estr => EmotionTag.GetFromName(estr))
-                                )
-                        );
-
-                options.CreateMap<UpdateOneRecordCommand, LifeRecord>()
-                        .IgnoreAllPropertiesWithAnInaccessibleSetter()
-                        .ConstructUsing((src, resolution) => new LifeRecord(
-                            identityService.GetUserId(), src.Title, src.Text, src.TextTypeId,
-                            src.LocationId, src.MusicRecordId, src.IsShared, src.Path, DateTime.Now,
-                            src.EmotionTags?.Select(estr => EmotionTag.GetFromName(estr))
-                            )
-                        );
+                
             }, Assembly.GetExecutingAssembly());
 
             return services;
@@ -255,7 +252,11 @@
         {
             var connectionString = configuration.GetConnectionString("ConnectMySQL");
 
-            services.AddScoped<ILifeRecordQueries, LifeRecordQueries>(sp => new LifeRecordQueries(connectionString));
+            services.AddScoped<ILifeRecordQueries, LifeRecordQueries>(sp =>
+            {
+                var identityServer = sp.GetRequiredService<IIdentityService>();
+                return new LifeRecordQueries(connectionString, identityServer);
+            });
 
             services.AddScoped<ILifeRecordRepository, LifeRecordRepository>();
 

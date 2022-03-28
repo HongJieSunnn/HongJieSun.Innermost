@@ -1,4 +1,4 @@
-﻿using LifeRecord = Innemost.LogLife.API.Queries.Model.LifeRecord;
+﻿using Innemost.LogLife.API.Queries.Models;
 
 namespace Innemost.LogLife.API.Queries
 {
@@ -6,193 +6,123 @@ namespace Innemost.LogLife.API.Queries
         : ILifeRecordQueries
     {
         private readonly string _connectionString = string.Empty;
-        public LifeRecordQueries(string connectionString)
+        private readonly IIdentityService _identityService;
+        public LifeRecordQueries(string connectionString,IIdentityService identityService)
         {
-            _connectionString = string.IsNullOrWhiteSpace(connectionString) ? throw new ArgumentNullException(nameof(connectionString)) : connectionString;
+            _connectionString = connectionString;
+            _identityService = identityService;
         }
 
-        public async Task<IEnumerable<string>> FindPathsOfUserByUserId(string userId)
+        public async Task<LifeRecordDTO?> FindRecordByRecordId(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                connection.Open();
+            using var connection = new MySqlConnection(_connectionString);
+            var userId = _identityService.GetUserId();//To avoid get the record that is not belonged to current user.
+            var sql =
+            @"SELECT      
+                    lr.Id,lr.Title,lr.Text,lr.IsShared,lr.CreateTime,
+                    lo.Id as LocationUId,lo.LocationName,lo.Province,lo.City,lo.District,lo.Address,lo.BaiduPOI_Longitude as Longitude,lo.BaiduPOI_Latitude as Latitude,
+                    m.Id as MusicRecordMId,m.MusicName,m.Singer,m.Album,
+                    GROUP_CONCAT(i.Path) as ImagePaths,
+                    GROUP_CONCAT(t.TagId,'-',t.TagName) as Tags
+                    FROM LifeRecords lr
+                    LEFT JOIN Locations lo ON lr.LocationUId=lo.Id
+                    LEFT JOIN MusicRecords m ON lr.MusicRecordMId=m.Id
+                    LEFT JOIN ImagePaths i ON i.RecordId=lr.Id
+                    INNER JOIN LifeRecordTagSummary lts ON lr.Id=lts.EntitiesId
+                    INNER JOIN TagSummaries t ON t.TagId=lts.TagsTagId
+                    WHERE lr.Id=@id AND lr.UserId=@userId
+                    GROUP BY lr.Id";
+            var record = await connection.QueryAsync<dynamic>(
+                sql,
+                param: new { id = id, userId = userId }
+            );
 
-                var paths = await connection.QueryAsync<string>(
-                    @"SELECT l.Path
-                        FROM LifeRecord l
-                        WHERE l.UserId=@userId"
-                    , new { userId = userId });
-
-                return paths;
-            }
+            return QueryModelMapper.MapToLifeRecordDTO(record.FirstOrDefault());
         }
 
-        public async Task<LifeRecord> FindRecordByRecordId(int id)
+        public async Task<IEnumerable<LifeRecordDTO>> GetAllRecordsAsync()
         {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                connection.Open();
+            using var connection = new MySqlConnection(_connectionString);
+            var userId = _identityService.GetUserId();
+            var sql =
+            @"SELECT      
+                    lr.Id,lr.Title,lr.Text,lr.IsShared,lr.CreateTime,
+                    lo.Id as LocationUId,lo.LocationName,lo.Province,lo.City,lo.District,lo.Address,lo.BaiduPOI_Longitude as Longitude,lo.BaiduPOI_Latitude as Latitude,
+                    m.Id as MusicRecordMId,m.MusicName,m.Singer,m.Album,
+                    GROUP_CONCAT(i.Path) as ImagePaths,
+                    GROUP_CONCAT(t.TagId,'-',t.TagName) as Tags
+                    FROM LifeRecords lr
+                    LEFT JOIN Locations lo ON lr.LocationUId=lo.Id
+                    LEFT JOIN MusicRecords m ON lr.MusicRecordMId=m.Id
+                    LEFT JOIN ImagePaths i ON i.RecordId=lr.Id
+                    INNER JOIN LifeRecordTagSummary lts ON lr.Id=lts.EntitiesId
+                    INNER JOIN TagSummaries t ON t.TagId=lts.TagsTagId
+                    WHERE lr.UserId=@userId
+                    GROUP BY lr.Id";
 
-                var recordTask = connection.QueryFirstOrDefaultAsync<dynamic>(
-                    @"SELECT l.Id,l.Title,l.Text,l.Path,l.PublishTime,l.IsShared,
-                        lo.Province,lo.City,lo.County,lo.Town,lo.Place,
-                        m.MusicName,m.Singer,m.Album,
-                        t.TextTypeName
-                        FROM LifeRecord l
-                        INNER JOIN Location lo ON l.LocationId=lo.Id
-                        INNER JOIN MusicRecord m ON l.MusicRecordId=m.Id
-                        INNER JOIN TextType t ON l.TextTypeId=t.Id
-                        WHERE l.Id=@id"
-                    ,
-                    param: new { id = id }
-                    );
-                //TODO
-                var dynamicRecords = await recordTask;
+            var records = await connection.QueryAsync<dynamic>(sql, new {userId=userId});
 
-                if (dynamicRecords == null)
-                    return null;
-
-                return QueryModelMapper.MapLifeRecordQueryModel(dynamicRecords);
-            }
+            return QueryModelMapper.MapToLifeRecordDTOs(records);
         }
 
-        public Task<IEnumerable<LifeRecord>> FindRecordsByEmotionTagsAsync(string userId, IEnumerable<int> emotionTagIds)
+        public async Task<IEnumerable<LifeRecordDTO>> FindRecordsByCreateTimeAsync(DateTimeToFind dateTime)
         {
-            //TODO 将标签系统放到MongoDB中
-            //using (var conn=new MySqlConnection(_connectionString))
-            //{
-            //    conn.Open();
+            using var connection = new MySqlConnection(_connectionString);
+            var userId = _identityService.GetUserId();
+            var (startTime, endTime) = dateTime.GetStartAndEndTimePair();
+            var sql = @"SELECT      
+                    lr.Id,lr.Title,lr.Text,lr.IsShared,lr.CreateTime,
+                    lo.Id as LocationUId,lo.LocationName,lo.Province,lo.City,lo.District,lo.Address,lo.BaiduPOI_Longitude as Longitude,lo.BaiduPOI_Latitude as Latitude,
+                    m.Id as MusicRecordMId,m.MusicName,m.Singer,m.Album,
+                    GROUP_CONCAT(i.Path) as ImagePaths,
+                    GROUP_CONCAT(t.TagId,'-',t.TagName) as Tags
+                    FROM LifeRecords lr
+                    LEFT JOIN Locations lo ON lr.LocationUId=lo.Id
+                    LEFT JOIN MusicRecords m ON lr.MusicRecordMId=m.Id
+                    LEFT JOIN ImagePaths i ON i.RecordId=lr.Id
+                    INNER JOIN LifeRecordTagSummary lts ON lr.Id=lts.EntitiesId
+                    INNER JOIN TagSummaries t ON t.TagId=lts.TagsTagId
+                    WHERE lr.UserId=@userId AND lr.CreateTime>=@startTime AND lr.CreateTime<=@endTime
+                    GROUP BY lr.Id";
 
-            //    var result = await conn.QueryAsync<LifeRecord>(
-            //        @"SELECT l.id as recordid,l.Title as title,l.Text as text,l.TextTypeId as texttype,
-            //            l.Province as province,l.City as city,l.County as county,l.Town as town,l.Place as place,
-            //            l.PublishTime as publishtime,l.MusicRecordId as musicrecordid,l.Path as path,
-            //            e.Name as emotiontagname,e.Emoji as emotiontagemoji,
-            //            tt.Name as texttypename
-            //            FROM LifeRecord l
-            //            INNER JOIN EmotionTag e On recordid=e.LifeRecordId
-            //            INNER JOIN TextType tt On "
-            //        );
-            //}
-            throw new NotImplementedException();
+            var records = await connection.QueryAsync<dynamic>(
+                 sql,
+                 param: new { userId = userId, startTime = startTime, endTime = endTime }
+             );
+
+            return QueryModelMapper.MapToLifeRecordDTOs(records);
         }
 
-        public Task<IEnumerable<LifeRecord>> FindRecordsByKeywordAsync(string userId, string keyword)
+        public async Task<IEnumerable<LifeRecordDTO>> FindRecordsByTagIdAsync(string tagId)
         {
-            //TODO 可能通过一些搜索引擎来完成
-            throw new NotImplementedException();
+            using var connection = new MySqlConnection(_connectionString);
+            var userId = _identityService.GetUserId();
+            var sql = @"SELECT      
+                    lr.Id,lr.Title,lr.Text,lr.IsShared,lr.CreateTime,
+                    lo.Id as LocationUId,lo.LocationName,lo.Province,lo.City,lo.District,lo.Address,lo.BaiduPOI_Longitude as Longitude,lo.BaiduPOI_Latitude as Latitude,
+                    m.Id as MusicRecordMId,m.MusicName,m.Singer,m.Album,
+                    GROUP_CONCAT(i.Path) as ImagePaths,
+                    GROUP_CONCAT(t.TagId,'-',t.TagName) as Tags
+                    FROM LifeRecords lr
+                    LEFT JOIN Locations lo ON lr.LocationUId=lo.Id
+                    LEFT JOIN MusicRecords m ON lr.MusicRecordMId=m.Id
+                    LEFT JOIN ImagePaths i ON i.RecordId=lr.Id
+                    INNER JOIN LifeRecordTagSummary lts ON lr.Id=lts.EntitiesId
+                    INNER JOIN TagSummaries t ON t.TagId=lts.TagsTagId
+                    WHERE lr.UserId=@userId AND t.TagId=@tagId
+                    GROUP BY lr.Id";
+
+            var records = await connection.QueryAsync<dynamic>(
+                 sql,
+                 param: new { userId = userId, tagId = tagId }
+             );
+
+            return QueryModelMapper.MapToLifeRecordDTOs(records);
         }
 
-        public async Task<IEnumerable<LifeRecord>> FindRecordsByPathAsync(string userId, string path)
+        public Task<IEnumerable<LifeRecordDTO>> FindRecordsByKeywordAsync(string keyword)
         {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                var recordsTask = connection.QueryAsync<dynamic>(
-                    @"SELECT l.Id,l.Title,l.Text,l.Path,l.PublishTime,l.IsShared,
-                        lo.Province,lo.City,lo.County,lo.Town,lo.Place,
-                        m.MusicName,m.Singer,m.Album,
-                        t.TextTypeName
-                        FROM LifeRecord l
-                        INNER JOIN Location lo ON l.LocationId=lo.Id
-                        INNER JOIN MusicRecord m ON l.MusicRecordId=m.Id
-                        INNER JOIN TextType t ON l.TextTypeId=t.Id
-                        WHERE l.UserId=@userId AND l.Path=@path"
-                    , new { path = path, userId = userId }
-                    );
-                //TODO 去Redis找EmotionTags、去MongoDB找图片
-                var dynamicRecords = await recordsTask;
-
-                if (dynamicRecords == null)
-                    return null;
-
-                return QueryModelMapper.MapLifeRecordQueryModel(dynamicRecords);
-            }
-        }
-
-        public async Task<IEnumerable<LifeRecord>> FindRecordsByPublishTimeAsync(string userId, DateTimeToFind dateTime)
-        {
-            var timePair = dateTime.GetStartAndEndTimePair();
-            var startTime = timePair.Item1.ToString("yyyy-MM-dd hh:mm:ss");
-            var endTime = timePair.Item2.ToString("yyyy-MM-dd hh:mm:ss");
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                var recordsTask = connection.QueryAsync<LifeRecord>(
-                    @"SELECT l.Id,l.Title,l.Text,l.Path,l.PublishTime,l.IsShared,
-                        lo.Province,lo.City,lo.County,lo.Town,lo.Place,
-                        m.MusicName,m.Singer,m.Album,
-                        t.TextTypeName
-                        FROM LifeRecord l
-                        INNER JOIN Location lo ON l.LocationId=lo.Id
-                        INNER JOIN MusicRecord m ON l.MusicRecordId=m.Id
-                        INNER JOIN TextType t ON l.TextTypeId=t.Id
-                        WHERE l.UserId=@userId
-                        AND l.DateTime>=@startTime AND l.DateTime<=@endTime"
-                    , new { startTime = startTime, endTime = endTime, userId = userId }
-                    );
-
-                var dynamicRecords = await recordsTask;
-                //TODO 去Redis找EmotionTags、去MongoDB找图片
-                if (dynamicRecords == null)
-                    return null;
-
-                return QueryModelMapper.MapLifeRecordQueryModel(dynamicRecords);
-            }
-        }
-
-        public async Task<IEnumerable<IGrouping<string, LifeRecord>>> FindRecordsGroupByPathAsync(string userId)
-        {
-            using (var connetion = new MySqlConnection(_connectionString))
-            {
-                connetion.Open();
-
-                var recordsBeforeGroupingTask = connetion.QueryAsync<LifeRecord>(
-                    @"SELECT l.Id,l.Title,l.Text,l.Path,l.PublishTime,l.IsShared,
-                        lo.Province,lo.City,lo.County,lo.Town,lo.Place,
-                        m.MusicName,m.Singer,m.Album,
-                        t.TextTypeName
-                        FROM LifeRecord l
-                        INNER JOIN Location lo ON l.LocationId=lo.Id
-                        INNER JOIN MusicRecord m ON l.MusicRecordId=m.Id
-                        INNER JOIN TextType t ON l.TextTypeId=t.Id
-                        WHERE l.UserId=@userId"
-                    , new { userId = userId }
-                );
-                var dynamicRecords = await recordsBeforeGroupingTask;
-                //TODO 去Redis找EmotionTags、去MongoDB找图片
-                if (dynamicRecords == null)
-                    return null;
-
-                var records = QueryModelMapper.MapLifeRecordQueryModel(dynamicRecords);
-
-                return records.GroupBy(l => l.Path);
-            }
-        }
-
-        /// <summary>
-        /// 貌似没啥用，因为不存在path，一定不会有对应的record
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public async Task<bool> IsPathExistedAsync(string userId, string path)
-        {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                var pathExisted = await connection.QueryFirstOrDefaultAsync<int?>(
-                    @"SELECT 1 
-                        FROM LifeRecord l 
-                        WHERE l.Path=@path 
-                        And UserId=@userId"
-                    , new { path = path, userId = userId });
-
-                return pathExisted.HasValue ? true : false;
-            }
+            throw new NotImplementedException();//TODO
         }
     }
 }

@@ -5,7 +5,6 @@ namespace IntegrationEventRecordMongoDB
     public class IntegrationEventRecordMongoDBModel
     {
         [BsonId]
-        [BsonIgnore]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string? Id { get; set; }
 
@@ -15,6 +14,7 @@ namespace IntegrationEventRecordMongoDB
         public IntegrationEvent EventContent { get; set; }
         public EventState EventState { get; set; }
         public int TimeSend { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateTime { get; set; }
         public IntegrationEventRecordMongoDBModel(Guid eventId,string eventName,IntegrationEvent eventContent,DateTime createTime)
         {

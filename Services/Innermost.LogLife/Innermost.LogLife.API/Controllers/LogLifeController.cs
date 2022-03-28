@@ -61,7 +61,7 @@
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
             {
-                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(new DeleteRecordCommand(recordId), guid);
+                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(new DeleteRecordCommand(recordId,_identityService.GetUserId()), guid);
 
                 _logger.LogInformation("");//TODO
 
@@ -69,7 +69,7 @@
             }
 
             if (!commandResult)
-                return BadRequest($"Record with Id {recordId} is not existed.");
+                return BadRequest($"Record with Id {recordId} is not existed or has been deleted.");
 
             return Ok();
         }
@@ -95,6 +95,49 @@
                 return BadRequest();
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("records")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetAllRecordsAsync()
+        { 
+            var records =await _lifeRecordQueries.GetAllRecordsAsync()??new List<LifeRecordDTO>();
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("record/{id:int}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<LifeRecordDTO>> GetRecordByIdAsync(int id)
+        {
+            var records = await _lifeRecordQueries.FindRecordByRecordId(id);
+            if(records is null)
+                return BadRequest($"The record with id:{id} is not existed.");
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("records/tag")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string tagId)
+        {
+            var records = await _lifeRecordQueries.FindRecordsByTagIdAsync(tagId)??new List<LifeRecordDTO>();
+            return Ok(records);
+        }
+
+        [HttpGet]
+        [Route("records/datetime")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year,string? month,string? day,string findType)
+        {
+            var dateTimeToFind=new DateTimeToFind(year,month,day,findType);
+            Validator.ValidateObject(dateTimeToFind,new ValidationContext(dateTimeToFind));
+            var records = await _lifeRecordQueries.FindRecordsByCreateTimeAsync(dateTimeToFind) ?? new List<LifeRecordDTO>();
+            return Ok(records);
         }
     }
 }

@@ -19,7 +19,7 @@
             services.AddDbContext<InnermostIdentityDbContext>(options =>
                 options.UseMySql(
                     sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
@@ -67,7 +67,7 @@
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseMySql(sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
@@ -78,13 +78,20 @@
             .AddOperationalStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseMySql(sqlConnectionString,
-                    new MySqlServerVersion(new Version(5, 7)),
+                    new MySqlServerVersion(new Version(8, 0)),
                     sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     });
+            });
+
+            //Add Authorization Policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("User", policy => policy.RequireClaim(ClaimTypes.Role, "User"));
             });
 
             //对账号密码等信息配置

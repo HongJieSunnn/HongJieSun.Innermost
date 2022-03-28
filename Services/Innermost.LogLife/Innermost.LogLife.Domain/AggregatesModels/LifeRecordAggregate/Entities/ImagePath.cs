@@ -5,6 +5,10 @@
         public string Path { get;private set; }
         public int RecordId { get;private set; }
         public LifeRecord? LifeRecord { get; set; }
+        public ImagePath()
+        {
+
+        }
         public ImagePath(string path)
         {
             Path = path;

@@ -36,9 +36,10 @@ namespace EventBusCommon
             where TH : IIntegrationEventHandler
         {
             var eventName = GetEventKey<T>();
-            var eventType = typeof(TH);
+            var eventType = typeof(T);
+            var eventHandlerType = typeof(TH);
 
-            DoAddSubscription(eventType, eventName);
+            DoAddSubscription(eventHandlerType, eventName);
 
             if (!_eventTypes.Contains(eventType))
             {
@@ -91,7 +92,7 @@ namespace EventBusCommon
                 if (!_handlers[eventName].Any())
                 {
                     _handlers.Remove(eventName);
-                    var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
+                    var eventType = _eventTypes.FirstOrDefault(e => e.Name == eventName);
                     if (eventType != null)
                     {
                         _eventTypes.Remove(eventType);
@@ -130,7 +131,7 @@ namespace EventBusCommon
                 return null;
             }
 
-            return _handlers[eventName].SingleOrDefault(s => s == handlerType);
+            return _handlers[eventName].FirstOrDefault(s => s == handlerType);
         }
 
         public bool HasSubscriptionForEvent<T>() where T : IntegrationEvent
@@ -152,7 +153,7 @@ namespace EventBusCommon
 
         public IEnumerable<Type> GetHandlersForEvent(string eventName) => _handlers[eventName];
 
-        public Type? GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
+        public Type? GetEventTypeByName(string eventName) => _eventTypes.FirstOrDefault(t => t.Name == eventName);
 
         public string GetEventKey<T>()
         {
@@ -165,7 +166,7 @@ namespace EventBusCommon
         /// <param name="eventName"></param>
         private void RaiseOnEventRemoved(string eventName)
         {
-            var handler = OnEventRemoved??throw new NullReferenceException("Delegate OnEventRemoved is null.");
+            var handler = OnEventRemoved;
             handler?.Invoke(this, eventName);
         }
     }

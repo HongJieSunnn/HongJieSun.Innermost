@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.Identity.API.Migrations.PersistedGrant
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20220228040000_InitPersistedGrantDbContext")]
+    [Migration("20220318083022_InitPersistedGrantDbContext")]
     partial class InitPersistedGrantDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>

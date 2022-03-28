@@ -10,6 +10,7 @@ namespace IntegrationEventRecord
 {
     public class IntegrationEventRecordModel
     {
+        private readonly JsonSerializerSettings _jsonSettings;
         public Guid EventId { get; private set; }
         public string TransactionId { get; private set; }
         public string EventTypeName { get; private set; }
@@ -24,22 +25,24 @@ namespace IntegrationEventRecord
 
         private IntegrationEventRecordModel()
         {
+            _jsonSettings = new JsonSerializerSettings();
+            _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
         }
 
-        public IntegrationEventRecordModel(IntegrationEvent @event, Guid transactionId)
+        public IntegrationEventRecordModel(IntegrationEvent @event, Guid transactionId) : this()
         {
             EventId = @event.Id;
             TransactionId = transactionId.ToString();
-            EventTypeName = @event.GetType().FullName??throw new NullReferenceException("The fullname of event is null.");
+            EventTypeName = @event.GetType().FullName ?? throw new NullReferenceException("The fullname of event is null.");
             State = EventState.NotPublished;
             CreateTime = @event.CreationDate;
-            EventContent = JsonConvert.SerializeObject(@event);
+            EventContent = JsonConvert.SerializeObject(@event, _jsonSettings);
             TimesSend = 0;
         }
 
         public IntegrationEventRecordModel DeserializeIntegrationEventFromEventContent(Type type)
         {
-            IntegrationEvent = JsonConvert.DeserializeObject(EventContent, type) as IntegrationEvent;
+            IntegrationEvent = JsonConvert.DeserializeObject(EventContent, type, _jsonSettings) as IntegrationEvent;
             return this;
         }
     }
