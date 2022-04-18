@@ -7,7 +7,6 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using MediatR;
 global using DomainSeedWork;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Entities;
-global using Innermost.LogLife.Domain.AggregatesModels.Extensions;
 global using Innermost.LogLife.Domain.Events;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.ValueObjects;
 global using Innermost.LogLife.Domain.Events.LifeRecordEvents;
