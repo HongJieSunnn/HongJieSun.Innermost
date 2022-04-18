@@ -5,7 +5,7 @@
         public override async Task HandleAsync(DataFlowContext context)
         {
             IEnumerable<SingerListEntity> singerList = context.GetData("singerList");
-            if(singerList is not null&&singerList.Count()>0)
+            if (singerList is not null && singerList.Count() > 0)
                 await _dbContext.SingerList.InsertManyAsync(singerList);
 
             SpiderRunner.SingerListBarrier.SignalAndWait();

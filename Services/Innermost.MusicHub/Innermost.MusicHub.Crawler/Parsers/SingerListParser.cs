@@ -12,7 +12,7 @@
             var singerCountToTake = (int)context.Request.Properties["SingerCountToTake"];//TODO:I don't know why the count of properties will be 0 while resending.By reading source code,it should not be.
             var region = (string)context.Request.Properties["Region"];
 
-            var singerList = context.Selectable.SelectList(Selectors.JsonPath("$.singerList.data.singerlist.[*].singer_mid")).Select(s=>new SingerListEntity(s.Value, region)).Skip(0).Take(singerCountToTake);
+            var singerList = context.Selectable.SelectList(Selectors.JsonPath("$.singerList.data.singerlist.[*].singer_mid")).Select(s => new SingerListEntity(s.Value, region)).Skip(0).Take(singerCountToTake);
             context.AddData("singerList", singerList);
 
             return Task.CompletedTask;

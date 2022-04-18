@@ -12,7 +12,7 @@ namespace Innermost.MusicHub.Crawler.Entities
         {
 
         }
-        public SingerListEntity(string singerMid,string region)
+        public SingerListEntity(string singerMid, string region)
         {
             SingerMid = singerMid;
             Region = region;
