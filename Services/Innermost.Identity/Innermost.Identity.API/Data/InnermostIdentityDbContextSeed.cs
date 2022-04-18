@@ -3,7 +3,7 @@
     public class InnermostIdentityDbContextSeed
     {
         private readonly IPasswordHasher<InnermostUser> _passwordHasher = new PasswordHasher<InnermostUser>();
-        public async Task SeedAsync(InnermostIdentityDbContext context,UserManager<InnermostUser> userManager, IConfiguration configuration)
+        public async Task SeedAsync(InnermostIdentityDbContext context, IConfiguration configuration)
         {
             if (context.Users.Any())
                 return;
@@ -11,32 +11,12 @@
 
             await context.Users.AddRangeAsync(userToAdd);
             await context.SaveChangesAsync();
-
-            var adminUser = userToAdd[0];
-            var hongJieSunUser = userToAdd[1];
-            var testerUser = userToAdd[2];
-
-            await userManager.AddClaimAsync(adminUser, new Claim(ClaimTypes.Role, "Admin"));
-            await userManager.AddClaimAsync(hongJieSunUser, new Claim(ClaimTypes.Role, "User"));
-            await userManager.AddClaimAsync(testerUser, new Claim(ClaimTypes.Role, "User"));
         }
 
         public List<InnermostUser> DefaultUsers()
         {
-            var admin = new InnermostUser()
-            {
-                Id = "13B8D30F-CFF8-20AB-8D40-1A64ADA8D067",
-                UserName = "Admin",
-                NormalizedUserName = "ADMIN",
-                Email = "Admin@innermost.com",
-                NormalizedEmail = "ADMIN@INNERMOST.COM",
-                Gender = "MALE",
-                NickName = "Admin",
-                CreateTime = DateTime.Now,
-            };
             var hongjiesunUser = new InnermostUser()
             {
-                Id= "555f5f9b-ebf8-4d75-8cd9-fb34f95f921d",
                 UserName = "HongJieSun",
                 NormalizedUserName = "HONGJIESUN",
                 Email = "457406475@qq.com",
@@ -69,14 +49,11 @@
                 CreateTime = DateTime.Now,
                 PhoneNumber = "12345678901",
             };
-            
-            admin.PasswordHash= _passwordHasher.HashPassword(hongjiesunUser, "Admin@Innermost");
+
             hongjiesunUser.PasswordHash = _passwordHasher.HashPassword(hongjiesunUser, "hong456..");
             test.PasswordHash = _passwordHasher.HashPassword(test, "testPwd");
-            
             return new List<InnermostUser>()
             {
-                admin,
                 hongjiesunUser,
                 test
             };

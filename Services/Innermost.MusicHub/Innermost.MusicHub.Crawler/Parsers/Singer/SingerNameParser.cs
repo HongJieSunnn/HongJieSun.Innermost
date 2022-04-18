@@ -10,24 +10,15 @@
 
         protected override async Task ParseAsync(DataFlowContext context)
         {
-            var singerName = context.Selectable.XPath(".//h1[@class='data__name_txt']")?.Value;
-            if (singerName is null)
+            var singerName = context.Selectable.XPath(".//h1[@class='data__name_txt']").Value;
+
+            var url = "http://localhost:3200/getSingerDesc?singermid={0}";
+            var requests = await SingerListService.GetRequestsBySingerListAsync(url);
+            for(int i = 0; i < requests.Count; ++i)
             {
-                await Task.CompletedTask;
-                return;
+                requests[i].Properties.Add("singerName", singerName);
             }
-
-            var singerMid = context.Request.Properties["singerMid"];
-            var region = context.Request.Properties["region"];
-            var url = $"http://localhost:3200/getSingerDesc?singermid={singerMid}";
-
-            var request = new Request(url, new Dictionary<string, object>
-            {
-                {"singerMid",singerMid },
-                {"region",region },
-                {"singerName",singerName }
-            });
-            context.AddFollowRequests(request);
+            context.AddFollowRequests(requests);
         }
     }
 }

@@ -92,7 +92,6 @@
             {
                 options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
                 options.AddPolicy("User", policy => policy.RequireClaim(ClaimTypes.Role, "User"));
-                options.AddPolicy("Crawler", policy => policy.RequireClaim("client_id", "crawlerclient"));
             });
 
             //对账号密码等信息配置

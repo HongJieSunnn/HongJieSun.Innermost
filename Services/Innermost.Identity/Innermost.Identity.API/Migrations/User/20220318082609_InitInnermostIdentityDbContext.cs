@@ -43,11 +43,11 @@ namespace Innermost.Identity.API.Migrations.User
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NickName = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    School = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                    School = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Province = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
+                    Province = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
+                    City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SelfDescription = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, defaultValue: "Be Yourself")
                         .Annotation("MySql:CharSet", "utf8mb4"),

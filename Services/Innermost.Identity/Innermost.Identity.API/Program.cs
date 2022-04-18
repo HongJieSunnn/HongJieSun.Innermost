@@ -14,9 +14,8 @@ try
     host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
         .MigrateDbContext<InnermostIdentityDbContext>((dbContext, services) =>
         {
-            var userManager= services.GetRequiredService<UserManager<InnermostUser>>();
             new InnermostIdentityDbContextSeed()
-                .SeedAsync(dbContext,userManager, configuration)
+                .SeedAsync(dbContext, configuration)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((dbContext, services) =>

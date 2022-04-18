@@ -18,22 +18,6 @@
                 {
                     Scopes={ "meet" }
                 },
-                new ApiResource("musichub","MusicHub Service Api")
-                {
-                    Scopes={ "musichub" }
-                },
-                new ApiResource("filesystem","FileSystem Service Api")
-                {
-                    Scopes={ "filesystem" }
-                },
-                new ApiResource("intelligence","Intelligence Service Api")
-                {
-                    Scopes={ "intelligence" }
-                },
-                new ApiResource("push","Push Service Api")
-                {
-                    Scopes={ "push" }
-                },
                 new ApiResource("tagserver","TagServer Service Api")
                 {
                     Scopes={ "tagserver" }
@@ -48,10 +32,6 @@
             {
                 new ApiScope("loglife"),
                 new ApiScope("meet"),
-                new ApiScope("musichub"),
-                new ApiScope("filesystem"),
-                new ApiScope("intelligence"),
-                new ApiScope("push"),
                 new ApiScope("tagserver"),
             };
         }
@@ -93,11 +73,10 @@
                         IdentityServerConstants.StandardScopes.Profile,
                         "loglife",
                         "meet",
-                        "musichub",
                         "tagserver",
                     },
-                    AccessTokenLifetime=60*60*24,
-                    IdentityTokenLifetime=60*60*24,
+                    AccessTokenLifetime=60*60*3,
+                    IdentityTokenLifetime=60*60*3,
                     AlwaysIncludeUserClaimsInIdToken=true
                 },
                 new Client
@@ -117,11 +96,10 @@
                         IdentityServerConstants.StandardScopes.Profile,
                         "loglife",
                         "meet",
-                        "musichub",
                         "tagserver",
                     },
-                    AccessTokenLifetime=60*60*24,
-                    IdentityTokenLifetime=60*60*24,
+                    AccessTokenLifetime=60*60*12,
+                    IdentityTokenLifetime=60*60*12,
                     AlwaysIncludeUserClaimsInIdToken=true
                 },
                 new Client
@@ -132,8 +110,8 @@
                     AllowedGrantTypes=GrantTypes.Hybrid,
                     AllowAccessTokensViaBrowser=false,
                     AllowOfflineAccess=true,
-                    AccessTokenLifetime=60*60*24,
-                    IdentityTokenLifetime=60*60*24,
+                    AccessTokenLifetime=60*60*2,
+                    IdentityTokenLifetime=60*60*2,
                     RequireConsent=false,
                     RequirePkce=true,
                     RedirectUris = { clientUrls["MobileApp"] },
@@ -145,31 +123,9 @@
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "loglife",
                         "meet",
-                        "musichub",
                         "tagserver",
                     },
-                },
-                new Client
-                {
-                    ClientId="serviceclient",
-                    ClientName="Service Client",
-                    ClientSecrets={new Secret("service-client".Sha256())},
-                    AllowedGrantTypes=GrantTypes.ClientCredentials,
-                    AllowAccessTokensViaBrowser=false,
-                    AllowOfflineAccess=true,
-                    AccessTokenLifetime=60*60*24*30,
-                    IdentityTokenLifetime=60*60*24*30,
-                    AllowedScopes = new List<string>
-                    {
-                        "loglife",
-                        "meet",
-                        "musichub",
-                        "filesystem",
-                        "intelligence",
-                        "push",
-                        "tagserver",
-                    },
-                },
+                }
             };
         }
     }
