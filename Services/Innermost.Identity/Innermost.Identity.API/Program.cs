@@ -14,8 +14,9 @@ try
     host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
         .MigrateDbContext<InnermostIdentityDbContext>((dbContext, services) =>
         {
+            var userManager = services.GetRequiredService<UserManager<InnermostUser>>();
             new InnermostIdentityDbContextSeed()
-                .SeedAsync(dbContext, configuration)
+                .SeedAsync(dbContext, userManager, configuration)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((dbContext, services) =>
@@ -46,7 +47,7 @@ finally
 
 
 #pragma warning disable CS0618 // 类型或成员已过时
-IWebHost CreateHostBuilder(string[] args, IConfiguration configuration) => 
+IWebHost CreateHostBuilder(string[] args, IConfiguration configuration) =>
     WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .CaptureStartupErrors(false)

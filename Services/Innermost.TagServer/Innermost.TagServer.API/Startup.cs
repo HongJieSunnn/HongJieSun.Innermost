@@ -103,7 +103,7 @@ namespace Innermost.TagServer.API
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule<AutofacModule>();
+            builder.RegisterModule<MediatRModule>();
         }
 
         private void ConfigureTagSServer(IApplicationBuilder builder)

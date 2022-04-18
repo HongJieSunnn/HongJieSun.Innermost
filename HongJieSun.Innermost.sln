@@ -79,6 +79,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Push.API", "Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.TagReferrers", "Services\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj", "{C4D34B70-93F1-4689-8AA6-D24F37186E6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.Domain", "Services\Innermost.Meet\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj", "{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.Infrastructure", "Services\Innermost.Meet\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj", "{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Domain", "Services\Innermost.MusicHub\Innermost.MusicHub.Domain\Innermost.MusicHub.Domain.csproj", "{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Infrastructure", "Services\Innermost.MusicHub\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj", "{6B82C97C-6E6B-48AA-B512-BD563452F585}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Crawler", "Services\Innermost.MusicHub\Innermost.MusicHub.Crawler\Innermost.MusicHub.Crawler.csproj", "{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +183,26 @@ Global
 		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4D34B70-93F1-4689-8AA6-D24F37186E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B82C97C-6E6B-48AA-B512-BD563452F585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B82C97C-6E6B-48AA-B512-BD563452F585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B82C97C-6E6B-48AA-B512-BD563452F585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B82C97C-6E6B-48AA-B512-BD563452F585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -213,6 +243,11 @@ Global
 		{D7F42CE5-CC75-49B3-A161-FD794B3455CF} = {4D490A87-36D8-4CE2-BC82-3BBFA386BC71}
 		{FC35147B-2599-4503-A2A4-03C66C53BBB5} = {DAEA6CC6-05C8-4330-95E4-82D3CE13DFB6}
 		{C4D34B70-93F1-4689-8AA6-D24F37186E6D} = {5287AB16-0117-4FE4-B516-14557F1BEC2A}
+		{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4} = {00C9B879-F585-45E9-BC3B-114EDAB4AED2}
+		{59A69261-D72D-44DC-8EBB-A8F1BD2DB938} = {00C9B879-F585-45E9-BC3B-114EDAB4AED2}
+		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
+		{6B82C97C-6E6B-48AA-B512-BD563452F585} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
+		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70648EC6-538D-4A92-84DD-4118D732324A}
