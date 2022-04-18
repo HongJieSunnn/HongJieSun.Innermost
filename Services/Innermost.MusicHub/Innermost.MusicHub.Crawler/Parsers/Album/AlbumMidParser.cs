@@ -19,7 +19,12 @@
 
         private IEnumerable<Request> GenerateAlbumDetailUrls(IEnumerable<string> albumMids)
         {
-            return albumMids.Select(aMid => new Request($"http://localhost:3200/getAlbumInfo?albummid={aMid}"));
+            return albumMids.Select(aMid =>
+            {
+                var request = new Request($"http://localhost:3200/getAlbumInfo?albummid={aMid}");
+                request.Headers.UserAgent = UserAgentPool.GetRandomUserAgent();
+                return request;
+            });
         }
     }
 }

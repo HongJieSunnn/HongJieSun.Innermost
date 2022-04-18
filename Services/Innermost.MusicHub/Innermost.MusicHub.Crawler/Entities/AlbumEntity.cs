@@ -26,7 +26,7 @@
             //--->MessagePack.Internal.MessagePackDynamicObjectResolverException: can't find matched constructor. type:Innermost.MusicHub.Crawler.Entities.AlbumEntity
         }
         public AlbumEntity(
-            int id,string mid, string albumName, string albumDescriptions,
+            int id, string mid, string albumName, string albumDescriptions,
             string albumGenre, string albumLanguage, string? albumCoverUrl,
             int albumSongCount, string publishCompany, string publishDate, string singerName, string singerMid, List<string> musicRecordMids)
         {

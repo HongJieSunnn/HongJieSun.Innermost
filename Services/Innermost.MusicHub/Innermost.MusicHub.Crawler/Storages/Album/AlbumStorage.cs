@@ -5,7 +5,7 @@
         public override async Task HandleAsync(DataFlowContext context)
         {
             var albums = context.GetData("album");
-            if(albums is not null)
+            if (albums is not null)
                 await _dbContext.Albums.InsertOneAsync(albums);
             await Task.CompletedTask;
         }
