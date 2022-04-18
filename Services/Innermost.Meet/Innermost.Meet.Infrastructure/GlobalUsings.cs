@@ -6,5 +6,5 @@ global using System.Threading.Tasks;
 global using DomainSeedWork;
 global using DomainSeedWork.Abstractions;
 global using Innermost.Meet.Domain.Repositories;
-global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord;
+global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
 global using MongoDB.Driver;
