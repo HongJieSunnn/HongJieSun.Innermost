@@ -12,4 +12,4 @@ global using CommonService.IdentityService;
 global using MongoDB.Driver;
 global using MongoDB.Driver.Linq;
 global using Innermost.Meet.Infrastructure;
-global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord;
+global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
