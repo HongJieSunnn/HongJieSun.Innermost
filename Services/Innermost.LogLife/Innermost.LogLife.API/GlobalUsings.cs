@@ -19,7 +19,6 @@ global using IntegrationEventRecord;
 global using Microsoft.EntityFrameworkCore.Design;
 global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics.CodeAnalysis;
-global using Innemost.LogLife.API.Models;
 global using Dapper;
 global using MySqlConnector;
 global using Innermost.LogLife.Domain.Events;
