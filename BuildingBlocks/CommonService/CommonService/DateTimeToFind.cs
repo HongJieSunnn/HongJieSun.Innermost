@@ -1,4 +1,6 @@
-﻿namespace Innemost.LogLife.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CommonService
 {
     public class DateTimeToFind
     {
@@ -34,7 +36,7 @@
         /// 通过查询的类型来决定起始时间以及结束时间来模糊查询
         /// </summary>
         /// <returns></returns>
-        public (DateTime, DateTime) GetStartAndEndTimePair()
+        public (DateTime startTime, DateTime endTime) GetStartAndEndTimePair()
         {
             return _getTimePairDitionary[FindType].Invoke();
         }
