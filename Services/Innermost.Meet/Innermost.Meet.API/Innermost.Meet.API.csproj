@@ -10,12 +10,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\ILoggerExtensions\ILoggerExtensions.csproj" />
+    <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
+    <ProjectReference Include="..\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Client.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
