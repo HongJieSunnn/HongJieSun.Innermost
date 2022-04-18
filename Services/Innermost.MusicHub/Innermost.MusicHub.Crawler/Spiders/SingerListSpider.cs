@@ -6,12 +6,12 @@
         public List<Request> SingerListRequests { get; set; }
         public Dictionary<string, int> MaxSingerCountForEachRegion => new Dictionary<string, int>()
         {
-            {"内地",0 },
-            {"港台",1 },
-            {"欧美",0 },
-            {"日本",0 },
-            {"韩国",0 },
-            {"其它",0 },
+            {"内地",500 },
+            {"港台",500 },
+            {"欧美",500 },
+            {"日本",500 },
+            {"韩国",300 },
+            {"其它",200 },
         };
         public Dictionary<string, int> Regions => new Dictionary<string, int>()
         {

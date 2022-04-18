@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
+    <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Innermost.MongoDBContext">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
+    </Reference>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -99,7 +99,7 @@
                 {
                     //Actually,this tokenLifetime is the lifetime of cookie
                     //as long as the cookie is not expired.we can get access token by connect/authorize endpoint.
-                    var tokenLifetime = _configuration.GetValue("TokenLifetimeMinutes", 120);
+                    var tokenLifetime = _configuration.GetValue("TokenLifetimeMinutes", 24*60);
 
                     var authenticationProps = new AuthenticationProperties
                     {
@@ -110,9 +110,9 @@
 
                     if (loginModel.RememberMe)
                     {
-                        var permanentTokenLifetime = _configuration.GetValue("PermanentTokenLifetimeDays", 5);
+                        var permanentCookieLifetime = _configuration.GetValue("PermanentTokenLifetimeDays", 5);
 
-                        authenticationProps.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(permanentTokenLifetime);
+                        authenticationProps.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(permanentCookieLifetime);
                         authenticationProps.IsPersistent = true;
                     }
 

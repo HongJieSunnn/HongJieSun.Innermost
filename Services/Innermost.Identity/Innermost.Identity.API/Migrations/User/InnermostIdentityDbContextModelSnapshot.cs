@@ -40,7 +40,7 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasDefaultValue("2000-01-01");
 
                     b.Property<string>("City")
-                        .IsRequired()
+                        .IsRequired(false)
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
@@ -98,12 +98,12 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Province")
-                        .IsRequired()
+                        .IsRequired(false)
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("School")
-                        .IsRequired()
+                        .IsRequired(false)
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
