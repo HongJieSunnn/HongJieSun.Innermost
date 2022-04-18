@@ -1,4 +1,4 @@
-﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord;
+﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
 
 namespace Innermost.Meet.Domain.Repositories
 {

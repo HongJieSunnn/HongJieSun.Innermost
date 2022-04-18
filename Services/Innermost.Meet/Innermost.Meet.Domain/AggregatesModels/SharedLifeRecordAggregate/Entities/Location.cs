@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver.GeoJsonObjectModel;
 
-namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.Entities
+namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities
 {
     public class Location : Entity<string>
     {

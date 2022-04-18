@@ -1,9 +1,9 @@
-﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.Entities;
-using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.ValueObjects;
+﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
+using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.ValueObjects;
 using TagS.Microservices.Client.DomainSeedWork;
 using TagS.Microservices.Client.Models;
 
-namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord
+namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate
 {
     public class SharedLifeRecord : TagableEntity<string>, IAggregateRoot
     {

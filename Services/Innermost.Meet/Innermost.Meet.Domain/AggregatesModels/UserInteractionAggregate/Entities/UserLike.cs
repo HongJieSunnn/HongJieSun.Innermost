@@ -1,4 +1,4 @@
-﻿namespace Innermost.Meet.Domain.AggregatesModels.UserInteraction.Entities
+﻿namespace Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate.Entities
 {
     /// <summary>
     /// User like contains the liked record's summary.

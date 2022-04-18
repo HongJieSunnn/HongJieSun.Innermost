@@ -1,4 +1,4 @@
-﻿using Innermost.Meet.Domain.AggregatesModels.UserInteraction.Entities;
+﻿using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate.Entities;
 
 namespace Innermost.Meet.Domain.AggregatesModels.UserInteraction
 {

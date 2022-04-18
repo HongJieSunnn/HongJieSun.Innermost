@@ -1,4 +1,4 @@
-﻿namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.Entities
+﻿namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities
 {
     public class MusicRecord : Entity<string>
     {

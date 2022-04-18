@@ -1,4 +1,4 @@
-﻿namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.ValueObjects
+﻿namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.ValueObjects
 {
     public class Like : ValueObject
     {
