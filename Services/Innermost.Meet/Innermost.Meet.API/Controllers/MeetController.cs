@@ -1,7 +1,7 @@
-﻿using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
-using Microsoft.AspNetCore.Http;
+﻿
+using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+
 
 namespace Innermost.Meet.API.Controllers
 {
@@ -9,10 +9,43 @@ namespace Innermost.Meet.API.Controllers
     [ApiController]
     public class MeetController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly IMeetSharedLifeRecordQueries _meetSharedLifeRecordQueries;
-        public MeetController(IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries)
+        private readonly IIdentityService _identityService;
+        private readonly ILogger<MeetController> _logger;
+        public MeetController(IMediator mediator,IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityService identityService, ILogger<MeetController> logger)
         {
+            _mediator = mediator;
             _meetSharedLifeRecordQueries = meetSharedLifeRecordQueries;
+            _identityService = identityService;
+            _logger = logger;
+
+        }
+
+        [HttpPost]
+        [Route("meet/like")]
+        public async Task<IActionResult> LikeSharedLifeRecordAsync([FromBody] LikeSharedLifeRecordCommand command, [FromHeader(Name = "x-requestid")] string requestId)
+        {
+            bool commandResult = false;
+
+            if (command.LikerUserId is null)
+            {
+                command.LikerUserId = _identityService.GetUserId();
+            }
+
+            if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
+            {
+                var createCommand = new IdempotentCommandLoader<LikeSharedLifeRecordCommand, bool>(command, guid);
+
+                _logger.LogSendCommand(requestId, nameof(LikeSharedLifeRecordCommand), nameof(command.SharedLifeRecordObjectId), command.SharedLifeRecordObjectId, command);
+
+                commandResult = await _mediator.Send(createCommand);
+            }
+
+            if (!commandResult)
+                return BadRequest();//TODO 或者直接抛异常 然后 filter 
+
+            return Ok();
         }
 
         [HttpGet]

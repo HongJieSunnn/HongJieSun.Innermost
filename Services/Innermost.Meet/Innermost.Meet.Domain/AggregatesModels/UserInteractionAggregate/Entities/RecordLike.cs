@@ -4,32 +4,34 @@
     /// User like contains the liked record's summary.
     /// Id is sharedRecordObjectId.
     /// </summary>
-    public class UserLike : Entity<string>
+    public class RecordLike : Entity<string>
     {
-        public string UserId { get; init; }
-        public string UserName { get; private set; }
-        public string UserAvatarUrl { get; private set; }
+        public string RecordUserId { get; init; }
+        public string RecordUserName { get; private set; }
+        public string RecordUserNickName { get; private set; }
+        public string RecordUserAvatarUrl { get; private set; }
         public string? RecordTitle { get; private set; }
         public string RecordText { get; private set; }
         public string? RecordMusicRecordName { get; private set; }
         public string? RecordLocation { get; private set; }
         public DateTime RecordCreateTime { get; init; }
         public DateTime LikeTime { get; init; }
-        public UserLike(
+        public RecordLike(
             string sharedRecordObjectId,
-            string userId, string userName, string userAvatarUrl,
-            string? recordTitle, string recordText, string? recordMusicRecordName, string? recordLocation, DateTime recordCreateTime,
-            DateTime likeTime
-        )
+            string recordUserId, string recordUserName, string recordUserNickName, string recordUserAvatarUrl,
+            string? recordTitle, string recordText, string? recordMusicRecordName, string? recordLocation, 
+            DateTime recordCreateTime,DateTime likeTime)
         {
             Id = sharedRecordObjectId;
-            UserId = userId;
-            UserName = userName;
-            UserAvatarUrl = userAvatarUrl;
+            RecordUserId = recordUserId;
+            RecordUserName = recordUserName;
+            RecordUserNickName = recordUserNickName;
+            RecordUserAvatarUrl = recordUserAvatarUrl;
             RecordTitle = recordTitle;
             RecordText = recordText;
             RecordMusicRecordName = recordMusicRecordName;
             RecordLocation = recordLocation;
+            RecordCreateTime = recordCreateTime;
             LikeTime = likeTime;
         }
     }

@@ -45,7 +45,7 @@ namespace Innermost.TagServer.API
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddMongoDBSession();
 

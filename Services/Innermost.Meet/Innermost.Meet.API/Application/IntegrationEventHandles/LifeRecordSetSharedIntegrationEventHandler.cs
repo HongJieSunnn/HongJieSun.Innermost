@@ -1,5 +1,6 @@
-﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord;
-using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecord.Entities;
+﻿using CommonIdentityService.IdentityService;
+using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
+using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
 using MongoDB.Driver.GeoJsonObjectModel;
 using TagS.Microservices.Client.Models;
 
@@ -8,16 +9,22 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
     public class LifeRecordSetSharedIntegrationEventHandler : IIntegrationEventHandler<LifeRecordSetSharedIntegrationEvent>
     {
         private readonly ISharedLifeRecordRepository _sharedLifeRecordRepository;
+        private readonly IUserIdentityService _userIdentityService;
         private readonly ILogger<LifeRecordSetSharedIntegrationEventHandler> _logger;
-        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
+        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository,IUserIdentityService userIdentityService, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
         {
             _sharedLifeRecordRepository = sharedLifeRecordRepository;
+            _userIdentityService = userIdentityService;
             _logger = logger;
 
         }
         public async Task Handle(LifeRecordSetSharedIntegrationEvent @event)
         {
             _logger.LogIntegrationEventHandlerStartHandling(@event, Program.AppName);
+
+            var getUserNamesTask=_userIdentityService.GetUserNamesAsync(@event.UserId);
+            var getUserAvatarUrlTask = _userIdentityService.GetUserAvatarUrlAsync(@event.UserId);
+
             Location? location = null;
             MusicRecord? musicRecord = null;
             List<TagSummary> tagSummaries = @event.TagSummaries.Select(t => new TagSummary(t.TagId, t.TagName)).ToList();
@@ -33,7 +40,10 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
                 musicRecord = new MusicRecord(@event.MusicId, @event.MusicName!, @event.Singer!, @event.Album!);
             }
 
-            var sharedLifeRecord = new SharedLifeRecord(null, @event.RecordId, @event.UserId, @event.Title, @event.Text, location, musicRecord, @event.ImagePaths, null, tagSummaries, @event.CreateTime, null, null);
+            var userNames = await getUserNamesTask;
+            var userAvatarUrl = await getUserAvatarUrlTask;
+
+            var sharedLifeRecord = new SharedLifeRecord(null, @event.RecordId, @event.UserId,userNames.userName,userNames.userNickName,userAvatarUrl, @event.Title, @event.Text, location, musicRecord, @event.ImagePaths,0, null, tagSummaries, @event.CreateTime, null, null);
 
             await _sharedLifeRecordRepository.AddSharedLifeRecordAsync(sharedLifeRecord);
         }

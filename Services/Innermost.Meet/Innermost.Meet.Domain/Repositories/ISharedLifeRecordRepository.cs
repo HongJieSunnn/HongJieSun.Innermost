@@ -4,6 +4,8 @@ namespace Innermost.Meet.Domain.Repositories
 {
     public interface ISharedLifeRecordRepository : IRepository<SharedLifeRecord>
     {
+        Task<SharedLifeRecord> GetSharedLifeRecordAsync(string sharedLifeRecordObjectId);
+
         Task AddSharedLifeRecordAsync(SharedLifeRecord sharedLifeRecord);
 
         Task<UpdateResult> UpdateSharedLifeRecordAsync(string sharedLifeRecordObjectId, UpdateDefinition<SharedLifeRecord> updateDefinition);

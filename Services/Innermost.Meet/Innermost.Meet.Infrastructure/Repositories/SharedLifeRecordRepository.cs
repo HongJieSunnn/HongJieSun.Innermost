@@ -12,6 +12,11 @@
         }
         public IUnitOfWork UnitOfWork => _context;
 
+        public Task<SharedLifeRecord> GetSharedLifeRecordAsync(string sharedLifeRecordObjectId)
+        {
+            return _context.SharedLifeRecords.Find(l=>l.Id==sharedLifeRecordObjectId).FirstAsync();
+        }
+
         public Task AddSharedLifeRecordAsync(SharedLifeRecord sharedLifeRecord)
         {
             return _context.SharedLifeRecords.InsertOneAsync(_session, sharedLifeRecord);

@@ -5,6 +5,9 @@
         public string SharedLifeRecordObjectId { get; set; }
         public int RecordId { get; set; }
         public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string UserNickName { get; set; }
+        public string UserAvatarUrl { get; set; }
         public string? Title { get; set; }
         public string Text { get; set; }
         public LocationDTO? Location { get; set; }
@@ -18,7 +21,7 @@
         public DateTime? DeleteTime { get; set; }
 
         public SharedLifeRecordDTO(
-            string objectId, int recordId, string userId,
+            string objectId, int recordId, string userId,string userName,string userNickName,string userAvatarUrl,
             string? title, string text,
             LocationDTO? location, MusicRecordDTO? musicRecord,
             List<string>? imagePaths, int likesCount, List<LikeDTO>? likes, List<TagSummaryDTO> tagSummaries,
@@ -27,6 +30,9 @@
             SharedLifeRecordObjectId = objectId;
             RecordId = recordId;
             UserId = userId;
+            UserName = userName;
+            UserNickName = userNickName;
+            UserAvatarUrl = userAvatarUrl;
             Title = title;
             Text = text;
             Location = location;
@@ -46,6 +52,9 @@
             SharedLifeRecordObjectId = sharedLifeRecord.Id!;
             RecordId = sharedLifeRecord.RecordId!;
             UserId = sharedLifeRecord.UserId!;
+            UserName = sharedLifeRecord.UserName!;
+            UserNickName = sharedLifeRecord.UserNickName!;
+            UserAvatarUrl = sharedLifeRecord.UserAvatarUrl!;
             Title = sharedLifeRecord.Title;
             Text = sharedLifeRecord.Text;
 
@@ -63,7 +72,7 @@
 
             ImagePaths = sharedLifeRecord.ImagePaths?.ToList();
             LikesCount = sharedLifeRecord.LikesCount;
-            Likes = sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikeUserId, l.LikeUserName, l.LikeUserAvatarUrl, l.LikeTime)).ToList();
+            Likes = sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikerUserId, l.LikerUserName,l.LikerUserNickName, l.LikerUserAvatarUrl, l.LikeTime)).ToList();
             TagSummaries = sharedLifeRecord.Tags.Select(t => new TagSummaryDTO(t.TagId, t.TagName)).ToList();
             CreateTime = sharedLifeRecord.CreateTime;
             UpdateTime = sharedLifeRecord.UpdateTime;
@@ -112,15 +121,17 @@
 
     public class LikeDTO
     {
-        public string LikeUserId { get; private set; }
-        public string LikeUserName { get; set; }
-        public string LikeUserAvatarUrl { get; private set; }
-        public DateTime LikeTime { get; private set; }
-        public LikeDTO(string likeUserId, string likeUserName, string likeUserAvatarUrl, DateTime likeTime)
+        public string LikerUserId { get; set; }
+        public string LikerUserName { get; set; }
+        public string LikerUserNickName { get; set; }
+        public string LikerUserAvatarUrl { get; set; }
+        public DateTime LikeTime { get; set; }
+        public LikeDTO(string likerUserId, string likerUserName,string likerUserNickeName, string likerUserAvatarUrl, DateTime likeTime)
         {
-            LikeUserId = likeUserId;
-            LikeUserName = likeUserName;
-            LikeUserAvatarUrl = likeUserAvatarUrl;
+            LikerUserId = likerUserId;
+            LikerUserName = likerUserName;
+            LikerUserNickName=likerUserNickeName;
+            LikerUserAvatarUrl = likerUserAvatarUrl;
             LikeTime = likeTime;
         }
     }

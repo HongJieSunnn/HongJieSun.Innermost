@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innermost.MusicHub", "Inner
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Identity.API", "Services\Innermost.Identity\Innermost.Identity.API\Innermost.Identity.API.csproj", "{41435F38-1843-4B21-812B-511FA89E81AC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonService", "CommonService", "{DD9FCC05-9996-4C7E-AC0F-EF44F021F696}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonServices", "CommonServices", "{DD9FCC05-9996-4C7E-AC0F-EF44F021F696}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonService", "BuildingBlocks\CommonService\CommonService\CommonService.csproj", "{39C3FA7C-FC69-49CC-BB6D-C20186A953C0}"
 EndProject
@@ -79,15 +79,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Push.API", "Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.TagReferrers", "Services\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj", "{C4D34B70-93F1-4689-8AA6-D24F37186E6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.Domain", "Services\Innermost.Meet\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj", "{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Meet.Domain", "Services\Innermost.Meet\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj", "{85FA9C42-DE1F-44B9-9BCF-27B420C6E8C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.Meet.Infrastructure", "Services\Innermost.Meet\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj", "{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.Meet.Infrastructure", "Services\Innermost.Meet\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj", "{59A69261-D72D-44DC-8EBB-A8F1BD2DB938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Domain", "Services\Innermost.MusicHub\Innermost.MusicHub.Domain\Innermost.MusicHub.Domain.csproj", "{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.MusicHub.Domain", "Services\Innermost.MusicHub\Innermost.MusicHub.Domain\Innermost.MusicHub.Domain.csproj", "{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Infrastructure", "Services\Innermost.MusicHub\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj", "{6B82C97C-6E6B-48AA-B512-BD563452F585}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.MusicHub.Infrastructure", "Services\Innermost.MusicHub\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj", "{6B82C97C-6E6B-48AA-B512-BD563452F585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innermost.MusicHub.Crawler", "Services\Innermost.MusicHub\Innermost.MusicHub.Crawler\Innermost.MusicHub.Crawler.csproj", "{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Innermost.MusicHub.Crawler", "Services\Innermost.MusicHub\Innermost.MusicHub.Crawler\Innermost.MusicHub.Crawler.csproj", "{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILoggerExtensions", "BuildingBlocks\Extensions\ILoggerExtensions\ILoggerExtensions.csproj", "{094F2898-403B-4B2D-952A-A38BD7CC8234}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonIdentityService", "BuildingBlocks\CommonService\CommonIdentityService\CommonIdentityService.csproj", "{08B6432A-5AE3-4BF6-A18D-32B53267E80B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -203,6 +207,14 @@ Global
 		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{094F2898-403B-4B2D-952A-A38BD7CC8234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{094F2898-403B-4B2D-952A-A38BD7CC8234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{094F2898-403B-4B2D-952A-A38BD7CC8234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{094F2898-403B-4B2D-952A-A38BD7CC8234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -248,6 +260,8 @@ Global
 		{58FCE40E-CF11-44CA-9AFF-028C4E6FD7FB} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
 		{6B82C97C-6E6B-48AA-B512-BD563452F585} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
 		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
+		{094F2898-403B-4B2D-952A-A38BD7CC8234} = {00A54387-ECCB-4AEA-AFFA-EA0C6B38688E}
+		{08B6432A-5AE3-4BF6-A18D-32B53267E80B} = {DD9FCC05-9996-4C7E-AC0F-EF44F021F696}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70648EC6-538D-4A92-84DD-4118D732324A}

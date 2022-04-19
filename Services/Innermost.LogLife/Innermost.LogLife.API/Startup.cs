@@ -1,4 +1,5 @@
-﻿using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+﻿using CommonService.IdentityService.Extensions;
+using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using TagS.Microservices.Client.Microsoft.DependencyInjection;
 
 namespace Innermost.LogLife.API
@@ -205,7 +206,7 @@ namespace Innermost.LogLife.API
 
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中.But TagServer has not configured that and IdentityService is also useful.
 
             var identityServerUrl = configuration["IdentityServerUrl"];
 
@@ -221,15 +222,13 @@ namespace Innermost.LogLife.API
                     options.Audience = "loglife";
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddIdentityService();
 
             return services;
         }
 
         public static IServiceCollection AddGrpcServices(this IServiceCollection service, IConfiguration configuration)
         {
-            
 
             return service;
         }

@@ -7,3 +7,5 @@ global using DomainSeedWork;
 global using DomainSeedWork.Abstractions;
 global using MongoDB.Driver;
 global using MongoDB.Bson.Serialization.Attributes;
+global using MediatR;
+global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;

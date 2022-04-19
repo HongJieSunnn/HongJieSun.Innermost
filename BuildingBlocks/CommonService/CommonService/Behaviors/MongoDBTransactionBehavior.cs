@@ -40,15 +40,20 @@ namespace CommonService.Behaviors
                 _session.StartTransaction();//TODO options
 
                 _logger.LogInformation("----- Begin MongoDB transaction for {CommandName} ({@Command})",  requestName, request);
-                response = await next();
-                _logger.LogInformation("----- Commit MongoDB transaction {TransactionId} for {CommandName}", requestName);
 
+                response = await next();
+
+                _logger.LogInformation("----- Commit MongoDB transaction {TransactionId} for {CommandName}", requestName);
+                
                 await _session.CommitTransactionAsync();
             }
             catch (Exception ex)//TODO 
             {
-                if(_session.IsInTransaction)
+                _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", requestName, request);
+
+                if (_session.IsInTransaction)
                     _session.AbortTransaction();
+
                 throw;
             }
 

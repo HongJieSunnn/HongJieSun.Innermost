@@ -5,8 +5,13 @@
     /// </summary>
     public class InnermostUser : IdentityUser
     {
+        /// <summary>
+        /// Real name
+        /// </summary>
+        public string? Name { get; set; }
+
         [Range(1, 130, ErrorMessage = "Age must between 1 and 130")]
-        public int Age { get; set; }
+        public uint Age { get; set; }
 
         [RegularExpression(@"^MALE|FEMALE$", ErrorMessage = "Error gender.Gender just only can be MALE or FEMALE")]
         [Required, Column(TypeName = "VARCHAR(8)")]

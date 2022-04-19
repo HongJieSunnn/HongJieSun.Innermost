@@ -1,0 +1,41 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Innermost.Identity.API";
+
+package IdentityUserApi;
+
+service IdentityUserGrpc{
+	rpc GetUserNames(UserIdDTO) returns (UserNamesDTO){}
+	rpc GetUserAvatarUrl(UserIdDTO) returns (UserAvatarUrlDTO){}
+	rpc GetUserProfiles(UserIdDTO) returns (UserDTO){}
+}
+
+message UserIdDTO{
+	string userId=1;
+}
+
+message UserNamesDTO{
+	string userName=1;
+	string userNickName=2;
+}
+
+message UserAvatarUrlDTO{
+	string userAvatarUrl=1;
+}
+
+message UserDTO{
+	string userName=1;
+	string userNickName=2;
+	string userEmail=3;
+	string name=4;
+	uint32 age=5;
+	string gender=6;
+	string school=7;
+	string province=8;
+	string city=9;
+	string selfDescription=10;
+	string birthday=11;
+	string userAvatarUrl=12;
+	string userBackgroundImageUrl=13;
+	string createTime=14;
+}

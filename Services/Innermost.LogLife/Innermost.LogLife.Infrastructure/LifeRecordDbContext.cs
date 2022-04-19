@@ -68,7 +68,7 @@ namespace Innermost.LogLife.Infrastructure
 
             try
             {
-                await this.SaveChangesAsync();
+                await this.SaveChangesAsync();//save domain evnets changes.
                 transaction.Commit();
             }
             catch

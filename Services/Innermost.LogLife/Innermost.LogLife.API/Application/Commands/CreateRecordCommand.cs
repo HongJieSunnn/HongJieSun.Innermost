@@ -25,7 +25,7 @@
 
         public List<string>? ImagePaths { get; set; }
 
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         public Dictionary<string,string> TagSummaries { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace Innermost.Identity.API
+﻿using Innermost.Identity.API.Grpc.Services;
+
+namespace Innermost.Identity.API
 {
     public class Startup
     {
@@ -55,8 +57,6 @@
                         .AllowAnyMethod();
                 });
             });
-
-
 
             //添加 IdentityServer
             var builder = services.AddIdentityServer(options =>
@@ -115,6 +115,9 @@
                 options.LoginPath = "/Account/Login";
             });
 
+            //Gprc
+            services.AddGrpc();
+
             //开发使用的证书，真正生产环境下需要像eshop项目里一样弄一个证书装进去
             builder.AddDeveloperSigningCredential();
 
@@ -156,6 +159,7 @@
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<IdentityUserGrpcService>();
             });
         }
     }

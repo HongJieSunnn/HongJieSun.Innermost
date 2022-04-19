@@ -2,19 +2,28 @@
 
 namespace Innermost.Meet.Domain.AggregatesModels.UserInteraction
 {
+    /// <summary>
+    /// UserInteraction represent for interaction between user and sharedLifeRecords or more later.
+    /// </summary>
     public class UserInteraction : Entity<string>, IAggregateRoot
     {
         public string UserId { get; init; }
 
         [BsonRequired]
-        [BsonElement("UserLikes")]
-        private readonly List<UserLike> _userLikes;
-        public IReadOnlyCollection<UserLike> UserLikes => _userLikes.AsReadOnly();
-        public UserInteraction(string? id, string userId, List<UserLike> userLikes)
+        [BsonElement("RecordLikes")]
+        private readonly List<RecordLike> _recordLikes;
+        public IReadOnlyCollection<RecordLike> RecordLikes => _recordLikes.AsReadOnly();
+        public UserInteraction(string? id, string userId, List<RecordLike> recordLikes)
         {
             Id = id;
             UserId = userId;
-            _userLikes = userLikes;
+            _recordLikes = recordLikes;
+        }
+
+        public UpdateDefinition<UserInteraction> AddRecordLike(RecordLike recordLike)
+        {
+            _recordLikes.Add(recordLike);
+            return Builders<UserInteraction>.Update.AddToSet("RecordLikes", recordLike);
         }
     }
 }
