@@ -1,21 +1,47 @@
-﻿using Innermost.MongoDBContext;
+﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
+using Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate;
+using Innermost.Meet.Domain.AggregatesModels.UserInteraction;
+using Innermost.MongoDBContext;
 using Innermost.MongoDBContext.Configurations;
-
+using MediatR;
 
 namespace Innermost.Meet.Infrastructure
 {
     public class MeetMongoDBContext : MongoDBContextBase, IUnitOfWork
     {
         private bool _disposed;
+        private readonly IMediator _mediator;
         public IMongoCollection<SharedLifeRecord> SharedLifeRecords { get; set; }
+        public IMongoCollection<UserInteraction> UserInteractions { get; set; }
+        public IMongoCollection<UserSocialContact> UserSocialContacts { get; set; }
+        public IMongoCollection<UserChattingContext> UserChattingContexts { get; set; }
         public MeetMongoDBContext(MongoDBContextConfiguration<MeetMongoDBContext> contextConfiguration) : base(contextConfiguration)
         {
 
         }
-        public Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>
+
+        public MeetMongoDBContext(MongoDBContextConfiguration<MeetMongoDBContext> contextConfiguration,IMediator mediator) : base(contextConfiguration)
         {
-            throw new NotImplementedException();
+            _mediator=mediator;
         }
+
+        public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
+        {
+            if (entity.DomainEvents is not null)
+            {
+                var domainEvents = entity.DomainEvents;
+
+                foreach (var domainEvent in domainEvents)
+                {
+                    await _mediator.Publish(domainEvent);
+                }
+
+                entity.ClearDomainEvents();//reference
+            }
+
+            return true;
+        }
+
         public void Dispose()
         {
             if (!_disposed)

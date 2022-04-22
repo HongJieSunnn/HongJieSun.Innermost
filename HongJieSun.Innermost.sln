@@ -93,6 +93,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILoggerExtensions", "Buildi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonIdentityService", "BuildingBlocks\CommonService\CommonIdentityService\CommonIdentityService.csproj", "{08B6432A-5AE3-4BF6-A18D-32B53267E80B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IEnumerableExtensions", "BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj", "{919CDEA0-4756-4555-A5E9-70D44F57773A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -215,6 +217,10 @@ Global
 		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08B6432A-5AE3-4BF6-A18D-32B53267E80B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919CDEA0-4756-4555-A5E9-70D44F57773A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919CDEA0-4756-4555-A5E9-70D44F57773A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919CDEA0-4756-4555-A5E9-70D44F57773A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919CDEA0-4756-4555-A5E9-70D44F57773A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +268,7 @@ Global
 		{EDFE4240-802E-4F94-98B2-2C1183E7F3F7} = {53AC5019-18BD-4C5A-B5F6-11E60B7304C3}
 		{094F2898-403B-4B2D-952A-A38BD7CC8234} = {00A54387-ECCB-4AEA-AFFA-EA0C6B38688E}
 		{08B6432A-5AE3-4BF6-A18D-32B53267E80B} = {DD9FCC05-9996-4C7E-AC0F-EF44F021F696}
+		{919CDEA0-4756-4555-A5E9-70D44F57773A} = {00A54387-ECCB-4AEA-AFFA-EA0C6B38688E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70648EC6-538D-4A92-84DD-4118D732324A}

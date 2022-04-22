@@ -17,8 +17,16 @@
             var testerUser = userToAdd[2];
 
             await userManager.AddClaimAsync(adminUser, new Claim(ClaimTypes.Role, "Admin"));
+            await userManager.AddClaimAsync(adminUser, new Claim("nickname", "Admin"));//We should add claims for profile.Or id_token(take profile) only contains name and preferred_username.
+            await userManager.AddClaimAsync(adminUser, new Claim("user_statue", adminUser.UserStatue));
+
             await userManager.AddClaimAsync(hongJieSunUser, new Claim(ClaimTypes.Role, "User"));
+            await userManager.AddClaimAsync(hongJieSunUser, new Claim("nickname", hongJieSunUser.NickName));
+            await userManager.AddClaimAsync(hongJieSunUser, new Claim("user_statue", hongJieSunUser.UserStatue));
+
             await userManager.AddClaimAsync(testerUser, new Claim(ClaimTypes.Role, "User"));
+            await userManager.AddClaimAsync(testerUser, new Claim("nickname", testerUser.NickName));
+            await userManager.AddClaimAsync(hongJieSunUser, new Claim("user_statue", hongJieSunUser.UserStatue));
         }
 
         public List<InnermostUser> DefaultUsers()

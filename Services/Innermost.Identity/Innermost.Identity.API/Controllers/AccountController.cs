@@ -38,6 +38,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel model, string returnUrl = null)
         {
+            //TODO add claims.
             if (ModelState.IsValid)
             {
                 var newUser = new InnermostUser
@@ -86,6 +87,9 @@
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
+            //TODO set user statue into redis.
+            //so that confidant can get faster and modify faster.
+            //after signalR disconnect or logout,modify redis value to mysql database.
             if (ModelState.IsValid)
             {
                 var user = await _loginService.FindByAccount(loginModel.Account, loginModel.AccountType);

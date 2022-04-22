@@ -6,6 +6,7 @@ namespace Innermost.Meet.Domain.Repositories
     {
         Task<UserInteraction> GetUserInteractionAsync(string interactiveUserId);
 
-        Task<UpdateResult> UpdateUserInteractionAsync(string interactiveUserId,UpdateDefinition<UserInteraction> updateDefinition);
+        Task<UpdateResult> UpdateUserInteractionAsync(string interactiveUserId,UpdateDefinition<UserInteraction> updateDefinition,params FilterDefinition<UserInteraction>[] filterDefinitions);
+        Task<UpdateResult> UpdateManyUserInteractionsAsync(IEnumerable<string> interactiveUserIds,UpdateDefinition<UserInteraction> updateDefinition,params FilterDefinition<UserInteraction>[] filterDefinitions);
     }
 }

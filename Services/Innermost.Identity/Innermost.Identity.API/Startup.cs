@@ -45,6 +45,7 @@ namespace Innermost.Identity.API
                 .AddEntityFrameworkStores<InnermostIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            //Add cors
             services.AddCors(options =>
             {
                 options.AddPolicy("WebApp", policy =>
@@ -62,6 +63,7 @@ namespace Innermost.Identity.API
             var builder = services.AddIdentityServer(options =>
             {
                 options.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                //TODO here can also configure cors.
             })
             .AddAspNetIdentity<InnermostUser>()
             .AddConfigurationStore(options =>
