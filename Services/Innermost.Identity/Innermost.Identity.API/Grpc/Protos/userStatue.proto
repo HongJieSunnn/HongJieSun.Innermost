@@ -1,0 +1,49 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Innermost.Identity.API";
+
+package IdentityUserStatueApi;
+
+service IdentityUserStatueGrpc{
+	rpc IsUserOnline(IsUserOnlineUserIdGrpcDTO) returns(IsUserOnlineGrpcDTO){}
+
+	rpc GetUsersOnlineStatue(UserIdsGrpcDTO) returns (UsersOnlineStatueGrpcDTO){}
+	rpc GetUsersStatue(UserIdsGrpcDTO) returns (UsersStatueGrpcDTO){}
+
+	rpc SetUserOnlineStatue(SetUserOnlineStatueGrpcDTO) returns (SetUserStatueVoidRetGrpcDTO){}
+	rpc SetUserStatue(SetUserStatueGrpcDTO) returns (SetUserStatueVoidRetGrpcDTO) {}
+}
+
+message IsUserOnlineUserIdGrpcDTO{
+	string userId=1;
+}
+
+message IsUserOnlineGrpcDTO{
+	bool isOnline=1;
+}
+
+message UserIdsGrpcDTO{
+	repeated string userIds=1;
+}
+
+message UsersOnlineStatueGrpcDTO{
+	repeated bool usersOnlineStatue=1;
+}
+
+message UsersStatueGrpcDTO{
+	repeated string usersStatue=1;
+}
+
+message SetUserOnlineStatueGrpcDTO{
+	string userId=1;
+	bool isOnline=2;
+}
+
+message SetUserStatueGrpcDTO{
+	string userId=1;
+	string userStatue=2;
+}
+
+message SetUserStatueVoidRetGrpcDTO{
+
+}
