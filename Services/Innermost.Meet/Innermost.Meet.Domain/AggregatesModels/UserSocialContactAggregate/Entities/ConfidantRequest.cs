@@ -8,12 +8,32 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserSocialContactAggregate.Enti
         public string RequestMessage { get; init; }
         public ConfidantRequestStatue ConfidantRequestStatue { get; private set; }
         public DateTime RequestTime { get; init; }
-        public ConfidantRequest(string requestUserId,string requestMessage,ConfidantRequestStatue confidantRequestStatue,DateTime? requestTime)
+        public DateTime? UpdateTime { get; private set; }
+        public ConfidantRequest(string requestUserId,string requestMessage,ConfidantRequestStatue confidantRequestStatue,DateTime requestTime,DateTime? updateTime)
         {
             RequestUserId= requestUserId;
             RequestMessage= requestMessage;
             ConfidantRequestStatue= confidantRequestStatue;
-            RequestTime = requestTime ?? DateTime.Now;
+            RequestTime = requestTime;
+            UpdateTime = updateTime;
+        }
+
+        public void SetConfidantRequestPassed()
+        {
+            ConfidantRequestStatue = ConfidantRequestStatue.Passed;
+            UpdateTime=DateTime.Now;
+        }
+
+        public void SetConfidantRequestRefused()
+        {
+            ConfidantRequestStatue = ConfidantRequestStatue.Refused;
+            UpdateTime = DateTime.Now;
+        }
+
+        public void SetConfidantRequestRefusedAndNotReceiveRequestAnyMore()
+        {
+            ConfidantRequestStatue = ConfidantRequestStatue.RefusedAndNotReceiveRequestAnyMore;
+            UpdateTime = DateTime.Now;
         }
     }
 }
