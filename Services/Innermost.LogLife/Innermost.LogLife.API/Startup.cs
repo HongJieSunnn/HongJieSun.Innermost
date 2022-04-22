@@ -32,7 +32,8 @@ namespace Innermost.LogLife.API
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
                 .AddCustomConfig(Configuration)
-                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>();
+                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>()
+                .AddCustomCORS();
     
 
             services.AddSwaggerGen(c =>
@@ -74,6 +75,8 @@ namespace Innermost.LogLife.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innemost.LogLife.API v1"));
             }
+
+            app.UseCors("ReactApp");
 
             app.UseHttpsRedirection();
 
@@ -206,7 +209,7 @@ namespace Innermost.LogLife.API
 
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中.But TagServer has not configured that and IdentityService is also useful.
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中.But TagServer has not configured that and IdentityService is also useful.
 
             var identityServerUrl = configuration["IdentityServerUrl"];
 
@@ -260,6 +263,24 @@ namespace Innermost.LogLife.API
             services.AddScoped<ILifeRecordRepository, LifeRecordRepository>();
 
             //TODO AddIdempotentCommandRequestStorage
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomCORS(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ReactApp", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000")
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyMethod();
+                });
+            });
 
             return services;
         }
