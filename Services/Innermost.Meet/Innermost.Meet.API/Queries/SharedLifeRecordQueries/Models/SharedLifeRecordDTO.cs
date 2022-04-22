@@ -1,24 +1,24 @@
-﻿namespace Innermost.Meet.API.Queries.Models
+﻿namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries.Models
 {
     public class SharedLifeRecordDTO
     {
-        public string SharedLifeRecordObjectId { get; set; }
-        public int RecordId { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string UserNickName { get; set; }
-        public string UserAvatarUrl { get; set; }
-        public string? Title { get; set; }
-        public string Text { get; set; }
-        public LocationDTO? Location { get; set; }
-        public MusicRecordDTO? MusicRecord { get; set; }
-        public List<string>? ImagePaths { get; set; }
-        public int LikesCount { get; set; }
-        public List<LikeDTO> Likes { get; set; }
-        public List<TagSummaryDTO> TagSummaries { get; set; }
-        public DateTime CreateTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
-        public DateTime? DeleteTime { get; set; }
+        public string SharedLifeRecordObjectId { get; init; }
+        public int RecordId { get; init; }
+        public string UserId { get; init; }
+        public string UserName { get; init; }
+        public string UserNickName { get; init; }
+        public string UserAvatarUrl { get; init; }
+        public string? Title { get; init; }
+        public string Text { get; init; }
+        public LocationDTO? Location { get; init; }
+        public MusicRecordDTO? MusicRecord { get; init; }
+        public List<string>? ImagePaths { get; init; }
+        public int LikesCount { get; init; }
+        public List<LikeDTO> Likes { get; init; }
+        public List<TagSummaryDTO> TagSummaries { get; init; }
+        public DateTime CreateTime { get; init; }
+        public DateTime? UpdateTime { get; init; }
+        public DateTime? DeleteTime { get; init; }
 
         public SharedLifeRecordDTO(
             string objectId, int recordId, string userId,string userName,string userNickName,string userAvatarUrl,
@@ -82,14 +82,14 @@
 
     public class LocationDTO
     {
-        public string LocationUId { get; set; }
-        public string LocationName { get; set; }
-        public string Province { get; set; }
-        public string City { get; set; }
-        public string? District { get; set; }
-        public string Address { get; set; }
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
+        public string LocationUId { get; init; }
+        public string LocationName { get; init; }
+        public string Province { get; init; }
+        public string City { get; init; }
+        public string? District { get; init; }
+        public string Address { get; init; }
+        public float Longitude { get; init; }
+        public float Latitude { get; init; }
         public LocationDTO(string uid, string locationName, string province, string city, string? district, string address, float longitude, float latitude)
         {
             LocationUId = uid;
@@ -105,10 +105,10 @@
 
     public class MusicRecordDTO
     {
-        public string MusicMId { get; set; }
-        public string MusicName { get; set; }
-        public string Singer { get; set; }
-        public string Album { get; set; }
+        public string MusicMId { get; init; }
+        public string MusicName { get; init; }
+        public string Singer { get; init; }
+        public string Album { get; init; }
 
         public MusicRecordDTO(string mid, string musicName, string singer, string album)
         {
@@ -121,11 +121,11 @@
 
     public class LikeDTO
     {
-        public string LikerUserId { get; set; }
-        public string LikerUserName { get; set; }
-        public string LikerUserNickName { get; set; }
-        public string LikerUserAvatarUrl { get; set; }
-        public DateTime LikeTime { get; set; }
+        public string LikerUserId { get; init; }
+        public string LikerUserName { get; init; }
+        public string LikerUserNickName { get; init; }
+        public string LikerUserAvatarUrl { get; init; }
+        public DateTime LikeTime { get; init; }
         public LikeDTO(string likerUserId, string likerUserName,string likerUserNickeName, string likerUserAvatarUrl, DateTime likeTime)
         {
             LikerUserId = likerUserId;
@@ -138,8 +138,8 @@
 
     public class TagSummaryDTO
     {
-        public string TagId { get; set; }
-        public string TagName { get; set; }
+        public string TagId { get; init; }
+        public string TagName { get; init; }
         public TagSummaryDTO(string tagId, string tagName)
         {
             TagId = tagId;
