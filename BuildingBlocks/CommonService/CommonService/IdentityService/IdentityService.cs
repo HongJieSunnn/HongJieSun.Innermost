@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace CommonService.IdentityService
 {
@@ -17,7 +18,7 @@ namespace CommonService.IdentityService
         {
             //若要使用 FindFirst("sub") 需要先在 Startup 中 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); 否则，需要 User.FindFirstValue(ClaimTypes.NameIdentifier);来获取
             //But TagServer has not configured that and IdentityService is also useful.
-            return _httpContextAccessor.HttpContext.User.FindFirst("sub")!.Value;
+            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         }
     }
 }
