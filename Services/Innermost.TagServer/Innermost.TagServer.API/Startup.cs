@@ -1,4 +1,5 @@
-﻿using EventBusCommon;
+﻿using CommonService.IdentityService.Extensions;
+using EventBusCommon;
 using EventBusCommon.Abstractions;
 using EventBusServiceBus;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
@@ -44,8 +45,7 @@ namespace Innermost.TagServer.API
                     options.Audience = "tagserver";
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddIdentityService();
 
             services.AddMongoDBSession();
 
