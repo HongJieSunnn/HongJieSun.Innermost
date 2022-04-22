@@ -25,11 +25,24 @@
 
         public List<string>? ImagePaths { get; set; }
 
-        public DateTime CreateTime { get; set; }
-
+        public DateTime? CreateTime { get; set; }
         public Dictionary<string,string> TagSummaries { get; set; }
 
-        public CreateRecordCommand(string userId, string? title, string text,bool isShared,
+        //Tip:Nullable params in JsonConstructor can be not passed by json.But the type of params in constructor must be same as property or fields the params pass to.
+        //For exsample,nullable params must pass to nullable properties or fields.
+        /* Json under can deserialize successfully.
+         * But if property CreateTime's type is DateTime but param createTime's type is DateTime?,even if all params have been passed,there is still throw exception:
+         * Each parameter in the deserialization constructor on type 'Innermost.LogLife.API.Application.Commands.CreateRecordCommand' must bind to an object property or field on deserialization. 
+         * Each parameter name must match with a property or field on the object. The match can be case-insensitive.
+         * {
+                "text":"油画一样的天空，你真该出现然后和我一块去看看的。",
+                "isShared":false,
+                "TagSummaries":{
+                    "623c16ab3617e7aaf8343318":"心情:积极"
+                }
+            }
+         */
+        public CreateRecordCommand(string? userId, string? title, string text,bool isShared,
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
