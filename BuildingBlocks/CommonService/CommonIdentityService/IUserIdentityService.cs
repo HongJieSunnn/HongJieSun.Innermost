@@ -1,4 +1,4 @@
-﻿using CommonIdentityService.IdentityService.Models;
+﻿using CommonIdentityService.Models;
 
 namespace CommonIdentityService.IdentityService
 {
@@ -18,5 +18,7 @@ namespace CommonIdentityService.IdentityService
         Task<(string userName, string userNickName)> GetUserNamesAsync(string? userId = null);
         Task<string> GetUserAvatarUrlAsync(string? userId = null);
         Task<UserProfile> GetUserProfileAsync(string? userId = null);
+        Task<UserProfileForLike> GetUserProfileForLikeAsync(string userId);
+        Task<UserProfileSummary> GetUserProfileSummaryAsync(string? userId=null);  
     }
 }

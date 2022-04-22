@@ -5,37 +5,44 @@ option csharp_namespace = "Innermost.Identity.API";
 package IdentityUserApi;
 
 service IdentityUserGrpc{
-	rpc GetUserNames(UserIdDTO) returns (UserNamesDTO){}
-	rpc GetUserAvatarUrl(UserIdDTO) returns (UserAvatarUrlDTO){}
-	rpc GetUserProfiles(UserIdDTO) returns (UserDTO){}
+	rpc GetUserProfileForLike(UserIdGrpcDTO) returns (UserProfileForLikeGrpcDTO){}
+	rpc GetUserProfileSummary(UserIdGrpcDTO) returns (UserProfileSummaryGrpcDTO){}
+	rpc GetUserProfile(UserIdGrpcDTO) returns (UserGrpcDTO){}
 }
 
-message UserIdDTO{
+message UserIdGrpcDTO{
 	string userId=1;
 }
 
-message UserNamesDTO{
+message UserProfileForLikeGrpcDTO{
 	string userName=1;
 	string userNickName=2;
+	string userAvatarUrl=3;
 }
 
-message UserAvatarUrlDTO{
-	string userAvatarUrl=1;
-}
-
-message UserDTO{
+message UserProfileSummaryGrpcDTO{
 	string userName=1;
 	string userNickName=2;
-	string userEmail=3;
-	string name=4;
-	uint32 age=5;
-	string gender=6;
-	string school=7;
-	string province=8;
-	string city=9;
-	string selfDescription=10;
-	string birthday=11;
-	string userAvatarUrl=12;
-	string userBackgroundImageUrl=13;
-	string createTime=14;
+	string userStatue=3;
+	string selfDescription=5;
+	string userAvatarUrl=6;
+	string userBackgroundImageUrl=7;
+}
+
+message UserGrpcDTO{
+	string userName=1;
+	string userNickName=2;
+	string realName=3;
+	string userEmail=4;
+	string userStatue=5;
+	uint32 age=6;
+	string gender=7;
+	string school=8;
+	string province=9;
+	string city=10;
+	string selfDescription=11;
+	string birthday=12;
+	string userAvatarUrl=13;
+	string userBackgroundImageUrl=14;
+	string createTime=15;
 }

@@ -7,27 +7,18 @@ namespace Innermost.Identity.API.Grpc.Services
         private readonly UserManager<InnermostUser> _userManager;
         public IdentityUserGrpcService(UserManager<InnermostUser> userManager)
         {
-            _userManager=userManager;
+            _userManager = userManager;
         }
-        public override async Task<UserAvatarUrlDTO> GetUserAvatarUrl(UserIdDTO request, ServerCallContext context)
-        {
-            var user =await _userManager.FindByIdAsync(request.UserId);
-            throw new NotImplementedException();
-        }
-        public override async Task<UserNamesDTO> GetUserNames(UserIdDTO request, ServerCallContext context)
-        {
-            var user=await _userManager.FindByNameAsync(request.UserId);
-            return new UserNamesDTO() { UserName = user.UserName , UserNickName = user.NickName};
-        }
-        public override async Task<UserDTO> GetUserProfiles(UserIdDTO request, ServerCallContext context)
+        public override async Task<UserGrpcDTO> GetUserProfile(UserIdGrpcDTO request, ServerCallContext context)
         {
             var user = await _userManager.FindByNameAsync(request.UserId);
-            return new UserDTO()
+            return new UserGrpcDTO()
             {
                 UserName = user.UserName,
                 UserNickName = user.NickName,
                 UserEmail = user.Email,
-                Name = user.Name,
+                UserStatue=user.UserStatue,
+                RealName = user.RealName,
                 Age = user.Age,
                 Gender = user.Gender,
                 School = user.School,
@@ -35,9 +26,32 @@ namespace Innermost.Identity.API.Grpc.Services
                 City = user.City,
                 SelfDescription = user.SelfDescription,
                 Birthday = user.Birthday,
-                //todo UserAvatarUrl=
-                //todo UserBackgroundImageUrl=
+                UserAvatarUrl=user.UserAvatarUrl,
+                UserBackgroundImageUrl=user.UserBackgroundImageUrl,
                 CreateTime = user.CreateTime.ToString()
+            };
+        }
+        public override async Task<UserProfileForLikeGrpcDTO> GetUserProfileForLike(UserIdGrpcDTO request, ServerCallContext context)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserId);
+            return new UserProfileForLikeGrpcDTO()
+            {
+                UserName = user.UserName,
+                UserNickName = user.NickName,
+                UserAvatarUrl = user.UserAvatarUrl,
+            };
+        }
+
+        public override async Task<UserProfileSummaryGrpcDTO> GetUserProfileSummary(UserIdGrpcDTO request, ServerCallContext context)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserId);
+            return new UserProfileSummaryGrpcDTO()
+            {
+                UserName = user.UserName,
+                UserNickName = user.NickName,
+                SelfDescription = user.SelfDescription,
+                UserAvatarUrl = user.UserAvatarUrl,
+                UserBackgroundImageUrl = user.UserBackgroundImageUrl,
             };
         }
     }
