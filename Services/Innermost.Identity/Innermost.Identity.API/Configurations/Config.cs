@@ -12,31 +12,38 @@
             {
                 new ApiResource("loglife","LogLife Service Api")
                 {
-                    Scopes={"loglife"}
+                    Scopes={"loglife"},
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("meet","Meet Service Api")
                 {
-                    Scopes={ "meet" }
+                    Scopes={ "meet" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("musichub","MusicHub Service Api")
                 {
-                    Scopes={ "musichub" }
+                    Scopes={ "musichub" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("filesystem","FileSystem Service Api")
                 {
-                    Scopes={ "filesystem" }
+                    Scopes={ "filesystem" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("intelligence","Intelligence Service Api")
                 {
-                    Scopes={ "intelligence" }
+                    Scopes={ "intelligence" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("push","Push Service Api")
                 {
-                    Scopes={ "push" }
+                    Scopes={ "push" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("tagserver","TagServer Service Api")
                 {
-                    Scopes={ "tagserver" }
+                    Scopes={ "tagserver" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
 
             };
@@ -65,7 +72,10 @@
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResources.Phone(),
+                new IdentityResource("userstatue",new[]{"user_statue"})
             };
         }
         /// <summary>
@@ -91,6 +101,9 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "userstatue",
                         "loglife",
                         "meet",
                         "musichub",
@@ -98,7 +111,7 @@
                     },
                     AccessTokenLifetime=60*60*24,
                     IdentityTokenLifetime=60*60*24,
-                    AlwaysIncludeUserClaimsInIdToken=true
+                    AlwaysIncludeUserClaimsInIdToken=true,
                 },
                 new Client
                 {
@@ -115,6 +128,9 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "userstatue",
                         "loglife",
                         "meet",
                         "musichub",
