@@ -1,19 +1,17 @@
-﻿
-using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
+﻿using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace Innermost.Meet.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MeetController : ControllerBase
+    public class SharedLifeRecordController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMeetSharedLifeRecordQueries _meetSharedLifeRecordQueries;
         private readonly IIdentityService _identityService;
-        private readonly ILogger<MeetController> _logger;
-        public MeetController(IMediator mediator,IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityService identityService, ILogger<MeetController> logger)
+        private readonly ILogger<SharedLifeRecordController> _logger;
+        public SharedLifeRecordController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityService identityService, ILogger<SharedLifeRecordController> logger)
         {
             _mediator = mediator;
             _meetSharedLifeRecordQueries = meetSharedLifeRecordQueries;
@@ -23,7 +21,7 @@ namespace Innermost.Meet.API.Controllers
         }
 
         [HttpPost]
-        [Route("meet/like")]
+        [Route("like")]
         public async Task<IActionResult> LikeSharedLifeRecordAsync([FromBody] LikeSharedLifeRecordCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             bool commandResult = false;
