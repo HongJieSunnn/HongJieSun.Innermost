@@ -2,6 +2,19 @@
 {
     public interface IChattingRecordRedisService
     {
-        Task 
+        Task<long> AddChattingRecordAsync(string chattingContextId, string chattingRecord);
+        Task<long> AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO,bool received);
+        Task<long> AddChattingRecordAsync(string chattingContextId, string sendUserId, string message, bool received);
+
+
+        Task<IEnumerable<ChattingRecordDTO>> GetAllChattingRecordsAsync(string chattingContextId);
+
+        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId);
+
+        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId);
+
+        Task SetNotReceivedChattingRecordsReceivedAsync(string chattingContextId, int modifyCount);
+
+        Task PersistReceivedChattingRecordToMongoDBAsync(string chattingContextId);
     }
 }
