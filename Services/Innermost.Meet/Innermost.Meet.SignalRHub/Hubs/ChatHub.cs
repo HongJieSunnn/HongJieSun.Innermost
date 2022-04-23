@@ -1,29 +1,39 @@
-﻿using Innermost.Identity.API;
-using Innermost.Meet.Domain.Repositories;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace Innermost.Meet.SignalRHub.Hubs
 {
     [Authorize]
-    public class ChatHub:Hub
+    public class ChatHub : Hub
     {
         private readonly IdentityUserStatueGrpc.IdentityUserStatueGrpcClient _identityUserStatueGrpcClient;
         private readonly IUserChattingContextRepository _userChattingContextRepository;
-        public ChatHub(IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient,IUserChattingContextRepository userChattingContextRepository)
+        private readonly IUserChattingContextQueries _userChattingContextQueries;
+        private readonly IChattingRecordRedisService _chattingRecordRedisService;
+        public ChatHub(IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient, IUserChattingContextRepository userChattingContextRepository, IUserChattingContextQueries userChattingContextQueries, IChattingRecordRedisService chattingRecordRedisService)
         {
-            _identityUserStatueGrpcClient= identityUserStatueGrpcClient;
-            _userChattingContextRepository= userChattingContextRepository;
+            _identityUserStatueGrpcClient = identityUserStatueGrpcClient;
+            _userChattingContextRepository = userChattingContextRepository;
+            _chattingRecordRedisService = chattingRecordRedisService;
+            _userChattingContextQueries = userChattingContextQueries;
+
         }
 
-        public async Task SendMessageToUser(string toUserId,string message)
+        public async Task SendMessageToUser(string toUserId, string chattingContextId, string message)
         {
-            var sendUserId=GetConnectedUserId();
-
-            
-
+            var sendUserId = GetConnectedUserId();
             if (!IsUserOnline(toUserId))
-                return;//TODO store message redis and then to mongodb.
-            await Clients.User(toUserId).SendAsync("SendMessage",message,sendUserId,DateTime.Now);
+            {
+                await _chattingRecordRedisService.AddChattingRecordAsync(chattingContextId,sendUserId,message,false);
+
+                return;
+            }
+
+            var messageId = ObjectId.GenerateNewId().ToString();
+            var chattingRecordDTO = new ChattingRecordDTO(messageId, sendUserId, message, DateTime.Now, null);
+
+            await Clients.User(toUserId).SendAsync("ChattingMessage", chattingRecordDTO);
+
+            await _chattingRecordRedisService.AddChattingRecordAsync(chattingContextId, chattingRecordDTO, true);
         }
 
         private bool IsUserOnline(string toUserId)
@@ -34,20 +44,42 @@ namespace Innermost.Meet.SignalRHub.Hubs
         private string GetConnectedUserId()
         {
             var connectUserId = Context.UserIdentifier;
-            
-            return connectUserId??throw new InvalidOperationException("User can not be null");
+
+            return connectUserId ?? throw new InvalidOperationException("User can not be null");
         }
 
         public override async Task OnConnectedAsync()
         {
             var connectedUserId = GetConnectedUserId();
-            await _identityUserStatueGrpcClient.SetUserOnlineStatueAsync(new SetUserOnlineStatueGrpcDTO { UserId=connectedUserId,IsOnline = true });
+            await _identityUserStatueGrpcClient.SetUserOnlineStatueAsync(new SetUserOnlineStatueGrpcDTO { UserId = connectedUserId, IsOnline = true });
+
+            var chattingContextIds = await _userChattingContextQueries.GetAllChattingContextIdsOfUserAsync(connectedUserId);
+
+            foreach (var chattingContextId in chattingContextIds)
+            {
+                var notReceivedMessages = await _chattingRecordRedisService.GetNotReceivedChattingRecordsAsync(chattingContextId);
+                var setNotReceivedChattingRecordsReceivedTask = _chattingRecordRedisService.SetNotReceivedChattingRecordsReceivedAsync(chattingContextId, notReceivedMessages.Count());
+
+                foreach (var message in notReceivedMessages)
+                {
+                    await Clients.User(connectedUserId).SendAsync("ChattingMessage", message);
+                }
+
+                await setNotReceivedChattingRecordsReceivedTask;
+            }
+
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var connectedUserId = GetConnectedUserId();
             await _identityUserStatueGrpcClient.SetUserOnlineStatueAsync(new SetUserOnlineStatueGrpcDTO { UserId = connectedUserId, IsOnline = false });
+
+            //persist records to MongoDB.
+            var chattingContextIds = await _userChattingContextQueries.GetAllChattingContextIdsOfUserAsync(connectedUserId);
+            var persistTasks = chattingContextIds.Select(c => _chattingRecordRedisService.PersistReceivedChattingRecordToMongoDBAsync(c));
+            await Task.WhenAll(persistTasks);
+
             await base.OnDisconnectedAsync(exception);
         }
     }
