@@ -36,5 +36,12 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate
             _users = users.Length == 2 ? users.OrderBy(s=>s).ToArray() : throw new ArgumentException("UserChattingContext's users must be only two.");
             _chattingRecords = chattingRecords;
         }
+
+        public UpdateDefinition<UserChattingContext> AddManyChattingRecords(IEnumerable<ChattingRecord> chattingRecords)
+        {
+            _chattingRecords.AddRange(chattingRecords);
+
+            return Builders<UserChattingContext>.Update.AddToSetEach(ucc=>ucc.ChattingRecords,chattingRecords);
+        }
     }
 }
