@@ -3,9 +3,14 @@ using Innermost.Meet.Domain.Events.UserSocialContactEvents;
 
 namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
 {
+    /// <summary>
+    /// UserSocialContact store the social contact of user.Id is userId.
+    /// </summary>
     public class UserSocialContact : Entity<string>, IAggregateRoot
     {
-        public string UserId { get; init; }
+        [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public override string? Id { get => base.Id; set => base.Id = value; }
 
         [BsonRequired]
         [BsonElement("ConfidantRequests")]
@@ -17,11 +22,11 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
         private List<Confidant> _confidants;
         public IReadOnlyCollection<Confidant> Confidants => _confidants.AsReadOnly();
 
-        public UserSocialContact(string userId, List<ConfidantRequest> confidantRequests, List<Confidant> confidants)
+        public UserSocialContact(string userId, List<ConfidantRequest>? confidantRequests, List<Confidant>? confidants)
         {
-            UserId = userId;
-            _confidantRequests = confidantRequests;
-            _confidants = confidants;
+            Id = userId;
+            _confidantRequests = confidantRequests??new List<ConfidantRequest>();
+            _confidants = confidants??new List<Confidant>();
         }
 
         public UpdateDefinition<UserSocialContact> AddConfidant(Confidant confidant)

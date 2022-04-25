@@ -44,7 +44,9 @@
         private SharedLifeRecordDTO MapToSharedLifeRecordDTO(SharedLifeRecord sharedLifeRecord)
         {
             return new SharedLifeRecordDTO(
-                  sharedLifeRecord.Id!, sharedLifeRecord.RecordId, sharedLifeRecord.UserId, sharedLifeRecord.Title, sharedLifeRecord.Text,
+                  sharedLifeRecord.Id!, sharedLifeRecord.RecordId, 
+                  sharedLifeRecord.UserId,sharedLifeRecord.UserName,sharedLifeRecord.UserNickName,sharedLifeRecord.UserAvatarUrl, 
+                  sharedLifeRecord.Title, sharedLifeRecord.Text,
 
                   (sharedLifeRecord.Location is null) ? null : new LocationDTO(sharedLifeRecord.Location.Id!,
                       sharedLifeRecord.Location.LocationName, sharedLifeRecord.Location.Province, sharedLifeRecord.Location.City, sharedLifeRecord.Location.District, sharedLifeRecord.Location.Address,
@@ -54,7 +56,8 @@
 
                   sharedLifeRecord.ImagePaths?.ToList(),
 
-                  sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikeUserId, l.LikeUserName, l.LikeUserAvatarUrl, l.LikeTime)).ToList(),
+                  sharedLifeRecord.LikesCount,
+                  sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikerUserId, l.LikerUserName,l.LikerUserNickName, l.LikerUserAvatarUrl, l.LikeTime)).ToList(),
 
                   sharedLifeRecord.Tags.Select(t => new TagSummaryDTO(t.TagId, t.TagName)).ToList(),
 

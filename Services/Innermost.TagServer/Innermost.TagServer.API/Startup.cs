@@ -5,7 +5,7 @@ using EventBusServiceBus;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
-using IServiceCollectionExtensions;
+using Innermost.IServiceCollectionExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -98,7 +98,6 @@ namespace Innermost.TagServer.API
             });
 
             ConfigureTagSServer(app);
-            app.ConfigureTagServerEventBus();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -109,10 +108,12 @@ namespace Innermost.TagServer.API
         private void ConfigureTagSServer(IApplicationBuilder builder)
         {
             builder.MapTagSMongoDBCollectionModels();
-            builder.AddReferrerDiscriminator<LifeRecordReferrer>();
             builder.AddLocationIndexFroReferrer("BaiduPOI");
             builder.SeedDefaultEmotionTags();
             builder.SeedDefaultMusicTags();
+            builder.ConfigureTagServerEventBus();
+
+            builder.AddReferrerDiscriminator<LifeRecordReferrer>();
         }
     }
 

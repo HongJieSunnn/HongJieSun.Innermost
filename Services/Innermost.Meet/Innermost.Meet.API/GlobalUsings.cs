@@ -25,3 +25,9 @@ global using Innermost.Meet.Domain.AggregatesModels.UserSocialContactAggregate.E
 global using Innermost.Meet.Domain.AggregatesModels.UserSocialContactAggregate.Enumerations;
 global using Innermost.Meet.API.Queries.SocialContactQueries.Models;
 global using Innermost.Meet.API.Queries.StatueQueries.Models;
+global using Innermost.Meet.API.Queries.InteractionQueries.Models;
+global using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate.Entities;
+global using Innermost.Meet.API.Queries.InteractionQueries;
+global using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
+global using Innermost.Meet.API.Queries.SocialContactQueries;
+global using Innermost.Meet.API.Queries.StatueQueries;

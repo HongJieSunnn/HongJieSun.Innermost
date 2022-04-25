@@ -93,7 +93,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ILoggerExtensions", "Buildi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonIdentityService", "BuildingBlocks\CommonService\CommonIdentityService\CommonIdentityService.csproj", "{08B6432A-5AE3-4BF6-A18D-32B53267E80B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IEnumerableExtensions", "BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj", "{919CDEA0-4756-4555-A5E9-70D44F57773A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IEnumerableExtensions", "BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj", "{919CDEA0-4756-4555-A5E9-70D44F57773A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

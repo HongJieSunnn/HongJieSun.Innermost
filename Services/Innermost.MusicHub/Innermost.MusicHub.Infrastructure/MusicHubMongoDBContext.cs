@@ -17,7 +17,7 @@ namespace Innermost.MusicHub.Infrastructure
             //TODO create indexes
         }
 
-        public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>
+        public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
         {
             if (entity.DomainEvents is not null)
             {

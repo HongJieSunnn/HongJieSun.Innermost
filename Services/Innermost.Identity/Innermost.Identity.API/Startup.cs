@@ -162,6 +162,7 @@ namespace Innermost.Identity.API
             {
                 endpoints.MapControllers();
                 endpoints.MapGrpcService<IdentityUserGrpcService>();
+                endpoints.MapGrpcService<IdentityUserStatueGrpcService>();
             });
         }
     }

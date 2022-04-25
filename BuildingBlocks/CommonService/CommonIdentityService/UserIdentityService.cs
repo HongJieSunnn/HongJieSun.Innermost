@@ -1,5 +1,5 @@
 ﻿using CommonIdentityService.Models;
-using Innermost.Identity.API;
+using Innermost.Identity.API.User;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -58,15 +58,15 @@ namespace CommonIdentityService.IdentityService
             var userIdGrpcDTO = new UserIdGrpcDTO() { UserId = userId ?? GetUserId() };
             var userProfileGrpcDTO = await _identityUserGrpcClient.GetUserProfileAsync(userIdGrpcDTO);
             return new UserProfile(
-                userProfileGrpcDTO.UserName, userProfileGrpcDTO.UserNickName, userProfileGrpcDTO.UserEmail,userProfileGrpcDTO.UserStatue,
+                userProfileGrpcDTO.UserName, userProfileGrpcDTO.UserNickName, userProfileGrpcDTO.UserEmail, userProfileGrpcDTO.UserStatue,
                 userProfileGrpcDTO.RealName, userProfileGrpcDTO.Age, userProfileGrpcDTO.Gender, userProfileGrpcDTO.School,
                 userProfileGrpcDTO.Province, userProfileGrpcDTO.City,
-                userProfileGrpcDTO.SelfDescription, userProfileGrpcDTO.Birthday,userProfileGrpcDTO.UserAvatarUrl,userProfileGrpcDTO.UserBackgroundImageUrl, userProfileGrpcDTO.CreateTime);
+                userProfileGrpcDTO.SelfDescription, userProfileGrpcDTO.Birthday, userProfileGrpcDTO.UserAvatarUrl, userProfileGrpcDTO.UserBackgroundImageUrl, userProfileGrpcDTO.CreateTime);
         }
 
         public async Task<UserProfileForLike> GetUserProfileForLikeAsync(string userId)
         {
-            var userIdGrpcDTO = new UserIdGrpcDTO() { UserId = userId};
+            var userIdGrpcDTO = new UserIdGrpcDTO() { UserId = userId };
             var userProfileForLikeGrpcDTO = await _identityUserGrpcClient.GetUserProfileForLikeAsync(userIdGrpcDTO);
 
             return new UserProfileForLike(userProfileForLikeGrpcDTO.UserName, userProfileForLikeGrpcDTO.UserNickName, userProfileForLikeGrpcDTO.UserAvatarUrl);
@@ -78,8 +78,8 @@ namespace CommonIdentityService.IdentityService
             var userProfileSummaryGrpcDTO = await _identityUserGrpcClient.GetUserProfileSummaryAsync(userIdGrpcDTO);
 
             return new UserProfileSummary(
-                userProfileSummaryGrpcDTO.UserName, userProfileSummaryGrpcDTO.UserNickName, 
-                userProfileSummaryGrpcDTO.SelfDescription, 
+                userProfileSummaryGrpcDTO.UserName, userProfileSummaryGrpcDTO.UserNickName,
+                userProfileSummaryGrpcDTO.SelfDescription,
                 userProfileSummaryGrpcDTO.UserAvatarUrl, userProfileSummaryGrpcDTO.UserBackgroundImageUrl);
         }
     }

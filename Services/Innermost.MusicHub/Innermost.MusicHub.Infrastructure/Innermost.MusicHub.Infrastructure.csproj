@@ -18,6 +18,9 @@
 		<Reference Include="Innermost.MongoDBContext">
 			<HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
 		</Reference>
+		<Reference Include="TagS.Microservices.Client">
+		  <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 </Project>

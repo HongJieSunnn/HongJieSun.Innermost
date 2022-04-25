@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
-namespace IServiceCollectionExtensions
+namespace Innermost.IServiceCollectionExtensions
 {
     public static class MongoDBIServiceCollectionExtensions
     {

@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Innermost.Identity.API.User;
 
 namespace Innermost.Identity.API.Grpc.Services
 {

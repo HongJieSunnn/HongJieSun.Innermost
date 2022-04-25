@@ -8,3 +8,4 @@ global using DomainSeedWork.Abstractions;
 global using Innermost.Meet.Domain.Repositories;
 global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
 global using MongoDB.Driver;
+global using IEnumerableExtensions;

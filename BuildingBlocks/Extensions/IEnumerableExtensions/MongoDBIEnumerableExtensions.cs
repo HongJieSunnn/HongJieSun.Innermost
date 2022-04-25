@@ -13,5 +13,12 @@ namespace IEnumerableExtensions
         {
             return filterDefinitions.Aggregate((filterBefore, filterNext) => filterBefore & filterNext);
         }
+
+        public static FilterDefinition<T> CombineFilterDefinitions<T>(this IEnumerable<FilterDefinition<T>> filterDefinitions,FilterDefinition<T> firstDefinition)
+        {
+            var filter = firstDefinition;
+
+            return filter & filterDefinitions.Aggregate((filterBefore, filterNext) => filterBefore & filterNext);
+        }
     }
 }

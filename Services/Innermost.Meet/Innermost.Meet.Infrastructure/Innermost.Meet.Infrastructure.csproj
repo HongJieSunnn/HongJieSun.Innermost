@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj" />
 		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
 		<ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
 	</ItemGroup>

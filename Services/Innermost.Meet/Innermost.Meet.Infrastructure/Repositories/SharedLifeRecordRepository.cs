@@ -1,6 +1,6 @@
 ﻿namespace Innermost.Meet.Infrastructure.Repositories
 {
-    internal class SharedLifeRecordRepository : ISharedLifeRecordRepository
+    public class SharedLifeRecordRepository : ISharedLifeRecordRepository
     {
         private readonly MeetMongoDBContext _context;
         private readonly IClientSessionHandle _session;
@@ -24,26 +24,19 @@
 
         public Task<UpdateResult> UpdateSharedLifeRecordAsync(string sharedLifeRecordObjectId, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
         {
-            var filter=CombineFilterDefinitions(Builders<SharedLifeRecord>.Filter.Eq(l => l.Id, sharedLifeRecordObjectId), filterDefinitions);
+            var idFilter = Builders<SharedLifeRecord>.Filter.Eq(l => l.Id, sharedLifeRecordObjectId);
+            var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.SharedLifeRecords.UpdateOneAsync(_session, filter , updateDefinition);
         }
 
         public Task<UpdateResult> UpdateSharedLifeRecordAsync(int lifeRecordId, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
         {
-            var filter = CombineFilterDefinitions(Builders<SharedLifeRecord>.Filter.Eq(l => l.RecordId, lifeRecordId), filterDefinitions);
+            var idFilter = Builders<SharedLifeRecord>.Filter.Eq(l => l.RecordId, lifeRecordId);
+
+            var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.SharedLifeRecords.UpdateOneAsync(_session, filter, updateDefinition);
-        }
-
-        private FilterDefinition<SharedLifeRecord> CombineFilterDefinitions(FilterDefinition<SharedLifeRecord> firstFilterDefinition, IEnumerable<FilterDefinition<SharedLifeRecord>> filterDefinitions)
-        {
-            var filter = firstFilterDefinition;
-            foreach (var filterDefinition in filterDefinitions)
-            {
-                filter &= filterDefinition;
-            }
-            return filter;
         }
 
         public Task<ReplaceOneResult> UpdateSharedLifeRecordAsync(SharedLifeRecord sharedLifeRecord)
@@ -54,7 +47,7 @@
         public Task<UpdateResult> UpdateManySharedLifeRecordsAsync(IEnumerable<int> lifeRecordIds, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
         {
             var idFilter= Builders<SharedLifeRecord>.Filter.In(l=>l.RecordId, lifeRecordIds);
-            var filter = CombineFilterDefinitions(idFilter, filterDefinitions);
+            var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.SharedLifeRecords.UpdateOneAsync(_session, filter, updateDefinition);
         }
@@ -62,7 +55,7 @@
         public Task<UpdateResult> UpdateManySharedLifeRecordsAsync(IEnumerable<string> sharedLifeRecordObjectIds, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
         {
             var idFilter = Builders<SharedLifeRecord>.Filter.In(l => l.Id, sharedLifeRecordObjectIds);
-            var filter = CombineFilterDefinitions(idFilter, filterDefinitions);
+            var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.SharedLifeRecords.UpdateOneAsync(_session, filter, updateDefinition);
         }

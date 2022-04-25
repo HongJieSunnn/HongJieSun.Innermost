@@ -25,9 +25,9 @@
                     Scopes={ "musichub" },
                     UserClaims=new[]{ ClaimTypes.Role }
                 },
-                new ApiResource("filesystem","FileSystem Service Api")
+                new ApiResource("fileserver","FileSystem Service Api")
                 {
-                    Scopes={ "filesystem" },
+                    Scopes={ "fileserver" },
                     UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("intelligence","Intelligence Service Api")
@@ -56,7 +56,7 @@
                 new ApiScope("loglife"),
                 new ApiScope("meet"),
                 new ApiScope("musichub"),
-                new ApiScope("filesystem"),
+                new ApiScope("fileserver"),
                 new ApiScope("intelligence"),
                 new ApiScope("push"),
                 new ApiScope("tagserver"),
@@ -108,6 +108,7 @@
                         "meet",
                         "musichub",
                         "tagserver",
+                        "fileserver",
                     },
                     AccessTokenLifetime=60*60*24,
                     IdentityTokenLifetime=60*60*24,
@@ -135,6 +136,7 @@
                         "meet",
                         "musichub",
                         "tagserver",
+                        "fileserver",
                     },
                     AccessTokenLifetime=60*60*24,
                     IdentityTokenLifetime=60*60*24,
@@ -163,6 +165,7 @@
                         "meet",
                         "musichub",
                         "tagserver",
+                        "fileserver",
                     },
                 },
                 new Client
@@ -180,7 +183,7 @@
                         "loglife",
                         "meet",
                         "musichub",
-                        "filesystem",
+                        "fileserver",
                         "intelligence",
                         "push",
                         "tagserver",

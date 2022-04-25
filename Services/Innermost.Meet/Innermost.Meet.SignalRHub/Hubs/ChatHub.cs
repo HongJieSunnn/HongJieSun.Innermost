@@ -6,13 +6,11 @@ namespace Innermost.Meet.SignalRHub.Hubs
     public class ChatHub : Hub
     {
         private readonly IdentityUserStatueGrpc.IdentityUserStatueGrpcClient _identityUserStatueGrpcClient;
-        private readonly IUserChattingContextRepository _userChattingContextRepository;
         private readonly IUserChattingContextQueries _userChattingContextQueries;
         private readonly IChattingRecordRedisService _chattingRecordRedisService;
-        public ChatHub(IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient, IUserChattingContextRepository userChattingContextRepository, IUserChattingContextQueries userChattingContextQueries, IChattingRecordRedisService chattingRecordRedisService)
+        public ChatHub(IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient, IUserChattingContextQueries userChattingContextQueries, IChattingRecordRedisService chattingRecordRedisService)
         {
             _identityUserStatueGrpcClient = identityUserStatueGrpcClient;
-            _userChattingContextRepository = userChattingContextRepository;
             _chattingRecordRedisService = chattingRecordRedisService;
             _userChattingContextQueries = userChattingContextQueries;
 
@@ -23,7 +21,7 @@ namespace Innermost.Meet.SignalRHub.Hubs
             var sendUserId = GetConnectedUserId();
             if (!IsUserOnline(toUserId))
             {
-                await _chattingRecordRedisService.AddChattingRecordAsync(chattingContextId,sendUserId,message,false);
+                await _chattingRecordRedisService.AddChattingRecordAsync(chattingContextId, sendUserId, message, false);
 
                 return;
             }

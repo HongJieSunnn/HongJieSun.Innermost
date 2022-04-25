@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "Innermost.Identity.API";
+option csharp_namespace = "Innermost.Identity.API.UserStatue";
 
 package IdentityUserStatueApi;
 
@@ -27,11 +27,11 @@ message UserIdsGrpcDTO{
 }
 
 message UsersOnlineStatueGrpcDTO{
-	repeated bool usersOnlineStatue=1;
+	repeated bool usersOnlineStatues=1;
 }
 
 message UsersStatueGrpcDTO{
-	repeated string usersStatue=1;
+	repeated string usersStatues=1;
 }
 
 message SetUserOnlineStatueGrpcDTO{

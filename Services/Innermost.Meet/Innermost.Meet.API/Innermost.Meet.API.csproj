@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<Protobuf Include="..\..\Innermost.Identity\Innermost.Identity.API\Grpc\Protos\userStatue.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.20.0" />
@@ -21,6 +25,7 @@
     </PackageReference>
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
@@ -33,7 +38,9 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonIdentityService\CommonIdentityService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\ILoggerExtensions\ILoggerExtensions.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IServiceCollectionExtensions\IServiceCollectionExtensions.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj" />
   </ItemGroup>
@@ -41,6 +48,15 @@
   <ItemGroup>
     <Reference Include="Innermost.IdempotentCommand">
       <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.MongoDBContext">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
+    </Reference>
+    <Reference Include="Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection">
+      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="TagS.Microservices.Client">
       <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>

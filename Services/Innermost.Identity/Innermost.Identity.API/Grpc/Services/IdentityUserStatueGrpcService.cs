@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Innermost.Identity.API.UserStatue;
 using StackExchange.Redis;
 
 namespace Innermost.Identity.API.Grpc.Services
@@ -23,7 +24,7 @@ namespace Innermost.Identity.API.Grpc.Services
             var onlineStatueRedisValues = await _redisContext.Context().HashGetAsync(UserOnlineStatueKey, request.UserIds.Select(id=>new RedisValue(id)).ToArray());
             var usersOnlineStatueDTO = new UsersOnlineStatueGrpcDTO();//repeated field properties is get only.So we should add values by add.
 
-            usersOnlineStatueDTO.UsersOnlineStatue.AddRange(onlineStatueRedisValues.Select(rv=>(bool)rv));
+            usersOnlineStatueDTO.UsersOnlineStatues.AddRange(onlineStatueRedisValues.Select(rv=>(bool)rv));
 
             return usersOnlineStatueDTO;
         }
@@ -33,7 +34,7 @@ namespace Innermost.Identity.API.Grpc.Services
             var onlineStatueRedisValues = await _redisContext.Context().HashGetAsync(UserStatueKey, request.UserIds.Select(id => new RedisValue(id)).ToArray());
             var usersStatueDTO = new UsersStatueGrpcDTO();
 
-            usersStatueDTO.UsersStatue.AddRange(onlineStatueRedisValues.Select(rv => (string)rv));
+            usersStatueDTO.UsersStatues.AddRange(onlineStatueRedisValues.Select(rv => (string)rv));
 
             return usersStatueDTO;
         }
