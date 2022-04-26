@@ -16,3 +16,4 @@ global using Innermost.Identity.API;
 global using Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries;
 global using Autofac;
 global using Innermost.Identity.API.UserStatue;
+global using EventBusCommon.Abstractions;

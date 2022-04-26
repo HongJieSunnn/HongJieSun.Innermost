@@ -192,7 +192,10 @@ internal static class IServiceCollectionExtensions
 
     public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services)
     {
-        services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>();
+        services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options=>
+        {
+            options.Address = new Uri("https://localhost:5106");
+        });
 
         return services;
     }
