@@ -2,26 +2,30 @@
 
 namespace Innermost.MusicHub.Domain.AggregatesModels.AlbumAggregate
 {
-    public class Album : TagableEntity<string>, IAggregateRoot
+    public class Album : Entity<string>, IAggregateRoot
     {
-        public int AlbumId { get; private set; }
+        public long AlbumId { get; private set; }
         public string AlbumName { get; private set; }
         public string AlbumDescriptions { get; private set; }
         public string AlbumGenre { get; private set; }
         public string AlbumLanguage { get; private set; }
         public int AlbumSongCount { get; private set; }
         public string AlbumCoverUrl { get; private set; }
+        public string AlbumSingerName { get; set; }
+        public string AlbumSingerMid { get; set; }
         public string PublishCompany { get; private set; }
         public string PublishTime { get; private set; }
 
+        [BsonRequired]
+        [BsonElement("MusicRecords")]
         private readonly List<AlbumMusicRecord> _musicRecords;
         public IReadOnlyCollection<AlbumMusicRecord> MusicRecords => _musicRecords;
         public Album(
-            string mid, int albumId, string albumName, string albumDescriptions,
+            string mid, long albumId, string albumName, string albumDescriptions,
             string albumGenre, string albumLanguage, string albumCoverUrl,
+            string albumSingerName, string albumSingerMid,
             int albumSongCount, string publishCompany, string publishTime,
-            List<AlbumMusicRecord> musicRecords,
-            List<TagSummary> tagSummaries) : base(tagSummaries)
+            List<AlbumMusicRecord> musicRecords)
         {
             Id = mid;
             AlbumId = albumId;
@@ -31,14 +35,11 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.AlbumAggregate
             AlbumLanguage = albumLanguage;
             AlbumCoverUrl = albumCoverUrl;
             AlbumSongCount = albumSongCount > 0 ? albumSongCount : throw new ArgumentException("AlbumSongCount must be at least 1.");
+            AlbumSingerName = albumSingerName;
+            AlbumSingerMid = albumSingerMid;
             PublishCompany = publishCompany;
             PublishTime = publishTime;
             _musicRecords = musicRecords;
-        }
-
-        protected override IReferrer ToReferrer()
-        {
-            throw new NotImplementedException();
         }
     }
 }
