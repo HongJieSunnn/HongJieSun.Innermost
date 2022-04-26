@@ -10,8 +10,10 @@
 
         protected override async Task ParseAsync(DataFlowContext context)
         {
-            var categoryIds = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:5].items.[*].categoryId")).Select(c => int.Parse(c.Value)).ToList();
-            var categoryNames = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:5].items.[*].categoryName")).Select(c => c.Value).ToList();
+            var categoryGroupNames = new[] { "流派", "主题", "心情", "场景" };
+            var categoryGroupCounts = new[] { 16,16,9,13 };
+            var categoryIds = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:].items.[*].categoryId")).Select(c => int.Parse(c.Value)).ToList();
+            var categoryNames = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:].items.[*].categoryName")).Select(c => c.Value).ToList();//short name for crawl
 
             var randbIndex = categoryNames.IndexOf("R&#38;B");
             categoryNames[randbIndex] = "R&B";
@@ -22,12 +24,19 @@
 
             List<CategoryEntity> categories = new List<CategoryEntity>(categoryIds.Count);
 
-            for (int i = 0; i < categoryIds.Count; i++)
+            int indexOfName = 0;
+            for (int j= 0;j < 4;++j)
             {
-                categories.Add(new CategoryEntity(categoryIds[i], categoryNames[i]));
-            }
+                for(int i= 0; i < categoryGroupCounts[j]; i++)
+                {
+                    var fullName = $"音乐:{categoryGroupNames[j]}:{categoryNames[indexOfName]}";
 
-            MusicTagStatics.CategoriesNameSet = new HashSet<string>(categories.Select(c => c.CategoryName));
+                    MusicTagStatics.CategoriesFullNameDictionary.Add(fullName, categoryNames[indexOfName]);
+
+                    categories.Add(new CategoryEntity(categoryIds[indexOfName], fullName));
+                    ++indexOfName;
+                }
+            }
 
             var requests = GetCategoryRequests(categories);
 

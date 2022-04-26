@@ -2,6 +2,9 @@
 {
     internal class MusicTagStatics
     {
-        public static HashSet<string> CategoriesNameSet = new HashSet<string>();
+        /// <summary>
+        /// Key is full name.Value is short name.
+        /// </summary>
+        public static Dictionary<string,string> CategoriesFullNameDictionary = new Dictionary<string,string>();
     }
 }
