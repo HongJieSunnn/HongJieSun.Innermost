@@ -13,8 +13,6 @@ namespace Innermost.Meet.API.Infrastructure.AutofacModules
 
             builder.RegisterGeneric(typeof(MongoDBTransactionBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 
-            builder.RegisterAssemblyTypes(typeof(LifeRecordSetSharedIntegrationEventHandler).GetTypeInfo().Assembly).As(typeof(IIntegrationEventHandler<>));
-
             builder.RegisterTagSMicroservicesClientTypes();
         }
     }

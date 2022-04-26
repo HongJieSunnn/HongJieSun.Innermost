@@ -94,6 +94,7 @@ namespace Innermost.Meet.API
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<MediatRModule>();
+            builder.RegisterModule<IntegrationEventModule>();
         }
     }
 
