@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Innermost.MusicHub.API";
+
+package MusicHubMusicRecordApi;
+
+service MusicRecordGrpc{
+	rpc GetRandomMusicRecordByTag(MusicRecordTagGrpcDTO) returns(MusicRecordGrpcDTO){}
+}
+
+message MusicRecordTagGrpcDTO{
+	repeated string tagName=1;
+}
+
+message MusicRecordGrpcDTO{
+	string mid=1;
+	string musicName=2;
+	string musicSinger=3;
+	string musicAlbum=4;
+}
