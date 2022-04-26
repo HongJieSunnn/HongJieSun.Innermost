@@ -1,15 +1,15 @@
-﻿using EventBusCommon.Abstractions;
+﻿using Innermost.Meet.SignalRHub.Hubs;
 
 namespace Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers
 {
     public class AdminSendMessageToUserIntegrationEventHandler : IIntegrationEventHandler<AdminSendMessageToUserIntegrationEvent>
     {
-        private readonly IHubContext _hubContext;
+        private readonly IHubContext<ChatHub> _hubContext;
         private readonly IUserChattingContextQueries _userChattingContextQueries;
         private readonly IChattingRecordRedisService _chattingRecordRedisService;
         private readonly IdentityUserStatueGrpc.IdentityUserStatueGrpcClient _identityUserStatueGrpcClient;
         public AdminSendMessageToUserIntegrationEventHandler(
-            IHubContext hubContext,
+            IHubContext<ChatHub> hubContext,
             IUserChattingContextQueries userChattingContextQueries,
             IChattingRecordRedisService chattingRecordRedisService, 
             IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient)
