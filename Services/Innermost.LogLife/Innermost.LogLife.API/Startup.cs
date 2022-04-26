@@ -1,6 +1,6 @@
 ﻿using CommonService.IdentityService.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
-using TagS.Microservices.Client.Microsoft.DependencyInjection;
+using Innermost.LogLife.API.Infrastructure.AutofacModules;
 
 namespace Innermost.LogLife.API
 {
@@ -34,7 +34,7 @@ namespace Innermost.LogLife.API
                 .AddCustomConfig(Configuration)
                 .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>()
                 .AddCustomCORS();
-    
+
 
             services.AddSwaggerGen(c =>
             {
@@ -62,6 +62,7 @@ namespace Innermost.LogLife.API
 
             container.Populate(services);
             container.RegisterModule<MediatRModules>();
+            container.RegisterModule<IntegrationEventModules>();
 
             return new AutofacServiceProvider(container.Build());
         }
@@ -176,7 +177,7 @@ namespace Innermost.LogLife.API
             services.AddTransient<IntegrationEventRecordServiceFactory>();
             services.AddTransient<ILogLifeIntegrationEventService, LogLifeIntegrationEventService>();
             services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();//TODO maybe we should not inject ILogLifeIntegrationEventService.
-            
+
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
                 var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
@@ -244,7 +245,7 @@ namespace Innermost.LogLife.API
 
                 //options.AddMaps(new Type[] { typeof(MusicDetailDTO), typeof(MusicDetail) ,typeof(CreateOneRecordCommand),typeof(UpdateOneRecordCommand),typeof(LifeRecord) });
 
-                
+
             }, Assembly.GetExecutingAssembly());
 
             return services;
