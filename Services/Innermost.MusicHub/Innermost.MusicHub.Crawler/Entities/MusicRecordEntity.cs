@@ -17,6 +17,8 @@
         public string? Lyric { get; set; }
         public string AlbumMid { get; set; }
         public List<string> SingerMids { get; set; }
+        public List<string> SingerNames { get; set; }
+
         public string? PublishTime { get; set; }
         public MusicRecordEntity()
         {
@@ -24,15 +26,16 @@
         }
         public MusicRecordEntity(
             string mid, int musicId,
-            string musicName, string? translatedMusicName,
+            string musicName, string? translatedMusicName,string? introduction,
             string? genre, string? language, string albumMid,
-            string albumCoverUrl, string musicUrl, string? wikiUrl, string? lyric, List<string> singerMids,
+            string albumCoverUrl, string musicUrl, string? wikiUrl, string? lyric, List<string> singerMids,List<string> singerNames,
             string? publishTime)
         {
             MusicMid = mid;
             MusicId = musicId;
             MusicName = musicName;
             TranslatedMusicName = translatedMusicName;
+            Introduction = introduction;
             Genre = genre;
             Language = language;
             AlbumMid = albumMid;
@@ -40,6 +43,7 @@
             MusicUrl = musicUrl;
             Lyric = lyric;
             SingerMids = singerMids;
+            SingerNames = singerNames;
             PublishTime = publishTime;
             WikiUrl = wikiUrl;
         }
