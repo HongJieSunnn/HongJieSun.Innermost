@@ -8,14 +8,15 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
-	<ItemGroup>
-		<Protobuf Include="Grpc\Protos\musichub.proto" GrpcServices="Server" />
-	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.19.4" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.42.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.44.0">
+    <Protobuf Include="Grpc\Protos\musicRecord.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.20.1" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.45.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.45.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -24,7 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TagS.Microservices.Client">
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
