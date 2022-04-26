@@ -2,9 +2,9 @@
 
 namespace Innermost.MusicHub.Domain.AggregatesModels.SingerAggregate
 {
-    public class Singer : TagableEntity<string>, IAggregateRoot
+    public class Singer : Entity<string>, IAggregateRoot
     {
-        public int SingerId { get; private set; }
+        public long SingerId { get; private set; }
         /// <summary>
         /// Chinese name
         /// </summary>
@@ -18,11 +18,13 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.SingerAggregate
         public string SingerRegion { get; private set; }
         public string SingerCoverUrl { get; private set; }
 
+        [BsonRequired]
+        [BsonElement("SingerAlbums")]
         private readonly List<SingerAlbum> _singerAlbums;
         public IReadOnlyCollection<SingerAlbum> SingerAlbums => _singerAlbums;
-        public Singer(string mid, int singerId, string singerName, string singerAlias,
+        public Singer(string mid, long singerId, string singerName, string singerAlias,
             string singerNationality, string singerBirthplace, string singerOccupation, string singerBirthday, string singerRepresentativeWorks,
-            string singerRegion, string singerCoverUrl, List<SingerAlbum> singerAlbums, List<TagSummary> tagSummaries) : base(tagSummaries)
+            string singerRegion, string singerCoverUrl, List<SingerAlbum> singerAlbums)
         {
             Id = mid;
             SingerId = singerId;
@@ -36,11 +38,6 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.SingerAggregate
             SingerRegion = singerRegion;
             SingerCoverUrl = singerCoverUrl;
             _singerAlbums = singerAlbums;
-        }
-
-        protected override IReferrer ToReferrer()
-        {
-            throw new NotImplementedException();
         }
     }
 }
