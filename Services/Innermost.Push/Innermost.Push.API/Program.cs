@@ -1,3 +1,7 @@
+using Autofac.Extensions.DependencyInjection;
+using EventBusServiceBus;
+using Innermost.Push.API.Application.IntegrationEventHandlers;
+using Innermost.Push.API.Infrastructure.AutofacModules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -8,20 +12,29 @@ Log.Logger = CreateSerilogLogger(configuration);
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog();
+builder.Host
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory(config =>
+    {
+        config.RegisterModule<IntegrationEventModule>();
+    }))
+    .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
+    .UseContentRoot(Directory.GetCurrentDirectory())
+    .UseSerilog()
+    .Build();
 
 // Add services to the container.
 
+builder.Services.AddSignalR();
+
 builder.Services
     .AddCustomAuthentication(configuration)
+    .AddEventBus(configuration)
     .AddCustomCORS();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -38,6 +51,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PushHub>("/push");
+
+ConfigureMeetSignalRHubEventBus(app);
 
 app.Run();
 
@@ -50,6 +66,13 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
+}
+
+void ConfigureMeetSignalRHubEventBus(IApplicationBuilder app)
+{
+    var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
+
+    eventBus.Subscribe<PushMessageToUserIntegrationEvent, PushMessageToUserIntegrationEventHandler>();
 }
 
 partial class Program
@@ -83,8 +106,35 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
-                options.Audience = "push";
+                options.Audience = "meet";
             });
+
+        return services;
+    }
+
+    public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        var subcriptionName = configuration["SubscriptionClientName"];
+
+        services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+        {
+            var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
+            var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+
+            return new DefaultServiceBusPersisterConnection(connectionString, logger);
+        });
+
+        services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
+        {
+            var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
+            var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
+            var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
+            var lifescope = sp.GetRequiredService<ILifetimeScope>();
+
+            return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
+        });
+
+        services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
 
         return services;
     }
