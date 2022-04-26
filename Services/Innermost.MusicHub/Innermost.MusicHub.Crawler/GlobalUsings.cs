@@ -24,3 +24,6 @@ global using Newtonsoft.Json.Linq;
 global using Innermost.MusicHub.Crawler.Services;
 global using System.Text.RegularExpressions;
 global using MongoDB.Bson.Serialization.Attributes;
+global using Innermost.MusicHub.Infrastructure;
+global using MongoDB.Driver;
+global using MongoDB.Bson;

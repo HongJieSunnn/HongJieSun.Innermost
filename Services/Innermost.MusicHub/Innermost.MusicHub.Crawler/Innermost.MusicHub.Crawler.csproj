@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DotnetSpider" Version="5.0.9" />
+		<PackageReference Include="IdentityModel" Version="6.0.0" />
 		<PackageReference Include="MongoDB.Bson" Version="2.15.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.15.0" />
 		<PackageReference Include="Serilog" Version="2.10.0" />
@@ -18,11 +19,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="Innermost.MongoDBContext">
 			<HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
 		</Reference>
 		<Reference Include="Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection">
 			<HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+		</Reference>
+		<Reference Include="TagS.Microservices.Client">
+		  <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
