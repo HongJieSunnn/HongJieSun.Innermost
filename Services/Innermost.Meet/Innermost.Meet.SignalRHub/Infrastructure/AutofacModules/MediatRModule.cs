@@ -1,7 +1,5 @@
 ﻿using CommonService.Behaviors;
-using Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers;
 using MediatR.Extensions.Autofac.DependencyInjection;
-using System.Reflection;
 using TagS.Microservices.Client.AutofacExtensions;
 
 namespace Innermost.Meet.SignalRHub.Infrastructure.AutofacModules
@@ -13,8 +11,6 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.AutofacModules
             builder.RegisterMediatR(typeof(Program).Assembly);
 
             builder.RegisterGeneric(typeof(MongoDBTransactionBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-
-            builder.RegisterAssemblyTypes(typeof(AdminSendMessageToUserIntegrationEventHandler).GetTypeInfo().Assembly).As(typeof(IIntegrationEventHandler<>));
 
             builder.RegisterTagSMicroservicesClientTypes();
         }

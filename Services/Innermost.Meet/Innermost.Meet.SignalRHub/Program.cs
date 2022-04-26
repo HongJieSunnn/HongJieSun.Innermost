@@ -20,6 +20,7 @@ builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory(config =>
     {
         config.RegisterModule<MediatRModule>();
+        config.RegisterModule<IntegrationEventModule>();
     }))
     .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
     .UseContentRoot(Directory.GetCurrentDirectory())
