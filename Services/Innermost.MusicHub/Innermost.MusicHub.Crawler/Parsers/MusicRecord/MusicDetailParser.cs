@@ -37,6 +37,7 @@
             var language = context.Selectable.JsonPath("$.response.songinfo.data.info.lan.content.[0].value")?.Value;
             var publishTime = context.Selectable.JsonPath("$.response.songinfo.data.info.pub_time.content.[0].value")?.Value;
             var singerMids = context.Selectable.SelectList(Selectors.JsonPath("$.response.songinfo.data.track_info.singer.[*].mid")).Select(s => s.Value).ToList();
+            var singerNames = context.Selectable.SelectList(Selectors.JsonPath("$.response.songinfo.data.track_info.singer.[*].name")).Select(s => s.Value).ToList();
             var albumMid = context.Selectable.JsonPath("$.response.songinfo.data.track_info.album.mid").Value;
             var wikiUrl = context.Selectable.JsonPath("$.response.songinfo.data.extras.wikiurl")?.Value;
             var transName = context.Selectable.JsonPath("$.response.songinfo.data.extras.transname")?.Value;
@@ -54,7 +55,7 @@
             var responseLyric = await responseLyricTask;
             var lyric = new JsonSelectable(await responseLyric.Content.ReadAsStringAsync()).JsonPath("$.response.lyric")?.Value ?? "";
 
-            var musicRecord = new MusicRecordEntity(musicMid, int.Parse(musicId), musicName, transName, genre, language, albumMid, (string)albumCoverUrl!, musicUrl, wikiUrl, lyric, singerMids, publishTime);
+            var musicRecord = new MusicRecordEntity(musicMid, int.Parse(musicId), musicName, transName,introduction, genre, language, albumMid, (string)albumCoverUrl!, musicUrl, wikiUrl, lyric, singerMids, singerNames, publishTime);
 
             await _dbContext.MusicRecords.InsertOneAsync(musicRecord);
         }
