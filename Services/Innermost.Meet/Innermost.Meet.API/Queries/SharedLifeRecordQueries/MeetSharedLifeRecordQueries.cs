@@ -1,4 +1,5 @@
-﻿using TagS.Microservices.Client.Models;
+﻿using System.Linq.Expressions;
+using TagS.Microservices.Client.Models;
 
 namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
 {
@@ -11,11 +12,16 @@ namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
             _context = context;
             _identityService = identityService;
         }
-        public async Task<IEnumerable<SharedLifeRecordDTO>> GetRandomSharedLifeRecordsAsync(int limit = 20)
+        public async Task<IEnumerable<SharedLifeRecordDTO>> GetRandomSharedLifeRecordsAsync(int limit = 20, Expression<Func<SharedLifeRecord, bool>>? filter = null)
         {
             var userId = _identityService.GetUserId();
 
-            var records = await _context.SharedLifeRecords.AsQueryable().Where(l => l.UserId != userId).Sample(limit).ToListAsync();//Method Sample(in MongoDD.Driver.Linq) is to get random limit count records.
+            List<SharedLifeRecord> records;
+
+            if(filter is null)
+                records = await _context.SharedLifeRecords.AsQueryable().Where(l => l.UserId != userId).Sample(limit).ToListAsync();//Method Sample(in MongoDD.Driver.Linq) is to get random limit count records.
+            else
+                records = await _context.SharedLifeRecords.AsQueryable().Where(l => l.UserId != userId).Where(filter).Sample(limit).ToListAsync();
 
             return records.Select(r => new SharedLifeRecordDTO(r));
         }
