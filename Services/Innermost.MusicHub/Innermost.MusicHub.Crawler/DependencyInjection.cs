@@ -1,4 +1,7 @@
-﻿using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
+﻿using IdentityModel;
+using IdentityModel.Client;
+using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
+using Innermost.MusicHub.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
@@ -33,7 +36,35 @@ namespace Innermost.MusicHub.Crawler
                 c.WithDatabase("MusicHubCrawler");
             });
 
-            _serivces.AddHttpClient();
+            _serivces.AddMongoDBContext<MusicHubMongoDBContext>(c =>
+            {
+                c.WithConnectionString(ConnectionString);
+                c.WithDatabase("InnermostMusicHub");
+            });
+
+            _serivces.AddSingleton<TokenResponse>((service) =>
+            {
+                var client = new HttpClient();
+
+                var disco = client.GetDiscoveryDocumentAsync("https://localhost:5106").GetAwaiter().GetResult();
+                var tokenResponse = client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                {
+                    Address = disco.TokenEndpoint,
+
+                    ClientId = "serviceclient",
+                    ClientSecret = "service - client".ToSha256(),
+                    Scope = "tagserver"
+                }).GetAwaiter().GetResult();
+
+                return tokenResponse;
+            });
+
+            _serivces.AddHttpClient("IdentifiedHttpClient",(service,options) =>
+            {
+                var token = service.GetRequiredService<TokenResponse>();
+
+                options.SetBearerToken(token.AccessToken);
+            });
 
             if (!Builded)
             {
