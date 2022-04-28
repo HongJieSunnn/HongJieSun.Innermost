@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\EventBus\EventBusCommon\EventBusCommon.csproj" />
+    <ProjectReference Include="..\..\Extensions\MongoDBExtensions\MongoDBExtensions.csproj" />
     <ProjectReference Include="..\..\Extensions\TypeExtensions\TypeExtensions.csproj" />
   </ItemGroup>
 
