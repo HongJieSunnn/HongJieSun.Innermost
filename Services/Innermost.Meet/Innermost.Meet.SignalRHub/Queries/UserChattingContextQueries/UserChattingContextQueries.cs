@@ -30,7 +30,7 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
 
             var chattingContext =await _context.UserChattingContexts.Find(filter).Project(chattingContextIdProjection).FirstAsync();
 
-            return chattingContext["_id"].AsString;
+            return chattingContext["_id"].ToString()!;
         }
 
         public async Task<IEnumerable<ChattingRecordDTO>> GetChattingRecordsAsync(string chattingContextId, int page = 1, int limit = 50)
