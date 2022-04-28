@@ -62,7 +62,7 @@ namespace Innermost.LogLife.API.Application.Behaviors
                         transactionId = transaction.TransactionId;
                     }
 
-                    await _integrationEventService.PublishEventsAsync(transactionId);
+                    await _integrationEventService.PublishEventsAsync(transactionId.ToString());
                 });
 
                 return response;
