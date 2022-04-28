@@ -1,14 +1,13 @@
-﻿using CommonIdentityService.Extensions;
-using EventBusServiceBus;
+﻿using EventBusServiceBus.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using Innermost.Identity.API.UserStatue;
+using Innermost.IServiceCollectionExtensions;
+using Innermost.Meet.API.Application.IntegrationEventHandles;
 using Innermost.Meet.API.Infrastructure.AutofacModules;
 using Innermost.Meet.Infrastructure.Repositories;
 using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
-using Innermost.IServiceCollectionExtensions;
-using Innermost.Identity.API.UserStatue;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Innermost.Meet.API.Application.IntegrationEventHandles;
+using Microsoft.OpenApi.Models;
 
 namespace Innermost.Meet.API
 {
@@ -28,7 +27,7 @@ namespace Innermost.Meet.API
                 .AddMeetMongoDBContext(Configuration)
                 .AddMeetRepositories()
                 .AddMeetQueries()
-                .AddEventBus(Configuration)
+                .AddDefaultAzureServiceBusEventBus(Configuration)
                 .AddIdempotentCommandRequestStorage()
                 .AddUserIdentityService()
                 .AddMeetGrpcClients()
@@ -100,7 +99,7 @@ namespace Innermost.Meet.API
 
     internal static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddMeetAuthentication(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddMeetAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddAuthentication(options =>
@@ -117,7 +116,7 @@ namespace Innermost.Meet.API
             return services;
         }
 
-        public static IServiceCollection AddMeetMongoDBContext(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddMeetMongoDBContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMongoDBContext<MeetMongoDBContext>(config =>
             {
@@ -147,33 +146,6 @@ namespace Innermost.Meet.API
             services.AddScoped<IInteractionQueries, InteractionQueries>();
             services.AddScoped<ISocialContactQueries, SocialContactQueries>();
             services.AddScoped<IStatueQueries, StatueQueries>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            var subcriptionName = configuration["SubscriptionClientName"];
-
-            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-            {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-                return new DefaultServiceBusPersisterConnection(connectionString, logger);
-            });
-
-            services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-            {
-                var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-                var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-                var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
 
             return services;
         }
