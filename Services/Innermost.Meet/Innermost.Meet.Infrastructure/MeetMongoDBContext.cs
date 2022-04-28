@@ -23,6 +23,72 @@ namespace Innermost.Meet.Infrastructure
         public MeetMongoDBContext(MongoDBContextConfiguration<MeetMongoDBContext> contextConfiguration,IMediator mediator) : base(contextConfiguration)
         {
             _mediator=mediator;
+            CreateIndexes();
+        }
+
+        void CreateIndexes()
+        {
+            CreateIndexesForSharedLifeRecords();
+            CreateIndexesForUserInteractions();
+            CreateIndexesForUserSocialContact();
+            CreateIndexesForUserChattingContext();
+        }
+
+        void CreateIndexesForSharedLifeRecords()
+        {
+            if (!SharedLifeRecords!.Indexes.List().Any())
+            {
+                var recordIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.RecordId);
+                var userIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.UserId);
+                var titleIndex = Builders<SharedLifeRecord>.IndexKeys.Text(sl => sl.Title);
+                var textIndex= Builders<SharedLifeRecord>.IndexKeys.Text(sl => sl.Text);
+                var locationIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.BaiduPOI");
+                var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl=>sl.CreateTime);
+
+
+                var createIndexModels = new[] { recordIdIndex,userIdIndex,titleIndex,textIndex,locationIndex,createTimeIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al));
+
+                SharedLifeRecords.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+            }
+        }
+
+        void CreateIndexesForUserInteractions()
+        {
+            if (!UserInteractions!.Indexes.List().Any())
+            {
+                
+
+
+                var createIndexModels = new IndexKeysDefinition<UserInteraction>[] {  }.Select(al => new CreateIndexModel<UserInteraction>(al));
+
+                UserInteractions.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+            }
+        }
+
+        void CreateIndexesForUserSocialContact()
+        {
+            if (!UserSocialContacts!.Indexes.List().Any())
+            {
+
+
+
+                var createIndexModels = new IndexKeysDefinition<UserSocialContact>[] { }.Select(al => new CreateIndexModel<UserSocialContact>(al));
+
+                UserSocialContacts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+            }
+        }
+
+        void CreateIndexesForUserChattingContext()
+        {
+            if (!UserChattingContexts!.Indexes.List().Any())
+            {
+                var usersIndex = Builders<UserChattingContext>.IndexKeys.Ascending(ucc => ucc.Users);
+
+
+                var createIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al));
+
+                UserChattingContexts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+            }
         }
 
         public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
