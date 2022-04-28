@@ -2,22 +2,72 @@
 {
     public record RegisterModel
     {
-        [Required]
-        [RegularExpression(@"[a-zA-Z0-9_-]{4,16}", ErrorMessage = "UserName only can contain letters,numbers,- and _")]
+        [RegularExpression(@"[a-zA-Z0-9_-]{4,20}", ErrorMessage = "UserName only can contain letters,numbers,- and _")]
         public string UserName { get; init; }
 
-        [Required]
         [EmailAddress]
         public string Email { get; init; }
 
-        [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long", MinimumLength = 8)]
         public string Password { get; init; }
 
-        [Required]
         [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match")]
         public string ComfirmPassword { get; init; }
 
-        public InnermostUser User { get; init; }
+        [RegularExpression(@"[a-zA-Z0-9_-]{1,30}", ErrorMessage = "NickName only can contain letters,numbers,- and _")]
+        public string NickName { get; set; }
+        public DateTime Birthday { get; set; }
+
+        [Url]
+        public string UserAvatarUrl { get; set; }
+
+        [Url]
+        public string UserBackgroundImageUrl { get; set; }
+
+        [RegularExpression(@"^MALE|FEMALE|OTHER$", ErrorMessage = "Error gender.Gender just only can be MALE,FEMALE and OTHER.")]
+        public string Gender { get; set; }
+
+        [StringLength(maximumLength: 150)]
+        public string? SelfDescription { get; set; }
+
+        [StringLength(maximumLength: 80)]
+        public string? School { get; set; }
+
+        [StringLength(30)]
+        public string? Province { get; set; }
+
+        [StringLength(30)]
+        public string? City { get; set; }
+
+        public RegisterModel(
+            string userName,
+            string email,
+            string password,
+            string comfirmPassword,
+            string nickName,
+            DateTime birthday,
+            string userAvatarUrl,
+            string userBackgroundImageUrl,
+            string gender,
+            string? selfDescription,
+            string? school,
+            string? province,
+            string? city
+        )
+        {
+            UserName=userName;
+            Email=email;
+            Password=password;
+            ComfirmPassword=comfirmPassword;
+            NickName=nickName;
+            Birthday=birthday;
+            UserAvatarUrl=userAvatarUrl;
+            UserBackgroundImageUrl=userBackgroundImageUrl;
+            Gender=gender;
+            SelfDescription=selfDescription;
+            School=school;
+            Province=province;
+            City=city;
+        }
     }
 }
