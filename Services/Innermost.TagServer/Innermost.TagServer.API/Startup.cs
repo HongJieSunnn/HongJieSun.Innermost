@@ -1,11 +1,10 @@
 ﻿using CommonService.IdentityService.Extensions;
-using EventBusCommon;
-using EventBusCommon.Abstractions;
-using EventBusServiceBus;
+using EventBusServiceBus.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using Innermost.IServiceCollectionExtensions;
 using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
-using Innermost.IServiceCollectionExtensions;
+using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -49,7 +48,9 @@ namespace Innermost.TagServer.API
 
             services.AddMongoDBSession();
 
-            services.AddEventBus(Configuration);
+            services
+                .AddDefaultAzureServiceBusEventBus(Configuration)
+                .AddIntegrationEventServiceMongoDB();
 
             services.AddSwaggerGen(c =>
             {
@@ -119,31 +120,6 @@ namespace Innermost.TagServer.API
 
     internal static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            var subcriptionName = configuration["SubscriptionClientName"];
 
-            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-            {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-                return new DefaultServiceBusPersisterConnection(connectionString, logger);
-            });
-
-            services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-            {
-                var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-                var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-                var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
-
-            return services;
-        }
     }
 }

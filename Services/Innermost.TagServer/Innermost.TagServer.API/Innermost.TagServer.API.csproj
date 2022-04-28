@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceMongoDB\IntegrationEventServiceMongoDB.csproj" />
     <ProjectReference Include="..\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 
@@ -47,9 +48,8 @@
       <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
     </Reference>
     <Reference Include="TagS.Microservices.Server">
-      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server\bin\Debug\net6.0\TagS.Microservices.Server.dll</HintPath>
+      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Server.dll</HintPath>
     </Reference>
-    
     <Reference Include="TagS.Microservices.Server.Microsoft.AspNetCore.Http">
       <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server.Microsoft.AspNetCore.Http\bin\Debug\net6.0\TagS.Microservices.Server.Microsoft.AspNetCore.Http.dll</HintPath>
     </Reference>
