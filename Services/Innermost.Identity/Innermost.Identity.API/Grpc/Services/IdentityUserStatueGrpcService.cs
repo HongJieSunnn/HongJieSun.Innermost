@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Innermost.Identity.API.Services.UserStatueServices;
 using Innermost.Identity.API.UserStatue;
 using StackExchange.Redis;
 
@@ -6,48 +7,45 @@ namespace Innermost.Identity.API.Grpc.Services
 {
     public class IdentityUserStatueGrpcService:IdentityUserStatueGrpc.IdentityUserStatueGrpcBase
     {
-        private readonly UserStatueRedisContext _redisContext;
-        private const string UserOnlineStatueKey = "user_online_statue";
-        private const string UserStatueKey = "user_statue";
-        public IdentityUserStatueGrpcService(UserStatueRedisContext redisContext)
+        private readonly IUserStatueService _userStatueService;
+        public IdentityUserStatueGrpcService(IUserStatueService userStatueService)
         {
-            _redisContext = redisContext;
-
+            _userStatueService = userStatueService;
         }
         public override async Task<IsUserOnlineGrpcDTO> IsUserOnline(IsUserOnlineUserIdGrpcDTO request, ServerCallContext context)
         {
-            var onlineStatueRedisValues=await _redisContext.Context().HashGetAsync(UserOnlineStatueKey,request.UserId);
-            return new IsUserOnlineGrpcDTO() { IsOnline = (bool)onlineStatueRedisValues };
+            var onlineStatueRedisValue = await _userStatueService.IsUserOnlinedAsync(request.UserId);
+            return new IsUserOnlineGrpcDTO() { IsOnline = onlineStatueRedisValue };
         }
         public override async Task<UsersOnlineStatueGrpcDTO> GetUsersOnlineStatue(UserIdsGrpcDTO request, ServerCallContext context)
         {
-            var onlineStatueRedisValues = await _redisContext.Context().HashGetAsync(UserOnlineStatueKey, request.UserIds.Select(id=>new RedisValue(id)).ToArray());
+            var onlineStatueRedisValues = await _userStatueService.GetUsersOnlinedStatueAsync(request.UserIds);
             var usersOnlineStatueDTO = new UsersOnlineStatueGrpcDTO();//repeated field properties is get only.So we should add values by add.
 
-            usersOnlineStatueDTO.UsersOnlineStatues.AddRange(onlineStatueRedisValues.Select(rv=>(bool)rv));
+            usersOnlineStatueDTO.UsersOnlineStatues.AddRange(onlineStatueRedisValues);
 
             return usersOnlineStatueDTO;
         }
 
         public override async Task<UsersStatueGrpcDTO> GetUsersStatue(UserIdsGrpcDTO request, ServerCallContext context)
         {
-            var onlineStatueRedisValues = await _redisContext.Context().HashGetAsync(UserStatueKey, request.UserIds.Select(id => new RedisValue(id)).ToArray());
+            var onlineStatueRedisValues=await _userStatueService.GetUsersStatueAsync(request.UserIds);
             var usersStatueDTO = new UsersStatueGrpcDTO();
 
-            usersStatueDTO.UsersStatues.AddRange(onlineStatueRedisValues.Select(rv => (string)rv));
+            usersStatueDTO.UsersStatues.AddRange(onlineStatueRedisValues);
 
             return usersStatueDTO;
         }
 
         public override async Task<SetUserStatueVoidRetGrpcDTO> SetUserOnlineStatue(SetUserOnlineStatueGrpcDTO request, ServerCallContext context)
         {
-            await _redisContext.Context().HashSetAsync(UserOnlineStatueKey, request.UserId, request.IsOnline);
+            await _userStatueService.SetUserOnlineStatueAsync(request.UserId, request.IsOnline);
             return new SetUserStatueVoidRetGrpcDTO();
         }
 
         public override async Task<SetUserStatueVoidRetGrpcDTO> SetUserStatue(SetUserStatueGrpcDTO request, ServerCallContext context)
         {
-            await _redisContext.Context().HashSetAsync(UserStatueKey, request.UserId, request.UserStatue);
+            await _userStatueService.SetUserStatueAsync(request.UserId, request.UserStatue);
             return new SetUserStatueVoidRetGrpcDTO();
         }
     }
