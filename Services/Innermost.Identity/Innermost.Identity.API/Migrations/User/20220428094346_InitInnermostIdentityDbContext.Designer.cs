@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.Identity.API.Migrations.User
 {
     [DbContext(typeof(InnermostIdentityDbContext))]
-    [Migration("20220318082609_InitInnermostIdentityDbContext")]
+    [Migration("20220428094346_InitInnermostIdentityDbContext")]
     partial class InitInnermostIdentityDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Innermost.Identity.API.Models.InnermostUser", b =>
@@ -29,10 +29,10 @@ namespace Innermost.Identity.API.Migrations.User
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Age")
+                    b.Property<uint>("Age")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int unsigned")
+                        .HasDefaultValue(1u);
 
                     b.Property<string>("Birthday")
                         .IsRequired()
@@ -42,7 +42,6 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasDefaultValue("2000-01-01");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
@@ -52,11 +51,11 @@ namespace Innermost.Identity.API.Migrations.User
 
                     b.Property<DateTime>("CreateTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
+                        .HasColumnType("DateTime")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<DateTime>("DeleteTime")
-                        .HasColumnType("DATETIME");
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("DateTime");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -77,8 +76,8 @@ namespace Innermost.Identity.API.Migrations.User
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("varchar(18)");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -92,19 +91,20 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(11)
-                        .HasColumnType("varchar(11)");
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Province")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
+                    b.Property<string>("RealName")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("School")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -121,12 +121,33 @@ namespace Innermost.Identity.API.Migrations.User
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("DATETIME");
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("DateTime");
+
+                    b.Property<string>("UserAvatarUrl")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(220)
+                        .HasColumnType("varchar(220)")
+                        .HasDefaultValue("");
+
+                    b.Property<string>("UserBackgroundImageUrl")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(220)
+                        .HasColumnType("varchar(220)")
+                        .HasDefaultValue("https://innermost-user-img-1300228246.cos.ap-nanjing.myqcloud.com/backgrounds/default-bgimg.jpg");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<string>("UserStatue")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)")
+                        .HasDefaultValue("NORMAL");
 
                     b.HasKey("Id");
 
@@ -138,6 +159,37 @@ namespace Innermost.Identity.API.Migrations.User
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("IntegrationEventServiceSQL.IntegrationEventSQLModel", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EventContent")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("EventTypeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimesSend")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("IntegrationEventRecords", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.Identity.API.Migrations.Configuration
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20220318082609_InitConfigurationDbContext")]
+    [Migration("20220428092846_InitConfigurationDbContext")]
     partial class InitConfigurationDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResource", b =>

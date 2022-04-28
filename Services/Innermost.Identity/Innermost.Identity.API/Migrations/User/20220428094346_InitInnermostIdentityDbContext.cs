@@ -38,10 +38,10 @@ namespace Innermost.Identity.API.Migrations.User
                 {
                     Id = table.Column<string>(type: "varchar(95)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Age = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Age = table.Column<uint>(type: "int unsigned", nullable: false, defaultValue: 1u),
                     Gender = table.Column<string>(type: "VARCHAR(8)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NickName = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false)
+                    NickName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     School = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -53,9 +53,17 @@ namespace Innermost.Identity.API.Migrations.User
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Birthday = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false, defaultValue: "2000-01-01")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreateTime = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UpdateTime = table.Column<DateTime>(type: "DATETIME", nullable: true),
-                    DeleteTime = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    UserAvatarUrl = table.Column<string>(type: "varchar(220)", maxLength: 220, nullable: false, defaultValue: "")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserBackgroundImageUrl = table.Column<string>(type: "varchar(220)", maxLength: 220, nullable: false, defaultValue: "https://innermost-user-img-1300228246.cos.ap-nanjing.myqcloud.com/backgrounds/default-bgimg.jpg")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserStatue = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false, defaultValue: "NORMAL")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RealName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreateTime = table.Column<DateTime>(type: "DateTime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdateTime = table.Column<DateTime>(type: "DateTime", nullable: true),
+                    DeleteTime = table.Column<DateTime>(type: "DateTime", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -71,7 +79,7 @@ namespace Innermost.Identity.API.Migrations.User
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 20, nullable: true)
+                    PhoneNumber = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -82,6 +90,27 @@ namespace Innermost.Identity.API.Migrations.User
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "IntegrationEventRecords",
+                columns: table => new
+                {
+                    EventId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TransactionId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EventTypeName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EventContent = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TimesSend = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IntegrationEventRecords", x => x.EventId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -266,6 +295,9 @@ namespace Innermost.Identity.API.Migrations.User
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "IntegrationEventRecords");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
