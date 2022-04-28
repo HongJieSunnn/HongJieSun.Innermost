@@ -75,7 +75,8 @@
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
                 new IdentityResources.Phone(),
-                new IdentityResource("userstatue",new[]{"user_statue"})
+                new IdentityResource("userstatue",new[]{"user_statue"}),
+                new IdentityResource("userimages",new[]{"avatarimg","backgroundimg"})
             };
         }
         /// <summary>
@@ -104,6 +105,7 @@
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Phone,
                         "userstatue",
+                        "userimages",
                         "loglife",
                         "meet",
                         "musichub",
@@ -132,6 +134,7 @@
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Phone,
                         "userstatue",
+                        "userimages",
                         "loglife",
                         "meet",
                         "musichub",
