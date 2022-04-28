@@ -1,4 +1,7 @@
-﻿namespace Innermost.Identity.API.Controllers
+﻿using EventBusCommon.Abstractions;
+using Innermost.Identity.API.IntegrationEvents;
+
+namespace Innermost.Identity.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
@@ -6,68 +9,131 @@
     {
         private readonly ILoginService<InnermostUser> _loginService;
         private readonly IIdentityServerInteractionService _identityServerInteraction;
-        private readonly IClientStore _clientStore;
+        private readonly IUserStatueService _userStatueService;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<InnermostUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IIntegrationEventService _integrationEventService;
 
         public AccountController(
             ILoginService<InnermostUser> loginService,
             IIdentityServerInteractionService identityServerInteraction,
-            IClientStore clientStore,
+            IUserStatueService userStatueService,
             ILogger<AccountController> logger,
             UserManager<InnermostUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IIntegrationEventService integrationEventService
+        )
         {
             _loginService = loginService;
             _identityServerInteraction = identityServerInteraction;
-            _clientStore = clientStore;
+            _userStatueService = userStatueService;
             _logger = logger;
             _userManager = userManager;
             _configuration = configuration;
+            _integrationEventService = integrationEventService;
         }
 
-        /// <summary>
-        /// Innermost 注册用户API
-        /// </summary>
-        /// <param name="model">用户注册信息</param>
-        /// <param name="returnUrl">返回的url</param>
-        /// <returns></returns>
         [Route("Register")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model, string returnUrl = null)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model, string? returnUrl = null)
         {
-            //TODO add claims.
-            if (ModelState.IsValid)
-            {
-                var newUser = new InnermostUser
-                {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    Age = model.User.Age,
-                    Gender = model.User.Gender,
-                    NickName = model.User.NickName,
-                    School = model.User.School,
-                    Province = model.User.Province,
-                    City = model.User.City,
-                    SelfDescription = model.User.SelfDescription,
-                    Birthday = model.User.Birthday
-                };
+            if (model.Password != model.ComfirmPassword)
+                return BadRequest("Password does not equal to ComfirmPassword.");
 
-                var createNewUserRes = await _userManager.CreateAsync(newUser, model.Password);
-                if (createNewUserRes.Errors.Count() > 0)
-                {
-                    return BadRequest(await BuildErrorModelStateJsonStr(model, createNewUserRes.Errors.Select(error => error.Description)));
-                }
+            var age = DateTime.Now.Year - model.Birthday.Year;
+            var newUser = new InnermostUser(
+                model.UserName, model.Email,
+                age, model.Gender, model.NickName,
+                model.School, model.Province, model.City,
+                model.SelfDescription,
+                model.Birthday.ToString("yyyy-MM-dd HH:mm:ss"),
+                model.UserAvatarUrl, model.UserBackgroundImageUrl,
+                DateTime.Now
+            );
+
+            var createNewUserRes = await _userManager.CreateAsync(newUser, model.Password);
+            if (createNewUserRes.Errors.Count() > 0)
+            {
+                return BadRequest(await BuildErrorModelStateJsonStr(model, createNewUserRes.Errors.Select(error => error.Description)));
             }
 
-            if (returnUrl != null && HttpContext.User.Identity.IsAuthenticated)//returnUrl不为空而且有用户登陆着
+            var createdUser = await _userManager.FindByNameAsync(model.UserName);
+
+            var addCliamsTask= AddClaimsToUserAsync(createdUser);
+            var addUserStatueTask= AddUserStatuesToRedisAsync(createdUser.Id);
+            var sendConfirmEmailTask= SendConfirmEmailAsync(createdUser);
+
+            await addCliamsTask;
+            await addUserStatueTask;
+            await sendConfirmEmailTask; 
+
+            if (returnUrl != null && HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
             {
                 return Redirect(returnUrl);
             }
 
             return Ok();
+        }
+
+        private async Task AddClaimsToUserAsync(InnermostUser createdUser)
+        {
+
+            await _userManager.AddClaimsAsync(createdUser, new[]
+            {
+                new Claim(ClaimTypes.Role,"User"),
+                new Claim("nickname",createdUser.NickName),
+                new Claim("gender",createdUser.Gender),
+                new Claim("user_statue", createdUser.UserStatue),
+                new Claim("avatarimg", createdUser.UserAvatarUrl),
+                new Claim("backgroundimg", createdUser.UserBackgroundImageUrl),
+            });
+        }
+
+        private async Task AddUserStatuesToRedisAsync(string userId)
+        {
+            await _userStatueService.SetUserOnlineStatueAsync(userId, false);
+            await _userStatueService.SetUserStatueAsync(userId, "NORMAL");
+        }
+
+        private async Task SendConfirmEmailAsync(InnermostUser user)
+        {
+            var confirmToken =await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var expiredTime = DateTime.Now.AddMinutes(10).ToString("yyyy-MM-dd HH:mm:ss");
+
+            var body = 
+                $@"
+                    Hi,<b><font size={"5"}>{user.NickName}</font></b> @{user.UserName}<br/><br/>
+                    感谢您注册 <b>Innermost</b> <br/> 
+                    请点击该链接进行账号邮箱验证:<a href={$"https://localhost:5106/account/email-confirm?userId={user.Id}&confirmToken={confirmToken}&expiredTime={expiredTime}"}>验证地址</a><br/>
+                    请在 {expiredTime} 前完成验证
+                ";
+            var sendEmailIntegrationEvent = new SendMailIntegrationEvent(user.Email, "Innermost账号注册邮箱验证", body, true);
+            await _integrationEventService.SaveEventAsync(sendEmailIntegrationEvent);
+            await _integrationEventService.PublishEventsAsync(new[] { sendEmailIntegrationEvent.Id });
+        }
+
+        [HttpGet]
+        [Route("email-confirm")]
+        public async Task<IActionResult> ConfirmEmail(string userId,string confirmToken,string expiredTime)
+        {
+            if(DateTime.Parse(expiredTime)<DateTime.Now)
+                return Redirect("http://localhost:3000/auth/confirm-failed?errorType=\"验证码已过期\"");
+
+            var user=await _userManager.FindByIdAsync(userId);
+            if(user.EmailConfirmed)
+                return Redirect("http://localhost:3000/auth/confirm-failed?errorType=\"已验证，请勿再点击该链接\"");
+
+            var result =await _userManager.ConfirmEmailAsync(user, confirmToken);
+
+            if(result.Errors.Count()>0)
+            {
+                return Redirect("http://localhost:3000/auth/confirm-failed");
+            }
+
+            return Redirect("http://localhost:3000/auth/confirm-succeed");
         }
 
         [Route("Login")]
@@ -78,26 +144,24 @@
         }
 
         /// <summary>
-        /// 登陆
+        /// Always,identityserver4 will call this action.
         /// </summary>
         /// <param name="loginModel"></param>
         /// <returns></returns>
         [Route("Login")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            //TODO set user statue into redis.
-            //so that confidant can get faster and modify faster.
-            //after signalR disconnect or logout,modify redis value to mysql database.
             if (ModelState.IsValid)
             {
                 var user = await _loginService.FindByAccount(loginModel.Account, loginModel.AccountType);
 
-                if (user == null)//用户不存在
+                if (user == null)
                 {
                     return Unauthorized("Account is not existing");
                 }
+
+                await _userStatueService.SetUserStatueFromMySQL(user);//To set user statue from mysql if redis has not the statue of this user of the value is redis is different with value in mysql.
 
                 if (await _loginService.ValidateCredentials(user, loginModel.PassWord))
                 {
@@ -130,7 +194,7 @@
                     return Ok();
                 }
 
-                return Unauthorized("Account or Password is invalid");//账号密码错误 401
+                return Unauthorized("Account or Password is invalid");
             }
 
             return BadRequest(await BuildErrorModelStateJsonStr(loginModel, new List<string> { "error model datas." }));
@@ -144,7 +208,7 @@
         /// <returns></returns>
         public Task<JObject> BuildErrorModelStateJsonStr<TModel>(TModel model, IEnumerable<string> errorMessages)
         {
-            var modelJson = JObject.FromObject(model);
+            var modelJson = JObject.FromObject(model!);
             JArray errorArray = new JArray();
             foreach (var error in errorMessages)
             {
@@ -183,9 +247,8 @@
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [Route("Logout")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Route("Logout")]
         public async Task<IActionResult> Logout(LogoutModel model)
         {
             var idp = User?.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
@@ -219,7 +282,14 @@
             HttpContext.User = new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity());
 
             var logoutContext = await _identityServerInteraction.GetLogoutContextAsync(model.LogoutId);
-            return Redirect(logoutContext?.PostLogoutRedirectUri);
+
+            //PostLogoutRedirectUri is uri like https://localhost:3000/ instead of domain name like https://localhost:3000 and must be contained in PostLogoutRedirectUris of the client.
+            //Or PostLogoutRedirectUri is null;
+
+            if (logoutContext.PostLogoutRedirectUri is null)
+                return Redirect("localhost:3000/");
+
+            return Redirect(logoutContext.PostLogoutRedirectUri);
         }
     }
 }
