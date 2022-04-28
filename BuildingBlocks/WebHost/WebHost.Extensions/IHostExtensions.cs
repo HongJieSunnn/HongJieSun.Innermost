@@ -1,17 +1,24 @@
 ﻿ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
 using Polly;
+// Copyright (c) .NET Foundation and Contributors. All Rights Reserved.
+//
+// Distributed under MIT license.
+// See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
+// Modify by HongJieSun 2022
+
 
 namespace Microsoft.AspNetCore.Hosting
 {
-    public static class IWebHostExtensions
+    public static class IHostExtensions
     {
-        public static bool IsInKubernetes(this IWebHost webHost)
+        public static bool IsInKubernetes(this IHost host)
         {
-            var cfg = webHost.Services.GetService(typeof(IConfiguration)) as IConfiguration;
+            var cfg = host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
             var orchestratorType = cfg["OrchestratorType"];
             return orchestratorType?.ToUpper() == "K8S";
         }
@@ -23,15 +30,15 @@ namespace Microsoft.AspNetCore.Hosting
         /// <param name="webHost">因为需要使用Services，所以做IWebHost的扩展函数比较方便</param>
         /// <param name="seeder"></param>
         /// <returns></returns>
-        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+        public static IHost MigrateDbContext<TContext>(this IHost host, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
         {
-            var underK8S = webHost.IsInKubernetes();
+            var underK8S = host.IsInKubernetes();
 
-            using (var scope = webHost.Services.CreateScope())//创建一个子容器,从调用该方法的wenHost处获取服务
+            using (var scope = host.Services.CreateScope())//创建一个子容器,从调用该方法的wenHost处获取服务
             {
                 var services = scope.ServiceProvider;
-                var logger = services.GetService<ILogger<TContext>>();
-                var context = services.GetService<TContext>();
+                var logger = services.GetRequiredService<ILogger<TContext>>();
+                var context = services.GetRequiredService<TContext>();
 
                 try
                 {
@@ -71,7 +78,7 @@ namespace Microsoft.AspNetCore.Hosting
                     }
                 }
             }
-            return webHost;
+            return host;
         }
 
         private static void InvokeSeeder<TContext>(Action<TContext, IServiceProvider> seeder, TContext context, IServiceProvider services)
