@@ -48,7 +48,7 @@ namespace Innermost.MusicHub.Crawler.Migrations
                     var tagFilter = Builders<MusicTagEntity>.Filter.Eq("MusicRecordMids", mr.MusicMid);
                     var tagProjection = Builders<MusicTagEntity>.Projection.Include(mt => mt.TagName);
                     var tagNameDocuments = await _crawlerMongoDBContext.MusicTags.Find(tagFilter).Project(tagProjection).ToListAsync();
-                    var tagNames = tagNameDocuments.Select(tnd => tnd.GetValue("TagName").AsString);
+                    var tagNames = tagNameDocuments.Select(tnd => tnd.GetValue("TagName").ToString());
 
 
                     return new MusicRecord(
