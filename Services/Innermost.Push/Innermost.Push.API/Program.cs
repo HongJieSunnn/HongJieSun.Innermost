@@ -1,5 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
 using EventBusServiceBus;
+using EventBusServiceBus.Extensions;
 using Innermost.Push.API.Application.IntegrationEventHandlers;
 using Innermost.Push.API.Infrastructure.AutofacModules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,7 +29,7 @@ builder.Services.AddSignalR();
 
 builder.Services
     .AddCustomAuthentication(configuration)
-    .AddEventBus(configuration)
+    .AddDefaultAzureServiceBusEventBus(configuration)
     .AddCustomCORS();
 
 builder.Services.AddControllers();
@@ -73,6 +74,7 @@ void ConfigureMeetSignalRHubEventBus(IApplicationBuilder app)
     var eventBus = app.ApplicationServices.GetRequiredService<IAsyncEventBus>();
 
     eventBus.Subscribe<PushMessageToUserIntegrationEvent, PushMessageToUserIntegrationEventHandler>();
+    eventBus.Subscribe<SendMailIntegrationEvent, SendMailIntegrationEventHandler>();
 }
 
 partial class Program
@@ -106,35 +108,8 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
-                options.Audience = "meet";
+                options.Audience = "push";
             });
-
-        return services;
-    }
-
-    public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-    {
-        var subcriptionName = configuration["SubscriptionClientName"];
-
-        services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-        {
-            var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-            var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-            return new DefaultServiceBusPersisterConnection(connectionString, logger);
-        });
-
-        services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-        {
-            var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-            var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-            var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-            var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-            return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-        });
-
-        services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
 
         return services;
     }
