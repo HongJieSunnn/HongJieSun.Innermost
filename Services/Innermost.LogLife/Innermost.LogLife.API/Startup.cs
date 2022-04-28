@@ -1,4 +1,5 @@
 ﻿using CommonService.IdentityService.Extensions;
+using EventBusServiceBus.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using Innermost.LogLife.API.Infrastructure.AutofacModules;
 
@@ -25,7 +26,7 @@ namespace Innermost.LogLife.API
                 .Services
                 .AddHealthCheck(Configuration)
                 .AddCustomDbContext(Configuration)
-                .AddCustomEventBus(Configuration)
+                .AddDefaultAzureServiceBusEventBus(Configuration)
                 .AddCustomIntegrationEventConfiguration(Configuration)
                 .AddCustomAuthentication(Configuration)
                 .AddGrpcServices(Configuration)
@@ -176,34 +177,7 @@ namespace Innermost.LogLife.API
         {
             services.AddTransient<IntegrationEventRecordServiceFactory>();
             services.AddTransient<ILogLifeIntegrationEventService, LogLifeIntegrationEventService>();
-            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();//TODO maybe we should not inject ILogLifeIntegrationEventService.
-
-            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-            {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-                var logger = sp.GetService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-                return new DefaultServiceBusPersisterConnection(connectionString, logger);
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection AddCustomEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            var subcriptionName = configuration["SubscriptionClientName"];
-
-            services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-            {
-                var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-                var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-                var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
+            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();
 
             return services;
         }
@@ -262,8 +236,6 @@ namespace Innermost.LogLife.API
             });
 
             services.AddScoped<ILifeRecordRepository, LifeRecordRepository>();
-
-            //TODO AddIdempotentCommandRequestStorage
 
             return services;
         }
