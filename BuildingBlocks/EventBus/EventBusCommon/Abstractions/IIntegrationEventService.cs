@@ -1,7 +1,9 @@
 ﻿namespace EventBusCommon.Abstractions
 {
-    public interface IIntegrationEventService//TODO shall I create interface ISQLIntegrationEventService used in TransactionBehavior of LogLife or maybe not because I will not use SQL except LogLife.
+    public interface IIntegrationEventService
     {
-        Task AddAndSaveEventAsync(IntegrationEvent integrationEvent);
+        Task SaveEventAsync(IntegrationEvent @event);
+        Task PublishEventsAsync(IEnumerable<Guid> eventIds);
+        Task PublishEventsAsync(string transactionOrSessionId);
     }
 }
