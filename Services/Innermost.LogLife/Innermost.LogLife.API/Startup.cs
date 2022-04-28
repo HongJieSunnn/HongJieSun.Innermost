@@ -15,7 +15,7 @@ namespace Innermost.LogLife.API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
 
             services
@@ -58,14 +58,12 @@ namespace Innermost.LogLife.API
                     }
                 });
             });
+        }
 
-            var container = new ContainerBuilder();
-
-            container.Populate(services);
-            container.RegisterModule<MediatRModules>();
-            container.RegisterModule<IntegrationEventModules>();
-
-            return new AutofacServiceProvider(container.Build());
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule<MediatRModules>();
+            builder.RegisterModule<IntegrationEventModules>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
