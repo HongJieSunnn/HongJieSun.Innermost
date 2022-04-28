@@ -68,16 +68,19 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("Address");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("City");
 
                     b.Property<string>("District")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("District");
 
                     b.Property<string>("LocationName")
@@ -87,7 +90,8 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.Property<string>("Province")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("Province");
 
                     b.HasKey("Id");
@@ -156,6 +160,11 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                         .HasColumnType("DateTime")
                         .HasColumnName("UpdateTime");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(95)")
+                        .HasColumnName("UserId1");
+
                     b.Property<bool>("_isShared")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("IsShared");
@@ -177,6 +186,16 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                     b.HasKey("Id");
 
                     b.HasIndex("CreateTime");
+
+                    b.HasIndex("Text")
+                        .HasAnnotation("MySql:FullTextIndex", true);
+
+                    b.HasIndex("Title")
+                        .HasAnnotation("MySql:FullTextIndex", true);
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("_isShared");
 
                     b.HasIndex("_locationUId");
 

@@ -36,13 +36,13 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LocationName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Province = table.Column<string>(type: "longtext", nullable: false)
+                    Province = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "longtext", nullable: false)
+                    City = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    District = table.Column<string>(type: "longtext", nullable: true)
+                    District = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: false)
+                    Address = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BaiduPOI_Longitude = table.Column<float>(type: "float", nullable: false),
                     BaiduPOI_Latitude = table.Column<float>(type: "float", nullable: false)
@@ -93,6 +93,8 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId1 = table.Column<string>(type: "varchar(95)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Title = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Text = table.Column<string>(type: "varchar(3000)", maxLength: 3000, nullable: false)
@@ -189,6 +191,11 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 column: "CreateTime");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LifeRecords_IsShared",
+                table: "LifeRecords",
+                column: "IsShared");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LifeRecords_LocationUId",
                 table: "LifeRecords",
                 column: "LocationUId");
@@ -197,6 +204,23 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 name: "IX_LifeRecords_MusicRecordMId",
                 table: "LifeRecords",
                 column: "MusicRecordMId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LifeRecords_Text",
+                table: "LifeRecords",
+                column: "Text")
+                .Annotation("MySql:FullTextIndex", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LifeRecords_Title",
+                table: "LifeRecords",
+                column: "Title")
+                .Annotation("MySql:FullTextIndex", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LifeRecords_UserId1",
+                table: "LifeRecords",
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LifeRecordTagSummary_TagsTagId",
