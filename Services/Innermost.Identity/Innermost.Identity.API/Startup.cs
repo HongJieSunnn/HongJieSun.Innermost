@@ -1,4 +1,6 @@
-﻿using Innermost.Identity.API.Grpc.Services;
+﻿using EventBusServiceBus.Extensions;
+using Innermost.Identity.API.Grpc.Services;
+using IntegrationEventServiceSQL.Extensions;
 
 namespace Innermost.Identity.API
 {
@@ -12,7 +14,7 @@ namespace Innermost.Identity.API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             var sqlConnectionString = Configuration.GetConnectionString("ConnectMySQL");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -31,14 +33,21 @@ namespace Innermost.Identity.API
                 )
             );
 
+            //redis context
+            services.AddSingleton<UserStatueRedisContext>(new UserStatueRedisContext(Configuration.GetConnectionString("Redis")));
+
             //数据库健康检查
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())
                 .AddMySql(sqlConnectionString,
                     name: "IdentityDB-Check",
                     tags: new string[] { "IdentityDB" });
+
             //添加transient依赖
             services.AddTransient<ILoginService<InnermostUser>, InnermostLoginService>();
+
+            //Add scoped dependencies
+            services.AddScoped<IUserStatueService, UserStatueService>();
 
             //添加 ASP.NET Identity
             services.AddIdentity<InnermostUser, IdentityRole>()
@@ -94,7 +103,7 @@ namespace Innermost.Identity.API
             {
                 options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
                 options.AddPolicy("User", policy => policy.RequireClaim(ClaimTypes.Role, "User"));
-                options.AddPolicy("Crawler", policy => policy.RequireClaim("client_id", "crawlerclient"));
+                options.AddPolicy("IntenalService", policy => policy.RequireClaim("client_id", "serviceclient"));
             });
 
             //对账号密码等信息配置
@@ -103,11 +112,14 @@ namespace Innermost.Identity.API
                 options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.User.AllowedUserNameCharacters =
                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
                 options.User.RequireUniqueEmail = true;
             });
+
+            //configure lifetime of tokens for confirm
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>o.TokenLifespan = TimeSpan.FromMinutes(10));
 
             //配置cookie
             services.ConfigureApplicationCookie(options =>
@@ -120,6 +132,11 @@ namespace Innermost.Identity.API
             //Gprc
             services.AddGrpc();
 
+            //add event bus and integration event service
+            services
+                .AddDefaultAzureServiceBusEventBus(Configuration)
+                .AddIntegrationEventServiceSQL<InnermostIdentityDbContext>();
+
             //开发使用的证书，真正生产环境下需要像eshop项目里一样弄一个证书装进去
             builder.AddDeveloperSigningCredential();
 
@@ -128,11 +145,11 @@ namespace Innermost.Identity.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Innermost.Identity.API", Version = "v1" });
             });
+        }
 
-            var container = new ContainerBuilder();
-            container.Populate(services);
-
-            return new AutofacServiceProvider(container.Build());
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
