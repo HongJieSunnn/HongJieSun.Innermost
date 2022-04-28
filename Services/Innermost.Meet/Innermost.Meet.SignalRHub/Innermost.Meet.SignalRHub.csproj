@@ -38,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceMongoDB\IntegrationEventServiceMongoDB.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\ILoggerExtensions\ILoggerExtensions.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IServiceCollectionExtensions\IServiceCollectionExtensions.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />

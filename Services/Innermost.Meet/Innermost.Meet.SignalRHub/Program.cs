@@ -1,12 +1,14 @@
 using Autofac.Extensions.DependencyInjection;
 using EventBusCommon.Abstractions;
 using EventBusServiceBus;
+using EventBusServiceBus.Extensions;
 using Innermost.IServiceCollectionExtensions;
 using Innermost.Meet.Infrastructure.Repositories;
 using Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers;
 using Innermost.Meet.SignalRHub.Hubs;
 using Innermost.Meet.SignalRHub.Infrastructure.AutofacModules;
 using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
+using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -38,7 +40,7 @@ builder.Services
     .AddMeetSignalRHubRepositories()
     .AddMeetSignalRHubQueries()
     .AddMeetSignalRHubServices()
-    .AddEventBus(configuration)
+    .AddDefaultAzureServiceBusEventBus(configuration)
     .AddMeetSignalRHubGrpcClients()
     .AddCustomCORS();
 
@@ -163,34 +165,6 @@ internal static class IServiceCollectionExtensions
 
         return services;
     }
-
-    public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-    {
-        var subcriptionName = configuration["SubscriptionClientName"];
-
-        services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-        {
-            var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-            var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-            return new DefaultServiceBusPersisterConnection(connectionString, logger);
-        });
-
-        services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-        {
-            var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-            var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-            var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-            var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-            return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-        });
-
-        services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
-
-        return services;
-    }
-
     public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services)
     {
         services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options=>
