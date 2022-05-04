@@ -39,7 +39,7 @@ namespace Innermost.Identity.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel model, string? returnUrl = null)
         {
-            if (model.Password != model.ComfirmPassword)
+            if (model.Password != model.ConfirmPassword)
                 return BadRequest("Password does not equal to ComfirmPassword.");
 
             var age = DateTime.Now.Year - model.Birthday.Year;
@@ -48,7 +48,7 @@ namespace Innermost.Identity.API.Controllers
                 age, model.Gender, model.NickName,
                 model.School, model.Province, model.City,
                 model.SelfDescription,
-                model.Birthday.ToString("yyyy-MM-dd HH:mm:ss"),
+                model.Birthday.ToString("yyyy-MM-dd"),
                 model.UserAvatarUrl, model.UserBackgroundImageUrl,
                 DateTime.Now
             );
@@ -61,13 +61,10 @@ namespace Innermost.Identity.API.Controllers
 
             var createdUser = await _userManager.FindByNameAsync(model.UserName);
 
-            var addCliamsTask= AddClaimsToUserAsync(createdUser);
-            var addUserStatueTask= AddUserStatuesToRedisAsync(createdUser.Id);
-            var sendConfirmEmailTask= SendConfirmEmailAsync(createdUser);
-
-            await addCliamsTask;
-            await addUserStatueTask;
-            await sendConfirmEmailTask; 
+            await AddUserStatuesToRedisAsync(createdUser.Id);
+            await AddClaimsToUserAsync(createdUser);
+            await SendConfirmEmailAsync(createdUser);
+            await PublishUserRegisteredIntegrationEventToMeet(createdUser.Id);
 
             if (returnUrl != null && HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
             {
@@ -101,18 +98,28 @@ namespace Innermost.Identity.API.Controllers
         {
             var confirmToken =await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var expiredTime = DateTime.Now.AddMinutes(10).ToString("yyyy-MM-dd HH:mm:ss");
+            var expiredTime = DateTime.Now.AddMinutes(10).ToString("yyyy-MM-ddTHH:mm:ss");
+
+            var confirmTokenEscaped = Uri.EscapeDataString(confirmToken);
+            var confirmUri=new Uri($"https://localhost:5106/account/email-confirm?userId={user.Id}&confirmToken={confirmTokenEscaped}&expiredTime={expiredTime}");
 
             var body = 
                 $@"
                     Hi,<b><font size={"5"}>{user.NickName}</font></b> @{user.UserName}<br/><br/>
                     感谢您注册 <b>Innermost</b> <br/> 
-                    请点击该链接进行账号邮箱验证:<a href={$"https://localhost:5106/account/email-confirm?userId={user.Id}&confirmToken={confirmToken}&expiredTime={expiredTime}"}>验证地址</a><br/>
-                    请在 {expiredTime} 前完成验证
+                    请点击该链接进行账号邮箱验证:<a href={confirmUri}>验证地址</a><br/>
+                    请在 {expiredTime.Replace('T',' ')} 前完成验证
                 ";
             var sendEmailIntegrationEvent = new SendMailIntegrationEvent(user.Email, "Innermost账号注册邮箱验证", body, true);
             await _integrationEventService.SaveEventAsync(sendEmailIntegrationEvent);
             await _integrationEventService.PublishEventsAsync(new[] { sendEmailIntegrationEvent.Id });
+        }
+
+        private async Task PublishUserRegisteredIntegrationEventToMeet(string userId)
+        {
+            var integrationEvent=new UserRegisteredIntegrationEvent(userId);
+            await _integrationEventService.SaveEventAsync(integrationEvent);
+            await _integrationEventService.PublishEventsAsync(new[] {integrationEvent.Id});
         }
 
         [HttpGet]
