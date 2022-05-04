@@ -1,6 +1,4 @@
-﻿using CommonIdentityService.IdentityService;
-using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
-using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
+﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
 using MongoDB.Driver.GeoJsonObjectModel;
 using TagS.Microservices.Client.Models;
 
@@ -11,7 +9,7 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
         private readonly ISharedLifeRecordRepository _sharedLifeRecordRepository;
         private readonly IUserIdentityService _userIdentityService;
         private readonly ILogger<LifeRecordSetSharedIntegrationEventHandler> _logger;
-        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository,IUserIdentityService userIdentityService, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
+        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IUserIdentityService userIdentityService, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
         {
             _sharedLifeRecordRepository = sharedLifeRecordRepository;
             _userIdentityService = userIdentityService;
@@ -22,7 +20,7 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
         {
             _logger.LogIntegrationEventHandlerStartHandling(@event, Program.AppName);
 
-            var getUserNamesTask=_userIdentityService.GetUserNamesAsync(@event.UserId);
+            var getUserNamesTask = _userIdentityService.GetUserNamesAsync(@event.UserId);
             var getUserAvatarUrlTask = _userIdentityService.GetUserAvatarUrlAsync(@event.UserId);
 
             Location? location = null;
@@ -43,7 +41,7 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
             var userNames = await getUserNamesTask;
             var userAvatarUrl = await getUserAvatarUrlTask;
 
-            var sharedLifeRecord = new SharedLifeRecord(null, @event.RecordId, @event.UserId,userNames.userName,userNames.userNickName,userAvatarUrl, @event.Title, @event.Text, location, musicRecord, @event.ImagePaths,0, null, tagSummaries, @event.CreateTime, null, null);
+            var sharedLifeRecord = new SharedLifeRecord(null, @event.RecordId, @event.UserId, userNames.userName, userNames.userNickName, userAvatarUrl, @event.Title, @event.Text, location, musicRecord, @event.ImagePaths, 0, null, tagSummaries, @event.CreateTime, null, null);
 
             await _sharedLifeRecordRepository.AddSharedLifeRecordAsync(sharedLifeRecord);
         }
