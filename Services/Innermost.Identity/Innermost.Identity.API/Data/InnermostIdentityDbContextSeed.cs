@@ -1,9 +1,12 @@
-﻿namespace Innermost.Identity.API.Data
+﻿using EventBusCommon.Abstractions;
+using Innermost.Identity.API.IntegrationEvents;
+
+namespace Innermost.Identity.API.Data
 {
     public class InnermostIdentityDbContextSeed
     {
         private readonly IPasswordHasher<InnermostUser> _passwordHasher = new PasswordHasher<InnermostUser>();
-        public async Task SeedAsync(InnermostIdentityDbContext context, UserManager<InnermostUser> userManager, IConfiguration configuration)
+        public async Task SeedAsync(InnermostIdentityDbContext context, UserManager<InnermostUser> userManager,IIntegrationEventService integrationEventService,IUserStatueService userStatueService, IConfiguration configuration)
         {
             if (context.Users.Any())
                 return;
@@ -16,17 +19,34 @@
             var hongJieSunUser = userToAdd[1];
             var testerUser = userToAdd[2];
 
-            await userManager.AddClaimAsync(adminUser, new Claim(ClaimTypes.Role, "Admin"));
-            await userManager.AddClaimAsync(adminUser, new Claim("nickname", "Admin"));//We should add claims for profile.Or id_token(take profile) only contains name and preferred_username.
-            await userManager.AddClaimAsync(adminUser, new Claim("user_statue", adminUser.UserStatue));
+            await ConfigureSeedUser(userManager, integrationEventService, adminUser);
+            await ConfigureSeedUser(userManager, integrationEventService, hongJieSunUser);
+            await ConfigureSeedUser(userManager, integrationEventService, testerUser);
 
-            await userManager.AddClaimAsync(hongJieSunUser, new Claim(ClaimTypes.Role, "User"));
-            await userManager.AddClaimAsync(hongJieSunUser, new Claim("nickname", hongJieSunUser.NickName));
-            await userManager.AddClaimAsync(hongJieSunUser, new Claim("user_statue", hongJieSunUser.UserStatue));
+            await ConfigureSeedUserStatue(userStatueService, adminUser.Id);//Admin always offlined.
+            await ConfigureSeedUserStatue(userStatueService, hongJieSunUser.Id);
+            await ConfigureSeedUserStatue(userStatueService, testerUser.Id);
+        }
 
-            await userManager.AddClaimAsync(testerUser, new Claim(ClaimTypes.Role, "User"));
-            await userManager.AddClaimAsync(testerUser, new Claim("nickname", testerUser.NickName));
-            await userManager.AddClaimAsync(hongJieSunUser, new Claim("user_statue", hongJieSunUser.UserStatue));
+        private async Task ConfigureSeedUser(UserManager<InnermostUser> userManager,IIntegrationEventService integrationEventService,InnermostUser user)
+        {
+            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
+            await userManager.AddClaimAsync(user, new Claim("nickname", user.NickName));
+            await userManager.AddClaimAsync(user, new Claim("user_statue", user.UserStatue));
+            await userManager.AddClaimAsync(user, new Claim("avatarimg", user.UserAvatarUrl));
+            await userManager.AddClaimAsync(user, new Claim("backgroundimg", user.UserBackgroundImageUrl));
+            var userToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            await userManager.ConfirmEmailAsync(user, userToken);
+
+            var integrationEvent = new UserRegisteredIntegrationEvent(user.Id);
+            await integrationEventService.SaveEventAsync(integrationEvent);
+            await integrationEventService.PublishEventsAsync(new[] {integrationEvent.Id});
+        }
+
+        private async Task ConfigureSeedUserStatue(IUserStatueService userStatueService,string userId,bool onlined=false)
+        {
+            await userStatueService.SetUserOnlineStatueAsync(userId, onlined);
+            await userStatueService.SetUserStatueAsync(userId, "NORMAL");
         }
 
         public List<InnermostUser> DefaultUsers()
@@ -59,6 +79,7 @@
                 Birthday = "2000-08-26",
                 CreateTime = DateTime.Now,
                 PhoneNumber = "18506013757",
+                UserAvatarUrl = "https://innermost-user-img-1300228246.cos.ap-nanjing.myqcloud.com/avatars/13ED0CD35270F8C5850930EB2975B12F.jpg"
             };
             var test = new InnermostUser()
             {
