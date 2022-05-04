@@ -1,6 +1,6 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
 using Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate;
-using Innermost.Meet.Domain.AggregatesModels.UserInteraction;
+using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate;
 using Innermost.MongoDBContext;
 using Innermost.MongoDBContext.Configurations;
 using MediatR;
@@ -40,15 +40,20 @@ namespace Innermost.Meet.Infrastructure
             {
                 var recordIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.RecordId);
                 var userIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.UserId);
-                var titleIndex = Builders<SharedLifeRecord>.IndexKeys.Text(sl => sl.Title);
-                var textIndex= Builders<SharedLifeRecord>.IndexKeys.Text(sl => sl.Text);
+                var textIndex= Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.Text);
+                var locationUidIndex= Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.LocationUid");
                 var locationIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.BaiduPOI");
+                var musicMidIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("MusicRecord.MusicMid");
                 var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl=>sl.CreateTime);
 
 
-                var createIndexModels = new[] { recordIdIndex,userIdIndex,titleIndex,textIndex,locationIndex,createTimeIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al));
 
-                SharedLifeRecords.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                var createUniqueIndexModels = new[] { recordIdIndex , userIdIndex, musicMidIndex, locationUidIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al,new CreateIndexOptions() { Unique=true}));
+                var createIndexModels = new[] { textIndex,locationIndex,createTimeIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
+
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    SharedLifeRecords.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
@@ -56,12 +61,14 @@ namespace Innermost.Meet.Infrastructure
         {
             if (!UserInteractions!.Indexes.List().Any())
             {
-                
+                var userIdIndex= Builders<UserInteraction>.IndexKeys.Ascending(sl => sl.UserId);
 
+                var createUniqueIndexModels = new[] { userIdIndex }.Select(al => new CreateIndexModel<UserInteraction>(al, new CreateIndexOptions() { Unique = true }));
+                var createIndexModels = new IndexKeysDefinition<UserInteraction>[] {  }.Select(al => new CreateIndexModel<UserInteraction>(al)).ToList();
 
-                var createIndexModels = new IndexKeysDefinition<UserInteraction>[] {  }.Select(al => new CreateIndexModel<UserInteraction>(al));
-
-                UserInteractions.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    UserInteractions.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
@@ -69,12 +76,14 @@ namespace Innermost.Meet.Infrastructure
         {
             if (!UserSocialContacts!.Indexes.List().Any())
             {
+                var userIdIndex = Builders<UserSocialContact>.IndexKeys.Ascending(sl => sl.UserId);
 
+                var createUniqueIndexModels = new[] { userIdIndex }.Select(al => new CreateIndexModel<UserSocialContact>(al, new CreateIndexOptions() { Unique = true }));
+                var createIndexModels = new IndexKeysDefinition<UserSocialContact>[] { }.Select(al => new CreateIndexModel<UserSocialContact>(al)).ToList();
 
-
-                var createIndexModels = new IndexKeysDefinition<UserSocialContact>[] { }.Select(al => new CreateIndexModel<UserSocialContact>(al));
-
-                UserSocialContacts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    UserSocialContacts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
@@ -86,8 +95,8 @@ namespace Innermost.Meet.Infrastructure
 
 
                 var createIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al));
-
-                UserChattingContexts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                if(createIndexModels.Any())
+                    UserChattingContexts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
