@@ -26,8 +26,7 @@ builder.Host
     }))
     .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
     .UseContentRoot(Directory.GetCurrentDirectory())
-    .UseSerilog()
-    .Build();
+    .UseSerilog();
 
 // Add services to the container.
 
@@ -41,6 +40,7 @@ builder.Services
     .AddMeetSignalRHubQueries()
     .AddMeetSignalRHubServices()
     .AddDefaultAzureServiceBusEventBus(configuration)
+    .AddIntegrationEventServiceMongoDB()
     .AddMeetSignalRHubGrpcClients()
     .AddCustomCORS();
 
@@ -64,7 +64,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/chat", options =>
+{
+    options.CloseOnAuthenticationExpiration = true;
+});
 
 ConfigureMeetSignalRHubEventBus(app);
 
