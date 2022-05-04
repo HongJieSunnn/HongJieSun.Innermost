@@ -15,7 +15,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate
     {
         [BsonRequired]
         [BsonElement("Users")]
-        private readonly string[] _users;
+        private string[] _users;
         public IReadOnlyCollection<string> Users => _users;
 
         [BsonRequired]
@@ -42,7 +42,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate
         {
             _chattingRecords.AddRange(chattingRecords);
 
-            return Builders<UserChattingContext>.Update.AddToSetEach(ucc=>ucc.ChattingRecords,chattingRecords);
+            return Builders<UserChattingContext>.Update.AddToSetEach("ChattingRecords", chattingRecords);
         }
     }
 }

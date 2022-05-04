@@ -15,6 +15,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate.Entities
         public DateTime CreateTime { get; init; }
         public ChattingRecord(string sendUserId,string recordMessage,DateTime createTime,List<TagSummary> tagSummaries) : base(tagSummaries)
         {
+            Id=ObjectId.GenerateNewId().ToString();
             SendUserId = sendUserId;
             RecordMessage = recordMessage;
             CreateTime = createTime;
