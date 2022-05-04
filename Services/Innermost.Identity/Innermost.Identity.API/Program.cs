@@ -1,3 +1,5 @@
+
+
 string Namespace = typeof(Startup).Namespace;
 string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
@@ -15,8 +17,10 @@ try
         .MigrateDbContext<InnermostIdentityDbContext>((dbContext, services) =>
         {
             var userManager = services.GetRequiredService<UserManager<InnermostUser>>();
+            var integrationEventService = services.GetRequiredService<IIntegrationEventService>();
+            var userStatueService=services.GetRequiredService<IUserStatueService>();
             new InnermostIdentityDbContextSeed()
-                .SeedAsync(dbContext, userManager, configuration)
+                .SeedAsync(dbContext, userManager, integrationEventService,userStatueService, configuration)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((dbContext, services) =>
