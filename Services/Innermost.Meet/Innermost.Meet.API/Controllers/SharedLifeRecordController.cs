@@ -1,5 +1,4 @@
-﻿using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Innermost.Meet.API.Controllers
 {
