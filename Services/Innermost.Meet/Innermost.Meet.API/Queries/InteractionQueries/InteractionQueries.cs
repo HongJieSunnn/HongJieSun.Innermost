@@ -11,7 +11,7 @@
 
         public async Task<IEnumerable<RecordLikeDTO>> GetRecordLikesAsync(string userId)
         {
-            var userInteraction = await _context.UserInteractions.Find(ui => ui.Id == userId).FirstAsync();
+            var userInteraction = await _context.UserInteractions.Find(ui => ui.UserId == userId).FirstAsync();
 
             return userInteraction.RecordLikes.Select(rl => MapToRecordLikeDTO(rl));
         }
