@@ -16,6 +16,9 @@ namespace IEnumerableExtensions
 
         public static FilterDefinition<T> CombineFilterDefinitions<T>(this IEnumerable<FilterDefinition<T>> filterDefinitions,FilterDefinition<T> firstDefinition)
         {
+            if (!filterDefinitions.Any())
+                return firstDefinition;
+
             var filter = firstDefinition;
 
             return filter & filterDefinitions.Aggregate((filterBefore, filterNext) => filterBefore & filterNext);
