@@ -7,7 +7,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(AdminSendMessageToUserIntegrationEventHandler).GetTypeInfo().Assembly).As(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(AdminSendMessageToUserIntegrationEventHandler).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }
