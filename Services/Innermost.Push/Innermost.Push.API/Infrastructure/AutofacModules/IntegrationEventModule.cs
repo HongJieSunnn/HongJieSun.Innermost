@@ -8,7 +8,7 @@ namespace Innermost.Push.API.Infrastructure.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
 
-            builder.RegisterAssemblyTypes(typeof(PushMessageToUserIntegrationEvent).GetTypeInfo().Assembly).As(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(PushMessageToUserIntegrationEvent).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }
