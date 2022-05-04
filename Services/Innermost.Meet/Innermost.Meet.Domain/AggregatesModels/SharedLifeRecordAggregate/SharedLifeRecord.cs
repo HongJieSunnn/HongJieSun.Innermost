@@ -26,14 +26,14 @@ namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate
 
         [BsonRequired]
         [BsonElement("ImagePaths")]
-        private readonly List<string>? _imagePaths;
+        private List<string>? _imagePaths;
         public IReadOnlyCollection<string>? ImagePaths => _imagePaths?.AsReadOnly();
 
         public int LikesCount { get; private set; }
 
         [BsonRequired]
         [BsonElement("Likes")]
-        private readonly List<Like> _likes;
+        private List<Like> _likes;
         public IReadOnlyCollection<Like> Likes => _likes.AsReadOnly();
 
         public DateTime CreateTime { get; private set; }
