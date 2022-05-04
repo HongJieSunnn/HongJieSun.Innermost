@@ -5,6 +5,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
 {
     public class MusicRecord : TagableEntity<string>, IAggregateRoot
     {
+        public string MusicMid { get; private set; }
         public long MusicId { get; private set; }
         public string MusicName { get; private set; }
         public string? TranslatedMusicName { get; private set; }
@@ -18,7 +19,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
 
         [BsonRequired]
         [BsonElement("Singers")]
-        private readonly List<MusicRecordSinger> _singers;
+        private List<MusicRecordSinger> _singers;
         public IReadOnlyCollection<MusicRecordSinger> Singers => _singers;
 
         public MusicRecordAlbum Album { get; private set; }
@@ -32,7 +33,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
             List<MusicRecordSinger> singers, MusicRecordAlbum album, string publishTime,
             List<TagSummary> tagSummaries) : base(tagSummaries)
         {
-            Id = mid;
+            MusicMid = mid;
             MusicName = musicName;
             MusicId = musicId;
             TranslatedMusicName = translatedMusicName;

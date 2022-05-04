@@ -4,6 +4,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.AlbumAggregate
 {
     public class Album : Entity<string>, IAggregateRoot
     {
+        public string AlbumMid { get; private set; }
         public long AlbumId { get; private set; }
         public string AlbumName { get; private set; }
         public string AlbumDescriptions { get; private set; }
@@ -18,7 +19,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.AlbumAggregate
 
         [BsonRequired]
         [BsonElement("MusicRecords")]
-        private readonly List<AlbumMusicRecord> _musicRecords;
+        private List<AlbumMusicRecord> _musicRecords;
         public IReadOnlyCollection<AlbumMusicRecord> MusicRecords => _musicRecords;
         public Album(
             string mid, long albumId, string albumName, string albumDescriptions,
@@ -27,7 +28,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.AlbumAggregate
             int albumSongCount, string publishCompany, string publishTime,
             List<AlbumMusicRecord> musicRecords)
         {
-            Id = mid;
+            AlbumMid = mid;
             AlbumId = albumId;
             AlbumName = albumName;
             AlbumDescriptions = albumDescriptions;

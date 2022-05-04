@@ -2,13 +2,12 @@
 {
     public class MusicRecordSinger : Entity<string>
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public override string? Id { get => base.Id; set => base.Id = value; }
+        public string SingerMid { get; private set; }
         public string SingerName { get; private set; }
         public MusicRecordSinger(string mid, string singerName)
         {
-            Id = mid;
+            Id = ObjectId.GenerateNewId().ToString();
+            SingerMid = mid;
             SingerName = singerName;
         }
     }

@@ -2,9 +2,7 @@
 {
     public class SingerAlbum : Entity<string>
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public override string? Id { get => base.Id; set => base.Id = value; }
+        public string AlbumMid { get; private set; }
         public string AlbumName { get; private set; }
         public string AlbumDescriptions { get; private set; }
         public string AlbumGenre { get; private set; }
@@ -14,7 +12,8 @@
         public string PublishTime { get; private set; }
         public SingerAlbum(string mid, string albumName, string albumDescriptions, string albumGenre, string albumLanguage, int albumSongCount, string publishCompany, string publishTime)
         {
-            Id = mid;
+            Id = ObjectId.GenerateNewId().ToString();
+            AlbumMid = mid;
             AlbumName = albumName;
             AlbumDescriptions = albumDescriptions;
             AlbumGenre = albumGenre;
