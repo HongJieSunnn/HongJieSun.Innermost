@@ -13,7 +13,8 @@ builder.Host.UseSerilog();
 
 builder.Services
     .AddCustomAuthentication(configuration)
-    .AddCustomCORS();
+    .AddCustomCORS()
+    .AddTencentCloudCos(configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -113,8 +114,8 @@ internal static class IServiceCollectionExtensions
             tc => new TencentClouldCosSTSService(
                 tencentCloudCosSection["bucket"],
                 tencentCloudCosSection["region"],
-                tencentCloudCosSection.GetValue<string[]>("allowPrefixes"),
-                tencentCloudCosSection.GetValue<string[]>("allowActions"),
+                tencentCloudCosSection.GetSection("allowPrefixes").Get<string[]>(),
+                tencentCloudCosSection.GetSection("allowActions").Get<string[]>(),
                 tencentCloudCosSection.GetValue<int>("durationSeconds"),
                 tencentCloudCosSection["secretId"],
                 tencentCloudCosSection["secretKey"]

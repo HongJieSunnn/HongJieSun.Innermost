@@ -5,7 +5,7 @@ namespace Innermost.FileServer.API.Services.TencentCloudCos
     public class TencentClouldCosSTSService : ITencentClouldCosSTSService
     {
         private readonly Dictionary<string, object> _values;
-        public TencentClouldCosSTSService(string bucket,string region,string[] allowPrefixes,string[] allowActions,int durationSeconds, string secrectId,string secretKey)
+        public TencentClouldCosSTSService(string bucket,string region,string[] allowPrefixes,string[] allowActions,int durationSeconds, string secretId,string secretKey)
         {
             _values = new Dictionary<string, object>()
             {
@@ -14,7 +14,7 @@ namespace Innermost.FileServer.API.Services.TencentCloudCos
                 {nameof(allowPrefixes),allowPrefixes },
                 {nameof(allowActions),allowActions },
                 {nameof(durationSeconds),durationSeconds},
-                {nameof(secrectId),secrectId },
+                {nameof(secretId),secretId },
                 {nameof(secretKey),secretKey },
             };
         }

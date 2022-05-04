@@ -1,6 +1,5 @@
-﻿using Innermost.FileServer.API.Services.TencentCloudCos;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Innermost.FileServer.API.Controllers
 {
@@ -11,16 +10,17 @@ namespace Innermost.FileServer.API.Controllers
         private readonly ITencentClouldCosSTSService _tencentClouldCosSTSService;
         public TencentCloudCosController(ITencentClouldCosSTSService tencentClouldCosSTSService)
         {
-            _tencentClouldCosSTSService=tencentClouldCosSTSService;
+            _tencentClouldCosSTSService = tencentClouldCosSTSService;
         }
 
         [HttpGet]
         [Route("temp-credencial")]
         public async Task<IActionResult> GetTencentCloudCosTemporaryCredentialAsync()
         {
-            var temporaryCredential=await _tencentClouldCosSTSService.GetTemporaryCredentialAsync();
+            var temporaryCredential = await _tencentClouldCosSTSService.GetTemporaryCredentialAsync();
+            var json=JsonConvert.SerializeObject(temporaryCredential);
 
-            return Ok(temporaryCredential);
+            return Ok(json);
         }
     }
 }
