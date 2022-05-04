@@ -1,23 +1,20 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate.Entities;
 
-namespace Innermost.Meet.Domain.AggregatesModels.UserInteraction
+namespace Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate
 {
     /// <summary>
-    /// UserInteraction represent for interaction between user and sharedLifeRecords or more later.Id is userId.
+    /// UserInteraction represent for interaction between user and sharedLifeRecords or more later.
     /// </summary>
     public class UserInteraction : Entity<string>, IAggregateRoot
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public override string? Id { get => base.Id; set => base.Id = value; }
-
+        public string UserId { get; private set; }
         [BsonRequired]
         [BsonElement("RecordLikes")]
-        private readonly List<RecordLike> _recordLikes;
+        private List<RecordLike> _recordLikes;
         public IReadOnlyCollection<RecordLike> RecordLikes => _recordLikes.AsReadOnly();
         public UserInteraction(string userId, List<RecordLike>? recordLikes)
         {
-            Id = userId;
+            UserId = userId;
             _recordLikes = recordLikes??new List<RecordLike>();
         }
 
