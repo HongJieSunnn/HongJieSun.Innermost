@@ -11,7 +11,8 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserSocialContactAggregate.Enti
         public DateTime? UpdateTime { get; private set; }
         public ConfidantRequest(string requestUserId,string requestMessage,ConfidantRequestStatue confidantRequestStatue,DateTime requestTime,DateTime? updateTime)
         {
-            RequestUserId= requestUserId;
+            Id = ObjectId.GenerateNewId().ToString();
+            RequestUserId = requestUserId;
             RequestMessage= requestMessage;
             ConfidantRequestStatue= confidantRequestStatue;
             RequestTime = requestTime;
