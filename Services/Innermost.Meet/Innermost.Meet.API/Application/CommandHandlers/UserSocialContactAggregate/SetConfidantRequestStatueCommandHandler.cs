@@ -41,17 +41,23 @@ namespace Innermost.Meet.API.Application.CommandHandlers.UserSocialContactAggreg
                 var chattingContextId=ObjectId.GenerateNewId().ToString();
 
                 var addConfidantTime=DateTime.Now;
-                var addConfidantUpdate = userToSet.AddConfidant(new Confidant(request.RequestUserId, chattingContextId, addConfidantTime));
-                requestUser.AddConfidant(new Confidant(request.UserId, chattingContextId, addConfidantTime));
+                var addConfidantUpdateUserToSet = userToSet.AddConfidant(new Confidant(request.RequestUserId, chattingContextId, addConfidantTime));
+                var addConfidantUpdateRequestUser=requestUser.AddConfidant(new Confidant(request.UserId!, chattingContextId, addConfidantTime));
 
-                var usersToAddConfidant = new string[] { request.UserId!, request.RequestUserId };
-
-                var addConfidantUpdateResult = await _userSocialContactRepository.UpdateManyUserSocialContactsAsync(usersToAddConfidant, addConfidantUpdate);
+                await _userSocialContactRepository.UpdateUserSocialContactAsync(request.UserId!, addConfidantUpdateUserToSet);
+                await _userSocialContactRepository.UpdateUserSocialContactAsync(request.RequestUserId!, addConfidantUpdateRequestUser);
 
                 await _userSocialContactRepository.UnitOfWork.SaveEntitiesAsync(userToSet, cancellationToken);//Pulish just one domain event to add chattingcontext for each other.
             }
 
             return string.Empty;
+        }
+    }
+
+    public class IdempotentSetConfidantRequestStatueCommandHandler : IdempotentCommandHandler<SetConfidantRequestStatueCommand, string>
+    {
+        public IdempotentSetConfidantRequestStatueCommandHandler(IMediator mediator, ICommandRequestRepository commandRequestRepository) : base(mediator, commandRequestRepository)
+        {
         }
     }
 }

@@ -34,4 +34,10 @@
             return string.Empty;
         }
     }
+    public class IdempotentAddConfidantRequestCommandHandler : IdempotentCommandHandler<AddConfidantRequestCommand, string>
+    {
+        public IdempotentAddConfidantRequestCommandHandler(IMediator mediator, ICommandRequestRepository commandRequestRepository) : base(mediator, commandRequestRepository)
+        {
+        }
+    }
 }
