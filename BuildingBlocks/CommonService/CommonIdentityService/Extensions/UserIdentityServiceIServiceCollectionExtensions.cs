@@ -10,7 +10,7 @@ namespace CommonIdentityService.Extensions
         /// <summary>
         /// Add UserIdentityService and dependencies it needs.(IHttpContextAccessor and IdentityUserGrpc.IdentityUserGrpcClient)
         /// </summary>
-        public static IServiceCollection AddUserIdentityService(this IServiceCollection services)
+        public static IServiceCollection AddCommonUserIdentityService(this IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
