@@ -1,4 +1,5 @@
-﻿using EventBusServiceBus.Extensions;
+﻿using CommonIdentityService.Extensions;
+using EventBusServiceBus.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using Innermost.Identity.API.UserStatue;
 using Innermost.IServiceCollectionExtensions;
@@ -159,7 +160,7 @@ namespace Innermost.Meet.API
 
         public static IServiceCollection AddUserIdentityService(this IServiceCollection services)
         {
-            services.AddUserIdentityService();
+            services.AddCommonUserIdentityService();
 
             return services;
         }
