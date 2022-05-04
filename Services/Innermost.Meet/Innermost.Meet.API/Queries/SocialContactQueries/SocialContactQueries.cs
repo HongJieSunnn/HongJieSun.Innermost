@@ -18,7 +18,7 @@ namespace Innermost.Meet.API.Queries.SocialContactQueries
         {
             var userId=_userIdentityService.GetUserId();
 
-            var userSocialContact = await _context.UserSocialContacts.Find(u => u.Id == userId).FirstAsync();
+            var userSocialContact = await _context.UserSocialContacts.Find(u => u.UserId == userId).FirstAsync();
 
             var confidantRequests = userSocialContact.ConfidantRequests.Where(cr=>cr.ConfidantRequestStatue==ConfidantRequestStatue.ToBeReviewed).Select(async cr =>
             {
@@ -35,9 +35,9 @@ namespace Innermost.Meet.API.Queries.SocialContactQueries
         {
             var userId=_userIdentityService.GetUserId();
 
-            var userSocialContact=await _context.UserSocialContacts.Find(u => u.Id == userId).FirstAsync();
+            var userSocialContact=await _context.UserSocialContacts.Find(u => u.UserId == userId).FirstAsync();
 
-            var confidantIds = userSocialContact.Confidants.Select(usc => usc.Id!);
+            var confidantIds = userSocialContact.Confidants.Select(usc => usc.ConfidantUserId);
             var confidantStatues = (List<StatueDTO>)await _statueQueries.GetManyUserStatuesAsync(confidantIds);
 
             var confidants = userSocialContact.Confidants.Select(async (c,i) =>
@@ -45,7 +45,7 @@ namespace Innermost.Meet.API.Queries.SocialContactQueries
                 var confidantUserNames = await _userIdentityService.GetUserNamesAsync(c.Id);
                 var confidantUserAvatarUrl = await _userIdentityService.GetUserAvatarUrlAsync(c.Id);
 
-                return new ConfidantDTO(c.Id!, confidantUserNames.userName, confidantUserNames.userNickName, confidantUserAvatarUrl, confidantStatues[i].UserStatue, confidantStatues[i].OnlineStatue, c.ChattingContextId);
+                return new ConfidantDTO(c.ConfidantUserId, confidantUserNames.userName, confidantUserNames.userNickName, confidantUserAvatarUrl, confidantStatues[i].UserStatue, confidantStatues[i].OnlineStatue, c.ChattingContextId);
             });
 
             return await Task.WhenAll(confidants);
