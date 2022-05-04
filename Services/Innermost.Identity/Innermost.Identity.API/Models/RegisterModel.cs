@@ -12,13 +12,11 @@
         public string Password { get; init; }
 
         [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match")]
-        public string ComfirmPassword { get; init; }
+        public string ConfirmPassword { get; init; }
 
         [RegularExpression(@"[a-zA-Z0-9_-]{1,30}", ErrorMessage = "NickName only can contain letters,numbers,- and _")]
         public string NickName { get; set; }
         public DateTime Birthday { get; set; }
-
-        [Url]
         public string UserAvatarUrl { get; set; }
 
         [Url]
@@ -43,7 +41,7 @@
             string userName,
             string email,
             string password,
-            string comfirmPassword,
+            string confirmPassword,
             string nickName,
             DateTime birthday,
             string userAvatarUrl,
@@ -58,7 +56,7 @@
             UserName=userName;
             Email=email;
             Password=password;
-            ComfirmPassword=comfirmPassword;
+            ConfirmPassword=confirmPassword;
             NickName=nickName;
             Birthday=birthday;
             UserAvatarUrl=userAvatarUrl;
