@@ -49,7 +49,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
             return chattingRecords ?? new List<ChattingRecordDTO>();
         }
 
-        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId)
+        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId,string connectedUserId)
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
             //list is order by CreateTime which means the right side chatting record is later record.
@@ -67,8 +67,13 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
                 {
                     throw new NullReferenceException($"Get ChattingRecord from redis failed");
                 }
-
-                ans.Add(DeserializeChattingRecordDTOByChattingRecordStringFromRedis(chattingRecordString));
+                var chattingRecord = DeserializeChattingRecordDTOByChattingRecordStringFromRedis(chattingRecordString);
+                //if connected User is the sendUser,break.
+                //if connected User is not the sendUser,it's obviouse that all the message on the right side of list with 0 is not received.
+                //there will be no intersection of 0 and 1
+                if (i == listLength - 1&&chattingRecord.SendUserId == connectedUserId)//only judge once.
+                    break;
+                ans.Add(chattingRecord);
             }
 
             ans.Reverse();
@@ -91,7 +96,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
             await _redis.Context().ListRightPushAsync(chattingContextId, chattingRecordArr);
         }
 
-        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId)
+        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId,string connectedUserId)
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
 
@@ -146,7 +151,10 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
                 var chattingRecordStringBuilder = new StringBuilder(chattingRecordRedisValue);
 
                 if (chattingRecordStringBuilder[chattingRecordStringBuilder.Length - 1] == '0')//Not received.
+                {
+                    await _redis.Context().ListLeftPushAsync(chattingContextId, chattingRecordRedisValue);//Push back,or the first message not received will be also poped.
                     break;
+                }
 
                 chattingRecordDTOList.Add(DeserializeChattingRecordDTOByChattingRecordStringFromRedis(chattingRecordStringBuilder));
             }

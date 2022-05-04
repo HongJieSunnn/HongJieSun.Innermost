@@ -9,9 +9,9 @@
 
         Task<IEnumerable<ChattingRecordDTO>> GetAllChattingRecordsAsync(string chattingContextId);
 
-        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId);
+        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId, string connectedUserId);
 
-        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId);
+        Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId, string connectedUserId);
 
         Task SetNotReceivedChattingRecordsReceivedAsync(string chattingContextId, int modifyCount);
 
