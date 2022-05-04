@@ -14,7 +14,7 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UserSocialContact> GetUserSocialContactAsync(string userSocialContactUserId)
         {
-            return _context.UserSocialContacts.Find(usc => usc.Id == userSocialContactUserId).FirstAsync();
+            return _context.UserSocialContacts.Find(usc => usc.UserId == userSocialContactUserId).FirstAsync();
         }
 
         public Task AddUserSocialContactAsync(UserSocialContact userSocialContact)
@@ -24,7 +24,7 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UpdateResult> UpdateUserSocialContactAsync(string userSocialContactUserId, UpdateDefinition<UserSocialContact> updateDefinition, params FilterDefinition<UserSocialContact>[] filterDefinitions)
         {
-            var idFilter=Builders<UserSocialContact>.Filter.Eq("_id",userSocialContactUserId);
+            var idFilter=Builders<UserSocialContact>.Filter.Eq(usc => usc.UserId, userSocialContactUserId);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.UserSocialContacts.UpdateOneAsync(filter, updateDefinition);
@@ -32,7 +32,7 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UpdateResult> UpdateManyUserSocialContactsAsync(IEnumerable<string> userSocialContactUserIds, UpdateDefinition<UserSocialContact> updateDefinition, params FilterDefinition<UserSocialContact>[] filterDefinitions)
         {
-            var idFilter = Builders<UserSocialContact>.Filter.In("_id", userSocialContactUserIds);
+            var idFilter = Builders<UserSocialContact>.Filter.In(usc => usc.UserId, userSocialContactUserIds);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.UserSocialContacts.UpdateOneAsync(filter, updateDefinition);
