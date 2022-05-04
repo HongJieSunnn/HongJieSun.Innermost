@@ -7,6 +7,7 @@ using Innermost.TagServer.API.Infrastructure.AutofacModules;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 
 namespace Innermost.TagServer.API
 {
@@ -109,12 +110,13 @@ namespace Innermost.TagServer.API
         private void ConfigureTagSServer(IApplicationBuilder builder)
         {
             builder.MapTagSMongoDBCollectionModels();
-            builder.AddLocationIndexFroReferrer("BaiduPOI");
             builder.SeedDefaultEmotionTags();
             builder.SeedDefaultMusicTags();
             builder.ConfigureTagServerEventBus();
 
             builder.AddReferrerDiscriminator<LifeRecordReferrer>();
+            builder.AddReferrerIndexes<LifeRecordReferrer>("UserId", "IsShared", "LocationUId", "MusicRecordMId", "CreateTime");
+            builder.AddReferrerIndexes<LifeRecordReferrer>(Builders<TagWithReferrer>.IndexKeys.Geo2DSphere("Referrers.BaiduPOI"));
         }
     }
 
