@@ -6,7 +6,7 @@ namespace Innermost.Meet.API.Infrastructure.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(LifeRecordSetSharedIntegrationEventHandler).GetTypeInfo().Assembly).As(typeof(IIntegrationEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(LifeRecordSetSharedIntegrationEventHandler).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
         }
     }
 }
