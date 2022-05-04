@@ -20,8 +20,7 @@ builder.Host
     }))
     .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
     .UseContentRoot(Directory.GetCurrentDirectory())
-    .UseSerilog()
-    .Build();
+    .UseSerilog();
 
 // Add services to the container.
 
@@ -30,6 +29,7 @@ builder.Services.AddSignalR();
 builder.Services
     .AddCustomAuthentication(configuration)
     .AddDefaultAzureServiceBusEventBus(configuration)
+    .AddEmailService(configuration)
     .AddCustomCORS();
 
 builder.Services.AddControllers();
@@ -110,6 +110,22 @@ internal static class IServiceCollectionExtensions
                 options.Authority = identityServerUrl;
                 options.Audience = "push";
             });
+
+        return services;
+    }
+
+    public static IServiceCollection AddEmailService(this IServiceCollection services,IConfiguration configuration)
+    {
+        var mailGunSection = configuration.GetSection("MailGun");
+        var fromEmail = mailGunSection.GetValue<string>("FromEmail");
+        var fromName= mailGunSection.GetValue<string>("FromName");
+        var domainName= mailGunSection.GetValue<string>("DomainName");
+        var apiKey= mailGunSection.GetValue<string>("ApiKey");
+        services
+            .AddFluentEmail(fromEmail, fromName)
+            .AddMailGunSender(domainName, apiKey);
+
+        services.AddTransient<ISendEmailService,SendEmailService>();
 
         return services;
     }
