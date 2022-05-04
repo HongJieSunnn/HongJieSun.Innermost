@@ -8,6 +8,8 @@ namespace Innermost.Meet.SignalRHub.Hubs
         private readonly IdentityUserStatueGrpc.IdentityUserStatueGrpcClient _identityUserStatueGrpcClient;
         private readonly IUserChattingContextQueries _userChattingContextQueries;
         private readonly IChattingRecordRedisService _chattingRecordRedisService;
+
+        private const string AdminId = "13B8D30F-CFF8-20AB-8D40-1A64ADA8D067";
         public ChatHub(IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient, IUserChattingContextQueries userChattingContextQueries, IChattingRecordRedisService chattingRecordRedisService)
         {
             _identityUserStatueGrpcClient = identityUserStatueGrpcClient;
@@ -18,6 +20,9 @@ namespace Innermost.Meet.SignalRHub.Hubs
 
         public async Task SendMessageToUser(string toUserId, string chattingContextId, string message)
         {
+            if (toUserId == AdminId)//Admin is all users' confidant,but Admin should never receive message.
+                return;
+
             var sendUserId = GetConnectedUserId();
             if (!IsUserOnline(toUserId))
             {
@@ -55,7 +60,7 @@ namespace Innermost.Meet.SignalRHub.Hubs
 
             foreach (var chattingContextId in chattingContextIds)
             {
-                var notReceivedMessages = await _chattingRecordRedisService.GetNotReceivedChattingRecordsAsync(chattingContextId);
+                var notReceivedMessages = await _chattingRecordRedisService.GetNotReceivedChattingRecordsAsync(chattingContextId,connectedUserId);
                 var setNotReceivedChattingRecordsReceivedTask = _chattingRecordRedisService.SetNotReceivedChattingRecordsReceivedAsync(chattingContextId, notReceivedMessages.Count());
 
                 foreach (var message in notReceivedMessages)
@@ -68,6 +73,7 @@ namespace Innermost.Meet.SignalRHub.Hubs
 
             await base.OnConnectedAsync();
         }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var connectedUserId = GetConnectedUserId();
