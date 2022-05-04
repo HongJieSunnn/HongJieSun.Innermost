@@ -29,12 +29,16 @@ namespace Innermost.MusicHub.Infrastructure
         {
             if (!Albums!.Indexes.List().Any())
             {
-                var albumNameIndex= Builders<Album>.IndexKeys.Text(t => t.AlbumName);
+                var albumNameIndex= Builders<Album>.IndexKeys.Ascending(t => t.AlbumName);
                 var albumGenreIndex= Builders<Album>.IndexKeys.Ascending(t => t.AlbumGenre);
+                var albumMidIndex= Builders<Album>.IndexKeys.Ascending(t => t.AlbumMid);
 
-                var createIndexModels = new[] { albumNameIndex, albumGenreIndex }.Select(al => new CreateIndexModel<Album>(al));
+                var createUniqueIndexModels= new[] { albumMidIndex }.Select(al => new CreateIndexModel<Album>(al,new CreateIndexOptions() { Unique=true}));
+                var createIndexModels = new[] { albumNameIndex, albumGenreIndex }.Select(al => new CreateIndexModel<Album>(al)).ToList();
 
-                Albums.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    Albums.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
@@ -42,12 +46,16 @@ namespace Innermost.MusicHub.Infrastructure
         {
             if (!Singers!.Indexes.List().Any())
             {
-                var singerNameIndex= Builders<Singer>.IndexKeys.Text(s=>s.SingerName);
+                var singerNameIndex= Builders<Singer>.IndexKeys.Ascending(s=>s.SingerName);
                 var singerRegionIndex= Builders<Singer>.IndexKeys.Ascending(s=>s.SingerRegion);
+                var singerMidIndex = Builders<Singer>.IndexKeys.Ascending(t => t.SingerMid);
 
-                var createIndexModels = new[] { singerNameIndex, singerRegionIndex }.Select(i => new CreateIndexModel<Singer>(i));
+                var createUniqueIndexModels = new[] { singerMidIndex }.Select(al => new CreateIndexModel<Singer>(al, new CreateIndexOptions() { Unique = true }));
+                var createIndexModels = new[] { singerNameIndex, singerRegionIndex }.Select(al => new CreateIndexModel<Singer>(al)).ToList();
 
-                Singers.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    Singers.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
@@ -55,16 +63,20 @@ namespace Innermost.MusicHub.Infrastructure
         {
             if (!MusicRecords!.Indexes.List().Any())
             {
-                var musicNameIndex = Builders<MusicRecord>.IndexKeys.Text(m=>m.MusicName);
-                var musicLyricIndex = Builders<MusicRecord>.IndexKeys.Text(m => m.Lyric);
+                var musicMidIndex= Builders<MusicRecord>.IndexKeys.Ascending(m => m.MusicMid);
+                var musicNameIndex = Builders<MusicRecord>.IndexKeys.Ascending(m=>m.MusicName);
+                var musicLyricIndex = Builders<MusicRecord>.IndexKeys.Ascending(m => m.Lyric);
                 var musicGenreIndex = Builders<MusicRecord>.IndexKeys.Ascending(m=>m.Genre);
                 var musicLanguageIndex = Builders<MusicRecord>.IndexKeys.Ascending(m=>m.Language);
-                var musicTagIdIndex = Builders<MusicRecord>.IndexKeys.Ascending("Tags.TagId");
+                var musicTagIdIndex = Builders<MusicRecord>.IndexKeys.Ascending("Tags.TagId");//MusicRecords do not store in TagWithReferrer so need indexes.
                 var musicTagNameIndex = Builders<MusicRecord>.IndexKeys.Ascending("Tags.TagName");
 
-                var createIndexModels = new[] { musicNameIndex, musicLyricIndex, musicGenreIndex, musicLanguageIndex, musicTagIdIndex, musicTagNameIndex }.Select(i => new CreateIndexModel<MusicRecord>(i));
+                var createUniqueIndexModels = new[] { musicMidIndex }.Select(al => new CreateIndexModel<MusicRecord>(al, new CreateIndexOptions() { Unique = true }));
+                var createIndexModels = new[] { musicNameIndex, musicLyricIndex, musicGenreIndex, musicLanguageIndex, musicTagIdIndex, musicTagNameIndex }.Select(i => new CreateIndexModel<MusicRecord>(i)).ToList();
 
-                MusicRecords.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
+                createIndexModels.AddRange(createUniqueIndexModels);
+                if (createIndexModels.Any())
+                    MusicRecords.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
 
