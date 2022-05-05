@@ -64,10 +64,7 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             UpdateTime = updateTime;
             DeleteTime = deleteTime;
             _imagePaths=imagePaths;
-            if(isShared)
-            {
-                SetShared();
-            }
+            _isShared = false;
         }
 
         public void SetDeleted()
