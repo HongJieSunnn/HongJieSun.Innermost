@@ -41,15 +41,15 @@ namespace Innermost.Meet.Infrastructure
                 var recordIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.RecordId);
                 var userIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.UserId);
                 var textIndex= Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.Text);
-                var locationUidIndex= Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.LocationUid");
+                var locationUidIndex= Builders<SharedLifeRecord>.IndexKeys.Ascending("Location.LocationUid");
                 var locationIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.BaiduPOI");
-                var musicMidIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("MusicRecord.MusicMid");
+                var musicMidIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending("MusicRecord.MusicMid");
                 var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl=>sl.CreateTime);
 
 
 
-                var createUniqueIndexModels = new[] { recordIdIndex , userIdIndex, musicMidIndex, locationUidIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al,new CreateIndexOptions() { Unique=true}));
-                var createIndexModels = new[] { textIndex,locationIndex,createTimeIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
+                var createUniqueIndexModels = new[] { recordIdIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al,new CreateIndexOptions() { Unique=true}));
+                var createIndexModels = new[] { userIdIndex,textIndex, locationIndex,createTimeIndex, locationUidIndex, musicMidIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
 
                 createIndexModels.AddRange(createUniqueIndexModels);
                 if (createIndexModels.Any())
