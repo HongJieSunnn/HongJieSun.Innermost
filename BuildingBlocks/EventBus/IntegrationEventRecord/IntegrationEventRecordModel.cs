@@ -27,6 +27,7 @@ namespace IntegrationEventRecord
         {
             _jsonSettings = new JsonSerializerSettings();
             _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
+            _jsonSettings.StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
         }
 
         public IntegrationEventRecordModel(IntegrationEvent @event, Guid transactionId) : this()

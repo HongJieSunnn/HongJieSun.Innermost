@@ -25,7 +25,7 @@ namespace EventBusServiceBus
         /// <summary>
         /// To ensure deserialization successful while use polumorphic.
         /// </summary>
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { TypeNameHandling=TypeNameHandling.Auto};
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { TypeNameHandling=TypeNameHandling.Auto,StringEscapeHandling=StringEscapeHandling.EscapeNonAscii};
 
         public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, ILogger<EventBusAzureServiceBus> logger,
             IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac,string subscriptionClientName)

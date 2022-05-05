@@ -23,6 +23,7 @@ namespace IntegrationEventServiceSQL
         {
             _jsonSettings = new JsonSerializerSettings();
             _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
+            _jsonSettings.StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
         }
 
         public IntegrationEventSQLModel(IntegrationEvent @event, Guid? transactionId) : this()
