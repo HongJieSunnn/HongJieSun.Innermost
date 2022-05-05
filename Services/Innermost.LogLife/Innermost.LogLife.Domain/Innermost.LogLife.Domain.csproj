@@ -7,22 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\TagS.Microservices.Client.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
     <ProjectReference Include="..\..\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="AggregatesModels\LifeRecordAggregate\Enumerations\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="TagS.Microservices.Client">
-      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

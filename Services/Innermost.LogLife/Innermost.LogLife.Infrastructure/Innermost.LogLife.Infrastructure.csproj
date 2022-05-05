@@ -9,23 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.3" />
-    <PackageReference Include="MongoDB.Bson" Version="2.15.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\Innermost.IdempotentCommand.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\MediatRExtensions\MediatRExtensions.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
     <ProjectReference Include="..\Innermost.LogLife.Domain\Innermost.LogLife.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Innermost.IdempotentCommand">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
-    </Reference>
-    <Reference Include="TagS.Microservices.Client">
-      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
