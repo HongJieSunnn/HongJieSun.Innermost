@@ -12,7 +12,7 @@ namespace Innermost.Identity.API.Grpc.Services
         }
         public override async Task<UserGrpcDTO> GetUserProfile(UserIdGrpcDTO request, ServerCallContext context)
         {
-            var user = await _userManager.FindByNameAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId);
             return new UserGrpcDTO()
             {
                 UserName = user.UserName,
@@ -34,7 +34,7 @@ namespace Innermost.Identity.API.Grpc.Services
         }
         public override async Task<UserProfileForLikeGrpcDTO> GetUserProfileForLike(UserIdGrpcDTO request, ServerCallContext context)
         {
-            var user = await _userManager.FindByNameAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId);
             return new UserProfileForLikeGrpcDTO()
             {
                 UserName = user.UserName,
@@ -45,7 +45,7 @@ namespace Innermost.Identity.API.Grpc.Services
 
         public override async Task<UserProfileSummaryGrpcDTO> GetUserProfileSummary(UserIdGrpcDTO request, ServerCallContext context)
         {
-            var user = await _userManager.FindByNameAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId);
             return new UserProfileSummaryGrpcDTO()
             {
                 UserName = user.UserName,
