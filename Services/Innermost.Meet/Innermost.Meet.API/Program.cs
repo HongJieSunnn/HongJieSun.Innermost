@@ -31,7 +31,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", AppName)
         .Enrich.FromLogContext()
-        .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+        .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }

@@ -35,6 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonIdentityService\CommonIdentityService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
@@ -44,27 +46,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IServiceCollectionExtensions\IServiceCollectionExtensions.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Innermost.IdempotentCommand">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand\bin\Debug\net6.0\Innermost.IdempotentCommand.dll</HintPath>
-    </Reference>
-    <Reference Include="Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="Innermost.MongoDBContext">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
-    </Reference>
-    <Reference Include="Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\bin\Debug\net6.0\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="TagS.Microservices.Client">
-      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="TagS.Microservices.Client.Microsoft.DependencyInjection">
-      <HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.Microsoft.DependencyInjection.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
