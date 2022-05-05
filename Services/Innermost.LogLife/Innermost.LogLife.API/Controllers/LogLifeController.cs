@@ -55,13 +55,18 @@
         [Route("delete/{recordId:int}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DeleteOneRecordAsync(int recordId, [FromHeader(Name = "x-requestid")] string requestId)//TODO Add Attribute to ensure the recordId belongs to user who requests
+        public async Task<IActionResult> DeleteOneRecordAsync([FromBody] DeleteRecordCommand command, [FromHeader(Name = "x-requestid")] string requestId)//TODO Add Attribute to ensure the recordId belongs to user who requests
         {
             var commandResult = false;
 
+            if(command.UserId is null)
+            {
+                command.UserId =_identityService.GetUserId();
+            }
+
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
             {
-                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(new DeleteRecordCommand(recordId,_identityService.GetUserId()), guid);
+                var deleteCommand = new IdempotentCommandLoader<DeleteRecordCommand, bool>(command, guid);
 
                 _logger.LogInformation("");//TODO
 
@@ -69,18 +74,23 @@
             }
 
             if (!commandResult)
-                return BadRequest($"Record with Id {recordId} is not existed or has been deleted.");
+                return BadRequest($"Record with Id {command.RecordId} is not existed or has been deleted.");
 
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("set-shared")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SetRecordSharedAsync([FromBody] SetRecordSharedCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandResult = false;
+
+            if(command.UserId ==null)
+            {
+                command.UserId=_identityService.GetUserId();
+            }
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
             {
@@ -92,7 +102,7 @@
             }
 
             if (!commandResult)
-                return BadRequest();
+                return BadRequest($"Record with Id {command.RecordId} is not existed or does not belong to the requested user.");
 
             return Ok();
         }
@@ -103,7 +113,7 @@
         public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetAllRecordsAsync()
         { 
             var records =await _lifeRecordQueries.GetAllRecordsAsync()??new List<LifeRecordDTO>();
-            return Ok(records);
+            return Ok(records.Reverse());
         }
 
         [HttpGet]
