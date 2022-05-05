@@ -1,4 +1,6 @@
-﻿namespace Innermost.TagReferrers
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Innermost.TagReferrers
 {
     public class LifeRecordReferrer : ReferrerBase
     {
@@ -13,7 +15,13 @@
         public string? City { get; set; }
         public string? District { get; set; }
         public string? Address { get; set; }
-        public GeoJsonPointGeoJson2DGeographicCoordinates? BaiduPOI { get; set; }
+        [BsonIgnore]
+        public float? Longitude { get; set; }
+        [BsonIgnore]
+        public float? Latitude { get; set; }
+
+        [JsonIgnore]
+        public GeoJsonPoint<GeoJson2DGeographicCoordinates>? BaiduPOI { get; set; }
 
         public string? MusicRecordMId { get; set; }
         public string? MusicName { get; set; }
@@ -25,10 +33,7 @@
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime? DeleteTime { get; set; }
-        public LifeRecordReferrer()
-        {
-
-        }
+        
         public LifeRecordReferrer(int recordId, string userId, string? title, string text,
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
@@ -38,7 +43,7 @@
             UserId = userId; Title = title; Text = text;
 
             LocationUId = locationUId; LocationName = locationName; Province = province; City = city; District = district; Address = address;
-            BaiduPOI = (longitude is null || latitude is null) ? null : new GeoJsonPointGeoJson2DGeographicCoordinates(new GeoJson2DGeographicCoordinates(longitude.Value, latitude.Value));
+            Longitude=longitude; Latitude=latitude;
 
             MusicRecordMId = musicId; MusicName = musicName; Singer = singer; Album = album;
 
