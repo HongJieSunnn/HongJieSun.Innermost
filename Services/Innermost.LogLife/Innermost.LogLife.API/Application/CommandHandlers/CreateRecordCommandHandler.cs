@@ -46,6 +46,11 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
             await _lifeRecordRepository.AddAsync(lifeRecord);
             await _lifeRecordRepository.UnitOfWork.SaveChangesAsync();
 
+            if(request.IsShared)
+            {
+                lifeRecord.SetShared();
+            }
+
             foreach (var tag in lifeRecord.Tags)
             {
                 lifeRecord.AddDomainEventForAddingTag(tag);
