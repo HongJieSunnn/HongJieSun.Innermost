@@ -5,7 +5,7 @@
         public static LifeRecordDTO MapToLifeRecordDTO(dynamic record)
         {
             return new LifeRecordDTO(
-                record.Id, record.TiTle, record.Text, record.IsShared,
+                record.Id, record.Title, record.Text, record.IsShared,
                 MapToLocationDTO(record),
                 MapToMusicRecordDTO(record),
                 record.ImagePaths?.Split(","),
@@ -41,7 +41,7 @@
                 return null;
             return new MusicRecordDTO(
                 record.MusicRecordMId,
-                record.MusicRecordName,
+                record.MusicName,
                 record.Singer,
                 record.Album
             );
