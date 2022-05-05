@@ -7,23 +7,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.15.1" />
 		<PackageReference Include="StackExchange.Redis" Version="2.5.61" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\Innermost.MongoDBContext.csproj" />
 		<ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj" />
 		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
 		<ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="Innermost.MongoDBContext">
-			<HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
-		</Reference>
-		<Reference Include="TagS.Microservices.Client">
-			<HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client.Microsoft.DependencyInjection\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 </Project>
