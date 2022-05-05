@@ -22,21 +22,16 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="MongoDB.Bson" Version="2.15.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.15.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.15.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\Innermost.MongoDBContext.csproj" />
     <ProjectReference Include="..\..\EventBus\EventBusCommon\EventBusCommon.csproj" />
     <ProjectReference Include="..\..\Extensions\MongoDBExtensions\MongoDBExtensions.csproj" />
     <ProjectReference Include="..\..\Extensions\TypeExtensions\TypeExtensions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Innermost.MongoDBContext">
-      <HintPath>..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\bin\Debug\net6.0\Innermost.MongoDBContext.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
