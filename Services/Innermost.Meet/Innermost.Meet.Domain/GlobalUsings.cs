@@ -9,3 +9,4 @@ global using MongoDB.Driver;
 global using MongoDB.Bson.Serialization.Attributes;
 global using MediatR;
 global using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
+global using MongoDB.Bson;
