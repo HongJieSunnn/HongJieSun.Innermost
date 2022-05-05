@@ -8,3 +8,4 @@ global using TagS.Microservices.Client.DomainSeedWork;
 global using TagS.Microservices.Client.Models;
 global using DomainSeedWork;
 global using MongoDB.Bson.Serialization.Attributes;
+global using MongoDB.Bson;

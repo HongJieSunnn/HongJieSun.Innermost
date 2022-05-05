@@ -9,3 +9,4 @@ global using Innermost.MongoDBContext;
 global using Innermost.MongoDBContext.Configurations;
 global using MongoDB.Driver;
 global using Innermost.MusicHub.Domain.Repositories;
+global using MongoDB.Bson;

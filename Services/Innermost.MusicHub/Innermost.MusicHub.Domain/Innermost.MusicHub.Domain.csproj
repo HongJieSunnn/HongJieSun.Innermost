@@ -11,13 +11,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\TagS.Microservices.Client.csproj" />
 		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="TagS.Microservices.Client">
-			<HintPath>..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\bin\Debug\net6.0\TagS.Microservices.Client.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 </Project>
