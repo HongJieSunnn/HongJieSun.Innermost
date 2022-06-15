@@ -51,10 +51,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
 
             confidantRequestToUpdate.SetConfidantRequestPassed();
 
-            var updateDefinition = Builders<UserSocialContact>.Update.Set(u => u._confidantRequests[-1].ConfidantRequestStatue, confidantRequestToUpdate.ConfidantRequestStatue);
-            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch("ConfidantRequests", Builders<ConfidantRequest>.Filter.Eq(cr => cr.Id, confidantRequestId));
-
-            return (updateElementFilter, updateDefinition);
+            return GetFilterAndUpdateForSetConfidantRequestStatue(confidantRequestId, confidantRequestToUpdate.ConfidantRequestStatue);
         }
 
         public (FilterDefinition<UserSocialContact>? updateElementFilter, UpdateDefinition<UserSocialContact>? updateDefinition) SetConfidantRequestRefused(string confidantRequestId)
@@ -66,10 +63,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
 
             confidantRequestToUpdate.SetConfidantRequestRefused();
 
-            var updateDefinition = Builders<UserSocialContact>.Update.Set(u => u._confidantRequests[-1].ConfidantRequestStatue, confidantRequestToUpdate.ConfidantRequestStatue);
-            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch("ConfidantRequests", Builders<ConfidantRequest>.Filter.Eq(cr => cr.Id, confidantRequestId));
-
-            return (updateElementFilter, updateDefinition);
+            return GetFilterAndUpdateForSetConfidantRequestStatue(confidantRequestId, confidantRequestToUpdate.ConfidantRequestStatue);
         }
 
         public (FilterDefinition<UserSocialContact>? updateElementFilter, UpdateDefinition<UserSocialContact>? updateDefinition) SetConfidantRequestRefusedAndNotReceiveRequestAnyMore(string confidantRequestId)
@@ -80,11 +74,21 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
                 return (null, null);
 
             confidantRequestToUpdate.SetConfidantRequestRefusedAndNotReceiveRequestAnyMore();
-
-            var updateDefinition = Builders<UserSocialContact>.Update.Set(u => u._confidantRequests[-1].ConfidantRequestStatue, confidantRequestToUpdate.ConfidantRequestStatue);
-            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch("ConfidantRequests", Builders<ConfidantRequest>.Filter.Eq(cr => cr.Id, confidantRequestId));
-
             //TODO push refused message?
+
+            return GetFilterAndUpdateForSetConfidantRequestStatue(confidantRequestId, confidantRequestToUpdate.ConfidantRequestStatue);
+        }
+
+        private (FilterDefinition<UserSocialContact>? updateElementFilter, UpdateDefinition<UserSocialContact>? updateDefinition) GetFilterAndUpdateForSetConfidantRequestStatue(
+            string confidantRequestId, 
+            UserSocialContactAggregate.Enumerations.ConfidantRequestStatue confidantRequestStatue
+        )
+        {
+            var updateDefinition = Builders<UserSocialContact>
+                                            .Update
+                                            .Set(uc=>uc._confidantRequests[-1].ConfidantRequestStatue, confidantRequestStatue)
+                                            .Set(uc => uc._confidantRequests[-1].UpdateTime, DateTime.Now);
+            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch(uc=>uc._confidantRequests, cr=>cr.Id==confidantRequestId);
 
             return (updateElementFilter, updateDefinition);
         }
