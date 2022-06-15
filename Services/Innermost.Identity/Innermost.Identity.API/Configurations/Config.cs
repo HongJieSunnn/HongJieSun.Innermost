@@ -45,7 +45,11 @@
                     Scopes={ "tagserver" },
                     UserClaims=new[]{ ClaimTypes.Role }
                 },
-
+                new ApiResource("reactapigateway","ReactApiGateway Service Api")
+                {
+                    Scopes={ "reactapigateway" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
             };
         }
 
@@ -60,6 +64,7 @@
                 new ApiScope("intelligence"),
                 new ApiScope("push"),
                 new ApiScope("tagserver"),
+                new ApiScope("reactapigateway"),
             };
         }
 
@@ -111,6 +116,9 @@
                         "musichub",
                         "tagserver",
                         "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
                     },
                     AccessTokenLifetime=60*60*24,
                     IdentityTokenLifetime=60*60*24,
@@ -140,10 +148,13 @@
                         "musichub",
                         "tagserver",
                         "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
                     },
                     AccessTokenLifetime=60*60*24,
                     IdentityTokenLifetime=60*60*24,
-                    AlwaysIncludeUserClaimsInIdToken=true
+                    AlwaysIncludeUserClaimsInIdToken=true,
                 },
                 new Client
                 {
@@ -169,6 +180,9 @@
                         "musichub",
                         "tagserver",
                         "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
                     },
                 },
                 new Client
