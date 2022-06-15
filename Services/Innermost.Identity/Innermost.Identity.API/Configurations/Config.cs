@@ -12,17 +12,44 @@
             {
                 new ApiResource("loglife","LogLife Service Api")
                 {
-                    Scopes={"loglife"}
+                    Scopes={"loglife"},
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("meet","Meet Service Api")
                 {
-                    Scopes={ "meet" }
+                    Scopes={ "meet" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
+                new ApiResource("musichub","MusicHub Service Api")
+                {
+                    Scopes={ "musichub" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
+                new ApiResource("fileserver","FileSystem Service Api")
+                {
+                    Scopes={ "fileserver" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
+                new ApiResource("intelligence","Intelligence Service Api")
+                {
+                    Scopes={ "intelligence" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
+                new ApiResource("push","Push Service Api")
+                {
+                    Scopes={ "push" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
                 new ApiResource("tagserver","TagServer Service Api")
                 {
-                    Scopes={ "tagserver" }
+                    Scopes={ "tagserver" },
+                    UserClaims=new[]{ ClaimTypes.Role }
                 },
-                
+                new ApiResource("reactapigateway","ReactApiGateway Service Api")
+                {
+                    Scopes={ "reactapigateway" },
+                    UserClaims=new[]{ ClaimTypes.Role }
+                },
             };
         }
 
@@ -32,7 +59,12 @@
             {
                 new ApiScope("loglife"),
                 new ApiScope("meet"),
+                new ApiScope("musichub"),
+                new ApiScope("fileserver"),
+                new ApiScope("intelligence"),
+                new ApiScope("push"),
                 new ApiScope("tagserver"),
+                new ApiScope("reactapigateway"),
             };
         }
 
@@ -45,7 +77,11 @@
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResources.Phone(),
+                new IdentityResource("userstatue",new[]{"user_statue"}),
+                new IdentityResource("userimages",new[]{"avatarimg","backgroundimg"})
             };
         }
         /// <summary>
@@ -71,13 +107,22 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "userstatue",
+                        "userimages",
                         "loglife",
                         "meet",
+                        "musichub",
                         "tagserver",
+                        "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
                     },
-                    AccessTokenLifetime=60*60*3,
-                    IdentityTokenLifetime=60*60*3,
-                    AlwaysIncludeUserClaimsInIdToken=true
+                    AccessTokenLifetime=60*60*24,
+                    IdentityTokenLifetime=60*60*24,
+                    AlwaysIncludeUserClaimsInIdToken=true,
                 },
                 new Client
                 {
@@ -94,13 +139,22 @@
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.Phone,
+                        "userstatue",
+                        "userimages",
                         "loglife",
                         "meet",
+                        "musichub",
                         "tagserver",
+                        "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
                     },
-                    AccessTokenLifetime=60*60*12,
-                    IdentityTokenLifetime=60*60*12,
-                    AlwaysIncludeUserClaimsInIdToken=true
+                    AccessTokenLifetime=60*60*24,
+                    IdentityTokenLifetime=60*60*24,
+                    AlwaysIncludeUserClaimsInIdToken=true,
                 },
                 new Client
                 {
@@ -110,8 +164,8 @@
                     AllowedGrantTypes=GrantTypes.Hybrid,
                     AllowAccessTokensViaBrowser=false,
                     AllowOfflineAccess=true,
-                    AccessTokenLifetime=60*60*2,
-                    IdentityTokenLifetime=60*60*2,
+                    AccessTokenLifetime=60*60*24,
+                    IdentityTokenLifetime=60*60*24,
                     RequireConsent=false,
                     RequirePkce=true,
                     RedirectUris = { clientUrls["MobileApp"] },
@@ -123,9 +177,35 @@
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "loglife",
                         "meet",
+                        "musichub",
+                        "tagserver",
+                        "fileserver",
+                        "intelligence",
+                        "push",
+                        "reactapigateway"
+                    },
+                },
+                new Client
+                {
+                    ClientId="serviceclient",
+                    ClientName="Service Client",
+                    ClientSecrets={new Secret("service-client".Sha256())},
+                    AllowedGrantTypes=GrantTypes.ClientCredentials,
+                    AllowAccessTokensViaBrowser=false,
+                    AllowOfflineAccess=true,
+                    AccessTokenLifetime=60*60*24*30,
+                    IdentityTokenLifetime=60*60*24*30,
+                    AllowedScopes = new List<string>
+                    {
+                        "loglife",
+                        "meet",
+                        "musichub",
+                        "fileserver",
+                        "intelligence",
+                        "push",
                         "tagserver",
                     },
-                }
+                },
             };
         }
     }

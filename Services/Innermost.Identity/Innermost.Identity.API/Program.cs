@@ -1,3 +1,8 @@
+
+
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.Net;
+
 string Namespace = typeof(Startup).Namespace;
 string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
@@ -8,14 +13,17 @@ Log.Logger = CreateSerilogLogger(configuration);
 try
 {
     Log.Information("Configuring web host ({ApplicationContext})...", AppName);
-    var host = CreateHostBuilder(args, configuration);
+    var host = CreateHostBuilder(configuration,args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", AppName);
     host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
         .MigrateDbContext<InnermostIdentityDbContext>((dbContext, services) =>
         {
+            var userManager = services.GetRequiredService<UserManager<InnermostUser>>();
+            var integrationEventService = services.GetRequiredService<IIntegrationEventService>();
+            var userStatueService=services.GetRequiredService<IUserStatueService>();
             new InnermostIdentityDbContextSeed()
-                .SeedAsync(dbContext, configuration)
+                .SeedAsync(dbContext, userManager, integrationEventService,userStatueService, configuration)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((dbContext, services) =>
@@ -43,18 +51,16 @@ finally
     Log.CloseAndFlush();
 }
 
-
-
-#pragma warning disable CS0618 // 类型或成员已过时
-IWebHost CreateHostBuilder(string[] args, IConfiguration configuration) => 
-    WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .CaptureStartupErrors(false)
+IHost CreateHostBuilder(IConfiguration configuration, string[] args) => Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>().CaptureStartupErrors(false);
+                })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseSerilog()
                 .Build();
-#pragma warning restore CS0618 // 类型或成员已过时
 
 
 Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
@@ -66,7 +72,6 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .Enrich.WithProperty("ApplicationContext", AppName)
         .Enrich.FromLogContext()
         .WriteTo.Console()
-        .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://localhost:8080" : logstashUrl)
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }

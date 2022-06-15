@@ -11,6 +11,7 @@
         public DefaultServiceBusPersisterConnection(string serviceBusConnectionString, ILogger<DefaultServiceBusPersisterConnection> logger)
         {
             _logger = logger ?? throw new ArgumentException(nameof(logger));
+            _logger.LogInformation("Connecting to Azure Service Bus");
             _serviceBusConnectionString = serviceBusConnectionString ?? throw new ArgumentException(nameof(serviceBusConnectionString));
             _serviceBusClient = new ServiceBusClient(_serviceBusConnectionString);//TODO 我不知道默认情况下是否会配置Retry，若不会则需通过ServiceBusClientOptions来配置
             _serviceBusAdministrationClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);

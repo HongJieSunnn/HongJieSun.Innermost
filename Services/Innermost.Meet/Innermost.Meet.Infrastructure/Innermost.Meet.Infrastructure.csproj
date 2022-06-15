@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MongoDB.Driver" Version="2.15.1" />
+		<PackageReference Include="StackExchange.Redis" Version="2.5.61" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\Innermost.MongoDBContext.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
+		<ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

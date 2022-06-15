@@ -8,7 +8,7 @@ namespace IntegrationEventRecord.Services
 {
     public interface IIntegrationEventRecordService
     {
-        Task<IEnumerable<IntegrationEventRecordModel>> RetrieveEventsByEventContentsToPublishAsync(Guid transactionId);
+        Task<IEnumerable<IntegrationEventRecordModel>> RetrieveEventsByEventContentsToPublishAsync(string transactionId);
         Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction);
         Task MarkEventAsInProcessAsync(Guid eventId);
         Task MarkEventAsPublishedAsync(Guid eventId);

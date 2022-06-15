@@ -19,7 +19,7 @@
                 notification.CreateTime, notification.UpdateTime, notification.DeleteTime,
                 notification.TagSummaries
             );
-            await _logLifeIntegrationEventService.AddAndSaveEventAsync(setSharedIntegrationEvent);
+            await _logLifeIntegrationEventService.SaveEventAsync(setSharedIntegrationEvent);
         }
     }
 }

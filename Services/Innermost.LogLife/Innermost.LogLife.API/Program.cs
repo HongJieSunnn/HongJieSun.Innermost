@@ -8,7 +8,7 @@ Log.Logger = CreateSerilogLogger(configuration);
 try
 {
     Log.Information("Configuring web host ({ApplicationContext})...", Program.AppName);
-    var host = CreateWebHostBuilder(configuration, args);
+    var host = CreateHostBuilder(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", Program.AppName);
     host.MigrateDbContext<LifeRecordDbContext>((context, service) =>
@@ -34,15 +34,16 @@ finally
     Log.CloseAndFlush();
 }
 
-#pragma warning disable CS0618 // 类型或成员已过时
-IWebHost CreateWebHostBuilder(IConfiguration configuration, string[] args) => WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .CaptureStartupErrors(false)
+IHost CreateHostBuilder(IConfiguration configuration, string[] args) => Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>().CaptureStartupErrors(false);
+                })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseSerilog()
                 .Build();
-#pragma warning restore CS0618 // 类型或成员已过时
 
 Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
 {
@@ -66,8 +67,8 @@ public partial class Program
     {
         var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                        .AddEnvironmentVariables();//no environmentvariables in this service
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables();//used for docker compose pass enviromment variables.
 
         var config = builder.Build();
 

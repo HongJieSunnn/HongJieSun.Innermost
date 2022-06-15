@@ -1,0 +1,40 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "innermost.fileserver.api": "StartDebugging",
+        "innermost.identity.api": "StartDebugging",
+        "innermost.intelligence.api": "StartDebugging",
+        "innermost.loglife.api": "StartDebugging",
+        "innermost.meet.api": "StartDebugging",
+        "innermost.meet.signalrhub": "StartDebugging",
+        "innermost.musichub.api": "StartDebugging",
+        "innermost.push.api": "StartDebugging",
+        "innermost.tagserver.api": "StartDebugging",
+        "mysql": "StartWithoutDebugging",
+        "reactapp.httpaggregator": "StartDebugging",
+        "redis": "StartWithoutDebugging"
+      }
+    },
+    "Docker Compose Run": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "innermost.fileserver.api": "StartWithoutDebugging",
+        "innermost.identity.api": "StartWithoutDebugging",
+        "innermost.intelligence.api": "StartWithoutDebugging",
+        "innermost.loglife.api": "StartWithoutDebugging",
+        "innermost.meet.api": "StartWithoutDebugging",
+        "innermost.meet.signalrhub": "StartWithoutDebugging",
+        "innermost.musichub.api": "StartWithoutDebugging",
+        "innermost.push.api": "StartWithoutDebugging",
+        "innermost.tagserver.api": "StartWithoutDebugging",
+        "mysql": "StartWithoutDebugging",
+        "reactapp.httpaggregator": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging"
+      }
+    }
+  }
+}

@@ -68,7 +68,7 @@ namespace Innermost.LogLife.Infrastructure
 
             try
             {
-                await this.SaveChangesAsync();
+                await this.SaveChangesAsync();//save domain evnets changes.
                 transaction.Commit();
             }
             catch
@@ -104,7 +104,7 @@ namespace Innermost.LogLife.Infrastructure
             }
         }
 
-        public Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>
+        public Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
         {
             throw new NotImplementedException();
         }

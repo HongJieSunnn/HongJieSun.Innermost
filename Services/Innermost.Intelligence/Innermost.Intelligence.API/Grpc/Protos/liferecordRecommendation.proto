@@ -1,0 +1,31 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Innermost.Intelligence.API.LifeRecord";
+
+package IntelligenceLifeRecordRecommendation;
+
+service IntelligenceLifeRecordRecommendationGrpc{
+	rpc GetLifeRecordEmotion(LifeRecordTextGrpcDTO) returns(PredictedEmotionGrpcDTO){}
+
+	rpc GetLifeRecordRecommendation(LifeRecordGrpcDTO) returns(LifeRecordRecomendationGrpcDTO){}
+}
+
+message LifeRecordTextGrpcDTO{
+	string lifeRecordText=1;
+}
+
+message PredictedEmotionGrpcDTO{
+	string tagId=1;
+	string tagName=2;
+}
+
+message LifeRecordGrpcDTO{
+	string musicRecordMid=1;
+	string predictedEmotionTagName=2;
+	repeated string tags=3;
+}
+
+message LifeRecordRecomendationGrpcDTO{
+	string type=1;
+	string content=2;
+}

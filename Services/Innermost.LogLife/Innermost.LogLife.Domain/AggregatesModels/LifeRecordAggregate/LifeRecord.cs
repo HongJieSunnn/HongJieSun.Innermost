@@ -28,7 +28,8 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         public string? MusicRecordMId => _musicRecordMId;
         public MusicRecord? MusicRecord { get; set; }
 
-        public List<ImagePath>? ImagePaths { get; set; }
+        private readonly List<ImagePath>? _imagePaths;
+        public IReadOnlyCollection<ImagePath>? ImagePaths => _imagePaths?.AsReadOnly();
 
         private bool _isShared;
         
@@ -62,11 +63,8 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             CreateTime= createTime;
             UpdateTime = updateTime;
             DeleteTime = deleteTime;
-            ImagePaths=imagePaths;
-            if(isShared)
-            {
-                SetShared();
-            }
+            _imagePaths=imagePaths;
+            _isShared = false;
         }
 
         public void SetDeleted()

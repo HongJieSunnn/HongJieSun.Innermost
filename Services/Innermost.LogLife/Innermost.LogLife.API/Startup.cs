@@ -1,5 +1,7 @@
-﻿using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
-using TagS.Microservices.Client.Microsoft.DependencyInjection;
+﻿using CommonService.IdentityService.Extensions;
+using EventBusServiceBus.Extensions;
+using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using Innermost.LogLife.API.Infrastructure.AutofacModules;
 
 namespace Innermost.LogLife.API
 {
@@ -13,7 +15,7 @@ namespace Innermost.LogLife.API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
 
             services
@@ -24,15 +26,16 @@ namespace Innermost.LogLife.API
                 .Services
                 .AddHealthCheck(Configuration)
                 .AddCustomDbContext(Configuration)
-                .AddCustomEventBus(Configuration)
+                .AddDefaultAzureServiceBusEventBus(Configuration)
                 .AddCustomIntegrationEventConfiguration(Configuration)
                 .AddCustomAuthentication(Configuration)
                 .AddGrpcServices(Configuration)
                 .AddCustomAutoMapper(Configuration)
                 .AddQueriesAndRepositories(Configuration)
                 .AddCustomConfig(Configuration)
-                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>();
-    
+                .AddIdempotentCommandRequestSQLStorage<LifeRecordDbContext>()
+                .AddCustomCORS();
+
 
             services.AddSwaggerGen(c =>
             {
@@ -55,13 +58,12 @@ namespace Innermost.LogLife.API
                     }
                 });
             });
+        }
 
-            var container = new ContainerBuilder();
-
-            container.Populate(services);
-            container.RegisterModule<MediatRModules>();
-
-            return new AutofacServiceProvider(container.Build());
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule<MediatRModules>();
+            builder.RegisterModule<IntegrationEventModules>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +76,10 @@ namespace Innermost.LogLife.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innemost.LogLife.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("ReactApp");
+
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -171,41 +176,14 @@ namespace Innermost.LogLife.API
         {
             services.AddTransient<IntegrationEventRecordServiceFactory>();
             services.AddTransient<ILogLifeIntegrationEventService, LogLifeIntegrationEventService>();
-            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();//TODO maybe we should not inject ILogLifeIntegrationEventService.
-            
-            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-            {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-                var logger = sp.GetService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-                return new DefaultServiceBusPersisterConnection(connectionString, logger);
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection AddCustomEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            var subcriptionName = configuration["SubscriptionClientName"];
-
-            services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-            {
-                var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-                var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-                var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
+            services.AddTransient<IIntegrationEventService, LogLifeIntegrationEventService>();
 
             return services;
         }
 
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");//Remove防止被过滤,从而可以出现在HttpContext.User Claims中.But TagServer has not configured that and IdentityService is also useful.
 
             var identityServerUrl = configuration["IdentityServerUrl"];
 
@@ -218,18 +196,20 @@ namespace Innermost.LogLife.API
                 .AddJwtBearer(options =>
                 {
                     options.Authority = identityServerUrl;
+                    options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "loglife";
+
+                    if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                        options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddIdentityService();
 
             return services;
         }
 
         public static IServiceCollection AddGrpcServices(this IServiceCollection service, IConfiguration configuration)
         {
-            
 
             return service;
         }
@@ -242,7 +222,7 @@ namespace Innermost.LogLife.API
 
                 //options.AddMaps(new Type[] { typeof(MusicDetailDTO), typeof(MusicDetail) ,typeof(CreateOneRecordCommand),typeof(UpdateOneRecordCommand),typeof(LifeRecord) });
 
-                
+
             }, Assembly.GetExecutingAssembly());
 
             return services;
@@ -260,7 +240,23 @@ namespace Innermost.LogLife.API
 
             services.AddScoped<ILifeRecordRepository, LifeRecordRepository>();
 
-            //TODO AddIdempotentCommandRequestStorage
+            return services;
+        }
+
+        public static IServiceCollection AddCustomCORS(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ReactApp", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000")
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyMethod();
+                });
+            });
 
             return services;
         }

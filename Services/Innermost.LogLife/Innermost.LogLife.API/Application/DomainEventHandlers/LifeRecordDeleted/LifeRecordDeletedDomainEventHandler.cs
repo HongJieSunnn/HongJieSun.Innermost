@@ -13,7 +13,7 @@
         public async Task Handle(LifeRecordDeletedDomainEvent notification, CancellationToken cancellationToken)
         {
             var deletedIntegrationEvent = new LifeRecordDeletedIntegrationEvent(notification.RecordId, notification.UserId);
-            await _logLifeIntegrationEventService.AddAndSaveEventAsync(deletedIntegrationEvent);
+            await _logLifeIntegrationEventService.SaveEventAsync(deletedIntegrationEvent);
         }
     }
 }

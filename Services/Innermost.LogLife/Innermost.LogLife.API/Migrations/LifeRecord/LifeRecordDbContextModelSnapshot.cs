@@ -68,16 +68,19 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("Address");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("City");
 
                     b.Property<string>("District")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("District");
 
                     b.Property<string>("LocationName")
@@ -87,7 +90,8 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.Property<string>("Province")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
                         .HasColumnName("Province");
 
                     b.HasKey("Id");
@@ -178,9 +182,19 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
 
                     b.HasIndex("CreateTime");
 
+                    b.HasIndex("Text")
+                        .HasAnnotation("MySql:FullTextIndex", true);
+
+                    b.HasIndex("Title")
+                        .HasAnnotation("MySql:FullTextIndex", true);
+
+                    b.HasIndex("_isShared");
+
                     b.HasIndex("_locationUId");
 
                     b.HasIndex("_musicRecordMId");
+
+                    b.HasIndex("_userId");
 
                     b.ToTable("LifeRecords", (string)null);
                 });

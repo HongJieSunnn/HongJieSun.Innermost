@@ -2,6 +2,5 @@
 {
     public interface ILogLifeIntegrationEventService:IIntegrationEventService
     {
-        Task PublishEventsAsync(Guid transactionId);
     }
 }

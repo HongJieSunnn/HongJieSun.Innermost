@@ -1,12 +1,14 @@
-﻿using EventBusCommon;
-using EventBusCommon.Abstractions;
-using EventBusServiceBus;
+﻿using CommonService.IdentityService.Extensions;
+using EventBusServiceBus.Extensions;
 using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+using Innermost.IServiceCollectionExtensions;
 using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
-using IServiceCollectionExtensions;
+using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
+using System.Security.Claims;
 
 namespace Innermost.TagServer.API
 {
@@ -41,15 +43,27 @@ namespace Innermost.TagServer.API
                 .AddJwtBearer(options =>
                 {
                     options.Authority = Configuration["IdentityServerUrl"];
+                    options.RequireHttpsMetadata = Configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "tagserver";
+
+                    if (Configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                        options.TokenValidationParameters.ValidIssuers = new[] { Configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+            });
+
+            services.AddIdentityService();
 
             services.AddMongoDBSession();
 
-            services.AddEventBus(Configuration);
+            services
+                .AddDefaultAzureServiceBusEventBus(Configuration)
+                .AddIntegrationEventServiceMongoDB();
+
+            services.AddCustomCORS();
 
             services.AddSwaggerGen(c =>
             {
@@ -83,8 +97,9 @@ namespace Innermost.TagServer.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innemost.TagServer.API v1"));
             }
-
-            app.UseHttpsRedirection();
+            app.UseCors("ReactApp");
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -98,49 +113,42 @@ namespace Innermost.TagServer.API
             });
 
             ConfigureTagSServer(app);
-            app.ConfigureTagServerEventBus();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule<AutofacModule>();
+            builder.RegisterModule<MediatRModule>();
         }
 
         private void ConfigureTagSServer(IApplicationBuilder builder)
         {
             builder.MapTagSMongoDBCollectionModels();
-            builder.AddReferrerDiscriminator<LifeRecordReferrer>();
-            builder.AddLocationIndexFroReferrer("BaiduPOI");
             builder.SeedDefaultEmotionTags();
             builder.SeedDefaultMusicTags();
+            builder.ConfigureTagServerEventBus();
+
+            builder.AddReferrerDiscriminator<LifeRecordReferrer>();
+            builder.AddReferrerIndexes<LifeRecordReferrer>("UserId", "IsShared", "LocationUId", "MusicRecordMId", "CreateTime");
+            builder.AddReferrerIndexes<LifeRecordReferrer>(Builders<TagWithReferrer>.IndexKeys.Geo2DSphere("Referrers.BaiduPOI"));
         }
     }
 
     internal static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomCORS(this IServiceCollection services)
         {
-            var subcriptionName = configuration["SubscriptionClientName"];
-
-            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+            services.AddCors(options =>
             {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"];
-                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
-
-                return new DefaultServiceBusPersisterConnection(connectionString, logger);
+                options.AddPolicy("ReactApp", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000")
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyMethod();
+                });
             });
-
-            services.AddSingleton<IAsyncEventBus, EventBusAzureServiceBus>(sp =>
-            {
-                var persister = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-                var subcriptionManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
-                var lifescope = sp.GetRequiredService<ILifetimeScope>();
-
-                return new EventBusAzureServiceBus(persister, logger, subcriptionManager, subcriptionName, lifescope, subcriptionName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
 
             return services;
         }

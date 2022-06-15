@@ -32,3 +32,7 @@ global using Innermost.Identity.API;
 global using Innermost.Identity.API.Services;
 global using Innermost.Identity.API.Data;
 global using Innermost.Identity.API.Models;
+global using Innermost.Identity.API.Services.UserStatueServices;
+global using EventBusCommon;
+global using EventBusCommon.Abstractions;
+global using CommonService.IdentityService;

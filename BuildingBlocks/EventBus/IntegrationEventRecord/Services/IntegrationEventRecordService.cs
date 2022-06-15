@@ -8,6 +8,12 @@
 
 namespace IntegrationEventRecord.Services
 {
+    /// <summary>
+    /// IntegrationEventRecordService to get and store IntegrationEventRecord.
+    /// </summary>
+    /// <remarks>
+    /// Better use CommonIntegrationEventServiceSQL<TDbContext>.But remain this to be used in ILogLifeIntegrationEventService which is already been tested and useful.
+    /// </remarks>
     public class IntegrationEventRecordService : IIntegrationEventRecordService, IDisposable
     {
         private readonly DbConnection _dbConnection;
@@ -24,10 +30,14 @@ namespace IntegrationEventRecord.Services
                         .Options);
 
             var entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly is null)
+                throw new InvalidOperationException($"EntryAssembly is null.");
+
             var tagClientAssembly = entryAssembly.GetReferencedAssemblies().FirstOrDefault(a=>a.Name== "TagS.Microservices.Client");
-            _eventTypes = Assembly.Load(entryAssembly.FullName)
+
+            _eventTypes = Assembly.Load(entryAssembly.FullName ?? throw new InvalidOperationException($"{entryAssembly}'s fullname is null."))
                 .GetTypes()
-                .Where(t => t.Name.EndsWith("IntegrationEvent"))
+                .Where(t => t.BaseType == typeof(IntegrationEvent))
                 .ToList();
 
             if(tagClientAssembly is not null)
@@ -35,16 +45,14 @@ namespace IntegrationEventRecord.Services
                 _eventTypes.AddRange(
                     Assembly.Load(tagClientAssembly.FullName)
                     .GetTypes()
-                    .Where(t => t.Name.EndsWith("IntegrationEvent"))
+                    .Where(t => t.BaseType == typeof(IntegrationEvent))
                 );
             }
         }
 
-        public async Task<IEnumerable<IntegrationEventRecordModel>> RetrieveEventsByEventContentsToPublishAsync(Guid transactionId)
+        public async Task<IEnumerable<IntegrationEventRecordModel>> RetrieveEventsByEventContentsToPublishAsync(string transactionId)
         {
-            var transactionIdStr = transactionId.ToString();
-
-            var recordsOfTransaction = await _dbContext.IntegrationEventRecords.Where(i => i.TransactionId == transactionIdStr && i.State == EventState.NotPublished).ToListAsync();
+            var recordsOfTransaction = await _dbContext.IntegrationEventRecords.Where(i => i.TransactionId == transactionId && i.State == EventState.NotPublished).ToListAsync();
 
             if (recordsOfTransaction != null)
             {

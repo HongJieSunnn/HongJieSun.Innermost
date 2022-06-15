@@ -1,25 +1,53 @@
+using Innermost.Meet.API;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+
+IConfiguration configuration = GetConfiguration();
+Log.Logger = CreateSerilogLogger(configuration);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+var app = CreateWebHostBuilder(configuration, args);
 
 app.Run();
+
+IHost CreateWebHostBuilder(IConfiguration configuration, string[] args) => Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>().CaptureStartupErrors(false);
+                })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureAppConfiguration(c => c.AddConfiguration(configuration))
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSerilog()
+                .Build();
+
+
+Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+{
+    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+    var logstashUrl = configuration["Serilog:LogstashgUrl"];
+    return new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .Enrich.WithProperty("ApplicationContext", AppName)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+
+partial class Program
+{
+    public static string AppName => "Innermost.Meet";
+    public static IConfiguration GetConfiguration()
+    {
+        var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables();
+
+        var config = builder.Build();
+
+        return config;
+    }
+}

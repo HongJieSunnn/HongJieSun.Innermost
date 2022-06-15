@@ -9,8 +9,13 @@
 
             builder.HasKey(l => l.Id);
 
-            //TODO add indexs to the columns always be searched.
             builder.HasIndex(l => l.CreateTime);
+            builder.HasIndex("_userId");
+            builder.HasIndex(l => l.Title).IsFullText(true);
+            builder.HasIndex(l => l.Text).IsFullText(true);
+            builder.HasIndex("_locationUId");
+            builder.HasIndex("_musicRecordMId");
+            builder.HasIndex("_isShared");
 
             builder
                 .Property("_userId")

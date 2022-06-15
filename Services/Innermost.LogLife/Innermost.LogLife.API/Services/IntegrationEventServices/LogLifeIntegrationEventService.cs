@@ -20,13 +20,13 @@
             _integrationEventRecordService = _integrationEventRecordServiceFactory.NewService(_lifeRecordDbContext.Database.GetDbConnection());
         }
 
-        public async Task AddAndSaveEventAsync(IntegrationEvent integrationEvent)
+        public async Task SaveEventAsync(IntegrationEvent integrationEvent)
         {
             _logger.LogInformation("----- Enqueuing integration event {IntegrationEventId} to repository ({@IntegrationEvent})", integrationEvent.Id, integrationEvent);
             await _integrationEventRecordService.SaveEventAsync(integrationEvent, _lifeRecordDbContext.CurrentTransaction);
         }
 
-        public async Task PublishEventsAsync(Guid transactionId)
+        public async Task PublishEventsAsync(string transactionId)
         {
             var recordsToPublish = await _integrationEventRecordService.RetrieveEventsByEventContentsToPublishAsync(transactionId);
             foreach (var record in recordsToPublish)
@@ -36,7 +36,7 @@
                 try
                 {
                     await _integrationEventRecordService.MarkEventAsInProcessAsync(record.EventId);
-                    await _eventBus.Publish(record.IntegrationEvent??throw new ArgumentNullException($"Integration event in IntegrationEventRecord with eventId({record.EventId}) is null"));
+                    await _eventBus.Publish(record.IntegrationEvent ?? throw new ArgumentNullException($"Integration event in IntegrationEventRecord with eventId({record.EventId}) is null"));
                     await _integrationEventRecordService.MarkEventAsPublishedAsync(record.EventId);
                 }
                 catch (Exception ex)
@@ -45,6 +45,11 @@
                     throw;
                 }
             }
+        }
+
+        public Task PublishEventsAsync(IEnumerable<Guid> eventIds)
+        {
+            throw new NotImplementedException();
         }
     }
 }

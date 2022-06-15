@@ -25,6 +25,6 @@ namespace DomainSeedWork
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken),bool saveChanges=true);
-        Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>;
+        Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot;
     }
 }
