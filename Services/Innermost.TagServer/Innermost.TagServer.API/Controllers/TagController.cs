@@ -25,7 +25,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("first")]
-        public async Task<ActionResult<IEnumerable<TagDTO>>> GetFirstLevelTagAsync()//TODO FirstLevelTagDTO
+        public async Task<ActionResult<IEnumerable<TagDTO>>> GetFirstLevelTagsAsync()//TODO FirstLevelTagDTO
         {
             var tags=await _tagQueries.GetAllFirstLevelTagsAsync();
             return Ok(tags);
@@ -51,7 +51,15 @@ namespace Innermost.TagServer.API.Controllers
         [Route("synonym")]
         public async Task<ActionResult<TagDTO>> GetTagBySynonymAsync(string synonym)
         {
-            var tags = await _tagQueries.GetTagBySynonymAsync(synonym);//TODO now will call The expression tree is not supported: {document}.Synonyms. List Synonyms is ok but IReadOnlyCollection Synonyms is not ok.
+            var tags = await _tagQueries.GetTagBySynonymAsync(synonym);
+            return Ok(tags);
+        }
+
+        [HttpGet]
+        [Route("search/name")]
+        public async Task<ActionResult<IEnumerable<TagDTO>>> SearchTagsByNameAsync(string name)
+        {
+            var tags = await _tagQueries.SearchTagsByNameAsync(name);
             return Ok(tags);
         }
     }
