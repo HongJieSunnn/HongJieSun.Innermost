@@ -43,7 +43,9 @@ namespace Innermost.TagReferrers
             UserId = userId; Title = title; Text = text;
 
             LocationUId = locationUId; LocationName = locationName; Province = province; City = city; District = district; Address = address;
-            Longitude=longitude; Latitude=latitude;
+            //Location can be null.However,the baiduPOI with geo index can not be null.
+            //So if location is null,we add longitude and latitude of "天涯海角" to record.
+            Longitude=longitude??(float)109.359673; Latitude=latitude?? (float)18.298693;
 
             MusicRecordMId = musicId; MusicName = musicName; Singer = singer; Album = album;
 
@@ -57,6 +59,7 @@ namespace Innermost.TagReferrers
     /// Newtonsoft.Json can not deserialize GeoJsonPoint<GeoJson2DGeographicCoordinates> 
     /// because GeoJsonPoint<GeoJson2DGeographicCoordinates> has not a defualt construct(to deserialize instance by setting value to properties) and has not a constructor with attribute JsonConstructor
     /// So,we create the class inherit GeoJsonPoint<GeoJson2DGeographicCoordinates> and provide a constructor with attribute [JsonConstructor] and which is useful for deserializing.
+    /// However,Mongodb can not use GeoJsonPointGeoJson2DGeographicCoordinates under Geo2DSphere index.
     /// </summary>
     public class GeoJsonPointGeoJson2DGeographicCoordinates : GeoJsonPoint<GeoJson2DGeographicCoordinates>
     {
