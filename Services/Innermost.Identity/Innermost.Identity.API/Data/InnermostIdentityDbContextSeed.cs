@@ -23,14 +23,21 @@ namespace Innermost.Identity.API.Data
             await ConfigureSeedUser(userManager, integrationEventService, hongJieSunUser);
             await ConfigureSeedUser(userManager, integrationEventService, testerUser);
 
-            await ConfigureSeedUserStatue(userStatueService, adminUser.Id);//Admin always offlined.
+            await ConfigureSeedUserStatue(userStatueService, adminUser.Id,true);//Admin always online.
             await ConfigureSeedUserStatue(userStatueService, hongJieSunUser.Id);
             await ConfigureSeedUserStatue(userStatueService, testerUser.Id);
         }
 
         private async Task ConfigureSeedUser(UserManager<InnermostUser> userManager,IIntegrationEventService integrationEventService,InnermostUser user)
         {
-            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
+            if (user.UserName == "Admin")
+            {
+                await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin"));
+            }
+            else
+            {
+                await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
+            }
             await userManager.AddClaimAsync(user, new Claim("nickname", user.NickName));
             await userManager.AddClaimAsync(user, new Claim("user_statue", user.UserStatue));
             await userManager.AddClaimAsync(user, new Claim("avatarimg", user.UserAvatarUrl));
@@ -83,6 +90,7 @@ namespace Innermost.Identity.API.Data
             };
             var test = new InnermostUser()
             {
+                Id= "d6afbed6-3df6-47d4-a105-a2f1885b8ffa",
                 UserName = "Tester",
                 NormalizedUserName = "TESTER",
                 Email = "Test@Innermost.com",
@@ -101,7 +109,7 @@ namespace Innermost.Identity.API.Data
 
             admin.PasswordHash = _passwordHasher.HashPassword(hongjiesunUser, "Admin@Innermost");
             hongjiesunUser.PasswordHash = _passwordHasher.HashPassword(hongjiesunUser, "hong456..");
-            test.PasswordHash = _passwordHasher.HashPassword(test, "testPwd");
+            test.PasswordHash = _passwordHasher.HashPassword(test, "hong456..");
 
             return new List<InnermostUser>()
             {
