@@ -11,19 +11,20 @@ namespace Innermost.MusicHub.API.Queries.SingerQueries
             _context = context;
 
         }
-        public async Task<IEnumerable<SingerDTO>> SearchSingerAsync(string singerName)
+        public async Task<IEnumerable<SingerDTO>> SearchSingerAsync(string singerName, int page = 1, int limit = 10)
         {
-            var singerNameTextFilter = Builders<Singer>.Filter.Text(singerName);
-            return (await _context.Singers.Find(singerNameTextFilter).ToListAsync()).Select(s=>MapToSingerDTO(s));
+            var textFilter = Builders<Singer>.Filter.Regex(mr => mr.SingerName, new BsonRegularExpression($@"{singerName}", "i"));
+
+            return (await _context.Singers.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).Select(m => MapToSingerDTO(m));
         }
 
         public SingerDTO MapToSingerDTO(Singer singer)
         {
             return new SingerDTO(
-                singer.Id!, singer.SingerId, singer.SingerName, singer.SingerAlias,
+                singer.SingerMid!, singer.SingerId, singer.SingerName, singer.SingerAlias,
                 singer.SingerNationality, singer.SingerBirthplace,
                 singer.SingerOccupation, singer.SingerBirthday, singer.SingerRepresentativeWorks, singer.SingerRegion, singer.SingerCoverUrl,
-                singer.SingerAlbums.Select(sa=>new SingerAlbumDTO(sa.Id,sa.AlbumName,sa.AlbumDescriptions,sa.AlbumGenre,sa.AlbumLanguage,sa.AlbumSongCount,sa.PublishCompany,sa.PublishTime)).ToList()
+                singer.SingerAlbums.Select(sa=>new SingerAlbumDTO(sa.AlbumMid,sa.AlbumName,sa.AlbumDescriptions,sa.AlbumGenre,sa.AlbumLanguage,sa.AlbumCoverUrl,sa.AlbumSongCount,sa.PublishCompany,sa.PublishTime)).ToList()
             );
         }
     }

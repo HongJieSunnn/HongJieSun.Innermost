@@ -10,17 +10,17 @@ namespace Innermost.MusicHub.API.Queries.AlbumQueries
         {
             _context=context;
         }
-        public async Task<IEnumerable<AlbumDTO>> SearchAlbum(string albumName)
+        public async Task<IEnumerable<AlbumDTO>> SearchAlbum(string albumName, int page = 1, int limit = 10)
         {
-            var textFilter = Builders<Album>.Filter.Text(albumName);
+            var textFilter = Builders<Album>.Filter.Regex(mr => mr.AlbumName, new BsonRegularExpression($"^{albumName}","i"));
 
-            return (await _context.Albums.Find(textFilter).ToListAsync()).Select(a => MapToAlbumDTO(a));
+            return (await _context.Albums.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).OrderBy(a=>a.PublishTime).Select(m => MapToAlbumDTO(m));
         }
 
         private AlbumDTO MapToAlbumDTO(Album album)
         {
             return new AlbumDTO(
-                album.Id!,
+                album.AlbumMid,
                 album.AlbumId,
                 album.AlbumName,
                 album.AlbumDescriptions,
@@ -34,7 +34,7 @@ namespace Innermost.MusicHub.API.Queries.AlbumQueries
                 album.PublishTime,
                 album.MusicRecords.Select(mr=>
                     new AlbumMusicRecordDTO(
-                        mr.Id!,
+                        mr.MusicMid,
                         mr.MusicName,
                         mr.TranslatedMusicName??"",
                         mr.Genre,
