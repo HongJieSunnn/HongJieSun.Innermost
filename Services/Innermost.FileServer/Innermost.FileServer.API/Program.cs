@@ -10,15 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
 // Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddCustomAuthentication(configuration)
     .AddCustomCORS()
     .AddTencentCloudCos(configuration);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -30,7 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (configuration.GetValue<bool>("UseHttpsRedirection"))
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -58,8 +58,8 @@ partial class Program
     {
         var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                        .AddEnvironmentVariables();//no environmentvariables in this service
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables();
 
         var config = builder.Build();
 
@@ -82,7 +82,11 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                 options.Audience = "fileserver";
+
+                if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                    options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
             });
 
         return services;
