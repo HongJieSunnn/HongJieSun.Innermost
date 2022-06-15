@@ -65,7 +65,7 @@ namespace Innermost.Meet.SignalRHub.Hubs
 
                 foreach (var message in notReceivedMessages)
                 {
-                    await Clients.User(connectedUserId).SendAsync("ChattingMessage", message);
+                    await Clients.User(connectedUserId).SendAsync("NotReceviedChattingMessage", message);
                 }
 
                 await setNotReceivedChattingRecordsReceivedTask;

@@ -7,6 +7,7 @@ using Innermost.Meet.API.Application.IntegrationEventHandles;
 using Innermost.Meet.API.Infrastructure.AutofacModules;
 using Innermost.Meet.Infrastructure.Repositories;
 using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
+using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -29,9 +30,10 @@ namespace Innermost.Meet.API
                 .AddMeetRepositories()
                 .AddMeetQueries()
                 .AddDefaultAzureServiceBusEventBus(Configuration)
+                .AddIntegrationEventServiceMongoDB()
                 .AddIdempotentCommandRequestStorage()
-                .AddUserIdentityService()
-                .AddMeetGrpcClients()
+                .AddUserIdentityService(Configuration)
+                .AddMeetGrpcClients(Configuration)
                 .AddCustomCORS();
 
             services.AddSwaggerGen(c =>
@@ -67,7 +69,8 @@ namespace Innermost.Meet.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innemost.TagServer.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -111,7 +114,11 @@ namespace Innermost.Meet.API
                 .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["IdentityServerUrl"];
+                    options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "meet";
+
+                    if(configuration.GetValue<string>("LocalhostValidIssuer")!=null)
+                        options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
 
             return services;
@@ -158,18 +165,18 @@ namespace Innermost.Meet.API
             return services;
         }
 
-        public static IServiceCollection AddUserIdentityService(this IServiceCollection services)
+        public static IServiceCollection AddUserIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCommonUserIdentityService();
+            services.AddCommonUserIdentityService(configuration.GetValue<string>("IdentityGrpcAddress"));
 
             return services;
         }
 
-        public static IServiceCollection AddMeetGrpcClients(this IServiceCollection services)
+        public static IServiceCollection AddMeetGrpcClients(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options =>
             {
-                options.Address = new Uri("https://localhost:5106");
+                options.Address = new Uri(configuration.GetValue<string>("IdentityGrpcAddress"));
             });
 
             return services;

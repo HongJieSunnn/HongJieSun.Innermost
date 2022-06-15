@@ -42,9 +42,9 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
 
-            var chattingRecordJsonStrings = await _redis.Context().ListRangeAsync(chattingContextId, 0, listLength);
+            var chattingRecordJsonStrings = (await _redis.Context().ListRangeAsync(chattingContextId, 0, listLength)).Select(rv=>rv.ToString());
 
-            var chattingRecords = chattingRecordJsonStrings.Select(rv => JsonSerializer.Deserialize<ChattingRecordDTO>(rv)!);
+            var chattingRecords = chattingRecordJsonStrings.Select(rv => JsonSerializer.Deserialize<ChattingRecordDTO>(rv.Substring(0,rv.Length-1)));
 
             return chattingRecords ?? new List<ChattingRecordDTO>();
         }

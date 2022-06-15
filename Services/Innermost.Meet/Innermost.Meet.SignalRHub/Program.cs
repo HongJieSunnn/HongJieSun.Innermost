@@ -1,4 +1,5 @@
 using Autofac.Extensions.DependencyInjection;
+using CommonService.IdentityService.Extensions;
 using EventBusCommon.Abstractions;
 using EventBusServiceBus;
 using EventBusServiceBus.Extensions;
@@ -32,22 +33,23 @@ builder.Host
 
 builder.Services.AddSignalR();
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services
     .AddCustomAuthentication(configuration)
     .AddMeetMongoDBContext(configuration)
     .AddMeetRedisContext(configuration)
+    .AddIdentityService()
     .AddMeetSignalRHubRepositories()
     .AddMeetSignalRHubQueries()
     .AddMeetSignalRHubServices()
     .AddDefaultAzureServiceBusEventBus(configuration)
     .AddIntegrationEventServiceMongoDB()
-    .AddMeetSignalRHubGrpcClients()
+    .AddMeetSignalRHubGrpcClients(configuration)
     .AddCustomCORS();
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -58,7 +60,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("ReactApp");
-app.UseHttpsRedirection();
+
+if (configuration.GetValue<bool>("UseHttpsRedirection"))
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -98,8 +102,8 @@ partial class Program
     {
         var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                        .AddEnvironmentVariables();//no environmentvariables in this service
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables();
 
         var config = builder.Build();
 
@@ -122,7 +126,11 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                 options.Audience = "meet";
+
+                if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                    options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
             });
 
         return services;
@@ -168,11 +176,11 @@ internal static class IServiceCollectionExtensions
 
         return services;
     }
-    public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services)
+    public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services,IConfiguration configuration)
     {
         services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options=>
         {
-            options.Address = new Uri("https://localhost:5106");
+            options.Address = new Uri(configuration.GetValue<string>("IdentityGrpcAddress"));
         });
 
         return services;

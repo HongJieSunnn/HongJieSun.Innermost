@@ -35,34 +35,36 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
 
         public async Task<IEnumerable<ChattingRecordDTO>> GetChattingRecordsAsync(string chattingContextId, int page = 1, int limit = 50)
         {
-            var ans = new List<ChattingRecordDTO>(limit);
+            var chattingRecordsInRedisList = new List<ChattingRecordDTO>();
             var chattingRecordsInRedis=await _chattingRecordRedisService.GetAllChattingRecordsAsync(chattingContextId);
 
             if(chattingRecordsInRedis.Any())
             {
-                ans.AddRange(chattingRecordsInRedis.Skip((page-1) * limit).Take(limit));
+                chattingRecordsInRedisList.AddRange(chattingRecordsInRedis.Skip((page - 1) * limit).Take(limit));
 
-                if (ans.Count == limit)
-                    return ans;
+                if (chattingRecordsInRedisList.Count == limit)
+                    return chattingRecordsInRedisList;
             }
 
             //ans.Count==0 means that didn't take any records in redis and which means (page-1)*limit is larger than count of records in redis.
             //So,has skiped for records' count in redis,we need to start skip in mongodb by (page-1)*limit - records' count in redis.
             //ans.Count==1 means that take some records in redis,so we should not skip in mongodb.
-            var skipForMongoDB = ans.Count == 0 ? ((page - 1) * limit - chattingContextId.Length) : 0;
-            var limitForMongoDB = limit - ans.Count;
+            var skipForMongoDB = -(limit - chattingRecordsInRedisList.Count);//-1 will take just one from end and -n will take n from end whatever the limit's number.
+            var limitForMongoDB = limit - chattingRecordsInRedisList.Count;
 
             var filter = Builders<UserChattingContext>.Filter.Eq(ucc => ucc.Id, chattingContextId);
 
             //Slice:https://www.mongodb.com/docs/manual/reference/operator/aggregation/slice/#mongodb-expression-exp.-slice
             //Projections:https://mongodb.github.io/mongo-csharp-driver/2.14/reference/driver/definitions/
-            var projection =Builders<UserChattingContext>.Projection.Slice(ucc=>ucc.ChattingRecords, skipForMongoDB,limitForMongoDB);
+            var projection =Builders<UserChattingContext>.Projection.Slice("ChattingRecords", skipForMongoDB, limitForMongoDB);
 
-            var chattingRecordInMongoDB = await _context.UserChattingContexts.Find(filter).Project<UserChattingContext>(projection).FirstAsync();
+            var chattingRecordsInMongoDB = await _context.UserChattingContexts.Find(filter).Project<UserChattingContext>(projection).FirstAsync();
 
-            ans.AddRange(chattingRecordInMongoDB.ChattingRecords.Select(cr=>MapToChattingRecordDTO(cr)));
+            var chattingRecordsTakeFromMongoDB = chattingRecordsInMongoDB.ChattingRecords.Select(cr => MapToChattingRecordDTO(cr)).ToList();
 
-            return ans;
+            chattingRecordsTakeFromMongoDB.AddRange(chattingRecordsInRedisList);
+
+            return chattingRecordsTakeFromMongoDB;
         }
 
         private ChattingRecordDTO MapToChattingRecordDTO(ChattingRecord chattingRecord)

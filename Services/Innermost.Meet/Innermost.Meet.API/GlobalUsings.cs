@@ -32,3 +32,4 @@ global using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
 global using Innermost.Meet.API.Queries.SocialContactQueries;
 global using Innermost.Meet.API.Queries.StatueQueries;
 global using Innermost.IdempotentCommand.Infrastructure.Repositories;
+global using Microsoft.AspNetCore.Authorization;
