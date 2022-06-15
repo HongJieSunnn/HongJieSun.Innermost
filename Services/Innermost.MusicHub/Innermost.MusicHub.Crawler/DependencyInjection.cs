@@ -1,11 +1,14 @@
-﻿using IdentityModel;
+﻿using Autofac.Core;
+using IdentityModel;
 using IdentityModel.Client;
 using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using Innermost.MusicHub.Infrastructure;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 using Serilog.Sinks.SystemConsole.Themes;
+using System.Reflection;
 
 namespace Innermost.MusicHub.Crawler
 {
@@ -22,12 +25,14 @@ namespace Innermost.MusicHub.Crawler
             _serivces.AddSingleton<Serilog.ILogger, Logger>((services) =>
             {
                 return new LoggerConfiguration()
-                        .MinimumLevel.Information()
+                        .MinimumLevel.Debug()
                         .Enrich.WithProperty("ApplicationContext", "Innermost.MusicHub.Crawler")
                         .Enrich.FromLogContext()
                         .WriteTo.Console(theme: AnsiConsoleTheme.Literate)
                         .CreateLogger();
             });
+
+            _serivces.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 
 
             _serivces.AddMongoDBContext<CrawlerMongoDBContext>(c =>
@@ -52,7 +57,7 @@ namespace Innermost.MusicHub.Crawler
                     Address = disco.TokenEndpoint,
 
                     ClientId = "serviceclient",
-                    ClientSecret = "service - client".ToSha256(),
+                    ClientSecret = "service-client",
                     Scope = "tagserver"
                 }).GetAwaiter().GetResult();
 
