@@ -8,6 +8,7 @@ using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using System.Security.Claims;
 
 namespace Innermost.TagServer.API
 {
@@ -42,8 +43,17 @@ namespace Innermost.TagServer.API
                 .AddJwtBearer(options =>
                 {
                     options.Authority = Configuration["IdentityServerUrl"];
+                    options.RequireHttpsMetadata = Configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "tagserver";
+
+                    if (Configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                        options.TokenValidationParameters.ValidIssuers = new[] { Configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+            });
 
             services.AddIdentityService();
 
@@ -52,6 +62,8 @@ namespace Innermost.TagServer.API
             services
                 .AddDefaultAzureServiceBusEventBus(Configuration)
                 .AddIntegrationEventServiceMongoDB();
+
+            services.AddCustomCORS();
 
             services.AddSwaggerGen(c =>
             {
@@ -85,8 +97,9 @@ namespace Innermost.TagServer.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innemost.TagServer.API v1"));
             }
-
-            app.UseHttpsRedirection();
+            app.UseCors("ReactApp");
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -122,6 +135,22 @@ namespace Innermost.TagServer.API
 
     internal static class IServiceCollectionExtensions
     {
+        public static IServiceCollection AddCustomCORS(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ReactApp", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000")
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyMethod();
+                });
+            });
 
+            return services;
+        }
     }
 }
