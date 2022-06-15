@@ -25,25 +25,25 @@ namespace Innermost.MusicHub.API.Controllers
 
         [HttpGet]
         [Route("album")]
-        public async Task<ActionResult<IEnumerable<AlbumDTO>>> SearchAlbumAsync(string name)
+        public async Task<ActionResult<IEnumerable<AlbumDTO>>> SearchAlbumAsync(string name, int page = 1, int limit=10)
         {
-            var albums=await _albumQueries.SearchAlbum(name);
+            var albums=await _albumQueries.SearchAlbum(name, page, limit);
             return Ok(albums);
         }
 
         [HttpGet]
         [Route("music")]
-        public async Task<ActionResult<IEnumerable<MusicRecordDTO>>> SearchMusicRecordAsync(string name)
+        public async Task<ActionResult<IEnumerable<MusicRecordDTO>>> SearchMusicRecordAsync(string name,int page=1,int limit=25)
         {
-            var musicRecords = await _musicRecordQueries.SearchMusicRecordAsync(name);
+            var musicRecords = await _musicRecordQueries.SearchMusicRecordAsync(name,page,limit);
             return Ok(musicRecords);
         }
 
         [HttpGet]
-        [Route("album")]
-        public async Task<ActionResult<IEnumerable<SingerDTO>>> SearchSingerAsync(string name)
+        [Route("singer")]
+        public async Task<ActionResult<IEnumerable<SingerDTO>>> SearchSingerAsync(string name, int page = 1, int limit=10)
         {
-            var singers = await _singerQueries.SearchSingerAsync(name);
+            var singers = await _singerQueries.SearchSingerAsync(name,page,limit);
             return Ok(singers);
         }
     }
