@@ -8,7 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Services/Innermost.Intelligence/Innermost.Intelligence.API/Innermost.Intelligence.API.csproj", "Services/Innermost.Intelligence/Innermost.Intelligence.API/"]
-COPY ["BuildingBlocks/EventBus/EventBusCommon/EventBusCommon.csproj", "BuildingBlocks/EventBus/EventBusCommon/"]
 RUN dotnet restore "Services/Innermost.Intelligence/Innermost.Intelligence.API/Innermost.Intelligence.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Innermost.Intelligence/Innermost.Intelligence.API"
