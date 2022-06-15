@@ -122,7 +122,13 @@ namespace EventBusServiceBus
             }
             catch (ServiceBusException ex) when (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
             {
-                _serviceBusAdministrationClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, _subscriptionName) { MaxDeliveryCount=300}).GetAwaiter().GetResult();
+                _serviceBusAdministrationClient.CreateSubscriptionAsync(
+                        new CreateSubscriptionOptions(TOPIC_NAME, _subscriptionName) 
+                        { 
+                            MaxDeliveryCount=300,
+                            DeadLetteringOnMessageExpiration=true,
+                            EnableDeadLetteringOnFilterEvaluationExceptions=false
+                        }).GetAwaiter().GetResult();
             }
         }
 
