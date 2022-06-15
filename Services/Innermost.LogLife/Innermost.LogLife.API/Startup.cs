@@ -78,7 +78,8 @@ namespace Innermost.LogLife.API
 
             app.UseCors("ReactApp");
 
-            app.UseHttpsRedirection();
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -195,7 +196,11 @@ namespace Innermost.LogLife.API
                 .AddJwtBearer(options =>
                 {
                     options.Authority = identityServerUrl;
+                    options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "loglife";
+
+                    if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                        options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
 
             services.AddIdentityService();
