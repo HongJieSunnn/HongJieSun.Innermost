@@ -42,8 +42,8 @@ namespace Innermost.Meet.API.Queries.SocialContactQueries
 
             var confidants = userSocialContact.Confidants.Select(async (c,i) =>
             {
-                var confidantUserNames = await _userIdentityService.GetUserNamesAsync(c.Id);
-                var confidantUserAvatarUrl = await _userIdentityService.GetUserAvatarUrlAsync(c.Id);
+                var confidantUserNames = await _userIdentityService.GetUserNamesAsync(c.ConfidantUserId);
+                var confidantUserAvatarUrl = await _userIdentityService.GetUserAvatarUrlAsync(c.ConfidantUserId);
 
                 return new ConfidantDTO(c.ConfidantUserId, confidantUserNames.userName, confidantUserNames.userNickName, confidantUserAvatarUrl, confidantStatues[i].UserStatue, confidantStatues[i].OnlineStatue, c.ChattingContextId);
             });

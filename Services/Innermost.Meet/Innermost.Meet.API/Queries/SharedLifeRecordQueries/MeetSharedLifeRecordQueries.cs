@@ -6,8 +6,8 @@ namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
     public class MeetSharedLifeRecordQueries : IMeetSharedLifeRecordQueries
     {
         private readonly MeetMongoDBContext _context;
-        private readonly IIdentityService _identityService;
-        public MeetSharedLifeRecordQueries(MeetMongoDBContext context, IIdentityService identityService)
+        private readonly IUserIdentityService _identityService;
+        public MeetSharedLifeRecordQueries(MeetMongoDBContext context, IUserIdentityService identityService)
         {
             _context = context;
             _identityService = identityService;
@@ -47,9 +47,8 @@ namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
 
             var sortByFilter = Builders<SharedLifeRecord>.Sort.Descending(sortBy);
 
-            var filter = Builders<SharedLifeRecord>.Filter.Ne(l => l.UserId, userId) &
-                            Builders<SharedLifeRecord>.Filter.Ne(l => l.MusicRecord, null) &
-                            Builders<SharedLifeRecord>.Filter.Eq(l => l.MusicRecord!.Id, musicRecordMid);
+            var filter = Builders<SharedLifeRecord>.Filter.Ne(l => l.MusicRecord, null) &
+                            Builders<SharedLifeRecord>.Filter.Eq(l => l.MusicRecord!.MusicMid, musicRecordMid);
 
             var records = await _context.SharedLifeRecords.Find(filter).Sort(sortByFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync();
 
