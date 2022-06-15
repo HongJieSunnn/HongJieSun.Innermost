@@ -1,5 +1,8 @@
 ﻿using Grpc.Core;
 using Innermost.MusicHub.API.Queries.MusicRecordQueries;
+using Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate;
+using MongoDB.Driver;
+using TagS.Microservices.Client.Models;
 
 namespace Innermost.MusicHub.API.Grpc.Services
 {
@@ -12,13 +15,15 @@ namespace Innermost.MusicHub.API.Grpc.Services
         }
         public override async Task<MusicRecordGrpcDTO> GetRandomMusicRecordByTag(MusicRecordTagGrpcDTO request, ServerCallContext context)
         {
-            var music = await _musicRecordQueries.GetOneRandomMusicRecord(mr=>mr.Tags.Any(t=> request.TagName.Contains(t.TagName)));//useful test in TestMongoDBReplica.
+            var filter = Builders<MusicRecord>.Filter.ElemMatch("Tags", Builders<TagSummary>.Filter.In("TagName", request.TagName));
+            var music = await _musicRecordQueries.GetOneRandomMusicRecord(filter);
             return new MusicRecordGrpcDTO()
             {
                 Mid = music.Mid,
                 MusicName = music.MusicName,
                 MusicAlbum = music.Album.AlbumName,
-                MusicSinger = string.Join(" / ", music.Singers)
+                MusicSinger = string.Join(" , ", music.Singers.Select(s=>s.SingerName)),
+                MusicCoverUrl=music.AlbumCoverUrl,
             };
         }
     }

@@ -17,4 +17,5 @@ message MusicRecordGrpcDTO{
 	string musicName=2;
 	string musicSinger=3;
 	string musicAlbum=4;
+	string musicCoverUrl=5;
 }
