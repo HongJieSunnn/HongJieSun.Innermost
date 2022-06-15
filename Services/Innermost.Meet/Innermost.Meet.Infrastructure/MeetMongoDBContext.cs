@@ -45,11 +45,12 @@ namespace Innermost.Meet.Infrastructure
                 var locationIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.BaiduPOI");
                 var musicMidIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending("MusicRecord.MusicMid");
                 var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl=>sl.CreateTime);
+                var likecountIndex = Builders<SharedLifeRecord>.IndexKeys.Descending(sl=>sl.LikesCount);
 
 
 
                 var createUniqueIndexModels = new[] { recordIdIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al,new CreateIndexOptions() { Unique=true}));
-                var createIndexModels = new[] { userIdIndex,textIndex, locationIndex,createTimeIndex, locationUidIndex, musicMidIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
+                var createIndexModels = new[] { userIdIndex,textIndex, locationIndex,createTimeIndex, locationUidIndex, musicMidIndex, likecountIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
 
                 createIndexModels.AddRange(createUniqueIndexModels);
                 if (createIndexModels.Any())
@@ -91,11 +92,17 @@ namespace Innermost.Meet.Infrastructure
         {
             if (!UserChattingContexts!.Indexes.List().Any())
             {
-                var usersIndex = Builders<UserChattingContext>.IndexKeys.Ascending(ucc => ucc.Users);
+                var usersIndex = Builders<UserChattingContext>.IndexKeys.Ascending("Users");
 
+                var createUniqueIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al,new CreateIndexOptions()
+                {
+                    Unique = true,
+                }));
+                var createIndexModels = new IndexKeysDefinition<UserChattingContext>[] { usersIndex }.Select(al => new CreateIndexModel<UserChattingContext>(al)).ToList();
 
-                var createIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al));
-                if(createIndexModels.Any())
+                createIndexModels.AddRange(createUniqueIndexModels);
+
+                if (createIndexModels.Any())
                     UserChattingContexts.Indexes.CreateManyAsync(createIndexModels).GetAwaiter().GetResult();
             }
         }
