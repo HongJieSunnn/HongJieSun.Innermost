@@ -33,9 +33,6 @@ namespace Innermost.Meet.API.Application.CommandHandlersAggregate
 
             var updateResult= await _sharedLifeRecordRepository.UpdateSharedLifeRecordAsync(request.SharedLifeRecordObjectId, update);
 
-            if (updateResult.MatchedCount != 1 || updateResult.ModifiedCount != 2)
-                throw new CommandHandleFailedException();//to roll back.
-
             await _sharedLifeRecordRepository.UnitOfWork.SaveEntitiesAsync(sharedRecord, cancellationToken);
 
             return true;
