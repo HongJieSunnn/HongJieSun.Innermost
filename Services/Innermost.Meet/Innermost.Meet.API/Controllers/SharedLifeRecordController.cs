@@ -4,13 +4,14 @@ namespace Innermost.Meet.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SharedLifeRecordController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMeetSharedLifeRecordQueries _meetSharedLifeRecordQueries;
-        private readonly IIdentityService _identityService;
+        private readonly IUserIdentityService _identityService;
         private readonly ILogger<SharedLifeRecordController> _logger;
-        public SharedLifeRecordController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityService identityService, ILogger<SharedLifeRecordController> logger)
+        public SharedLifeRecordController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IUserIdentityService identityService, ILogger<SharedLifeRecordController> logger)
         {
             _mediator = mediator;
             _meetSharedLifeRecordQueries = meetSharedLifeRecordQueries;
@@ -46,6 +47,18 @@ namespace Innermost.Meet.API.Controllers
         }
 
         [HttpGet]
+        [Route("record/random")]
+        public async Task<ActionResult<IEnumerable<SharedLifeRecordDTO>>> GetRandomSharedLifeRecordsAsync([Range(1, 50)] int limit = 20)
+        {
+            var sharedRecords = await _meetSharedLifeRecordQueries.GetRandomSharedLifeRecordsAsync(limit);
+
+            if (sharedRecords is null)
+                return BadRequest();
+
+            return Ok(sharedRecords);
+        }
+
+        [HttpGet]
         [Route("record/tag")]
         public async Task<ActionResult<IEnumerable<SharedLifeRecordDTO>>> GetSharedLifeRecordsByTagsAsync(
             IEnumerable<string> tagIds,
@@ -54,6 +67,22 @@ namespace Innermost.Meet.API.Controllers
             [RegularExpression(@"^Id|CreateTime|LikesCount$")] string sortBy = "Id")
         {
             var sharedRecords = await _meetSharedLifeRecordQueries.GetSharedLifeRecordsByTagsAsync(tagIds, page, limit, sortBy);
+
+            if (sharedRecords is null)
+                return BadRequest();
+
+            return Ok(sharedRecords);
+        }
+
+        [HttpGet]
+        [Route("record/music-record")]
+        public async Task<ActionResult<IEnumerable<SharedLifeRecordDTO>>> GetSharedLifeRecordsByMusicRecordAsync(
+            string mid,
+            [Range(1, int.MaxValue)] int page = 1,
+            [Range(20, 100)] int limit = 20,
+            [RegularExpression(@"^Id|CreateTime|LikesCount$")] string sortBy = "LikesCount")
+        {
+            var sharedRecords = await _meetSharedLifeRecordQueries.GetSharedLifeRecordsByMusicRecordAsync(mid, page, limit, sortBy);
 
             if (sharedRecords is null)
                 return BadRequest();
