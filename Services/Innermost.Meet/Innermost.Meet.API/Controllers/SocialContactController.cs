@@ -1,4 +1,5 @@
 ﻿using Innermost.Meet.API.Queries.SharedLifeRecordQueries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -6,30 +7,31 @@ namespace Innermost.Meet.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SocialContactController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMeetSharedLifeRecordQueries _meetSharedLifeRecordQueries;
-        private readonly IIdentityService _identityService;
+        private readonly ISocialContactQueries _socialContactQueries;
+        private readonly IUserIdentityService _identityService;
         private readonly ILogger<SocialContactController> _logger;
 
         private readonly static string SuccessedString = string.Empty;
-        public SocialContactController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityService identityService, ILogger<SocialContactController> logger)
+        public SocialContactController(IMediator mediator, ISocialContactQueries socialContactQueries, IUserIdentityService identityService, ILogger<SocialContactController> logger)
         {
             _mediator = mediator;
-            _meetSharedLifeRecordQueries = meetSharedLifeRecordQueries;
+            _socialContactQueries = socialContactQueries;
             _identityService = identityService;
             _logger = logger;
 
         }
 
         [HttpPost]
-        [Route("confidant-request")]
+        [Route("add-confidant-request")]
         public async Task<IActionResult> AddConfidantRequestAsync([FromBody] AddConfidantRequestCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             string commandResult = SuccessedString;
 
-            if (command.RequestUserId is null)
+            if (command.RequestUserId is null)//TODO for testing.While testing end,userId should only be get by identityService.
             {
                 command.RequestUserId = _identityService.GetUserId();
             }
@@ -44,7 +46,7 @@ namespace Innermost.Meet.API.Controllers
             }
 
             if (commandResult != SuccessedString)
-                return BadRequest(commandResult);
+                return Ok(commandResult);
 
             return Ok();
         }
@@ -73,6 +75,22 @@ namespace Innermost.Meet.API.Controllers
                 return BadRequest(commandResult);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("confidants")]
+        public async Task<ActionResult<IEnumerable<ConfidantRequestDTO>>> GetConfidantsAsync()
+        {
+            var confidants = await _socialContactQueries.GetConfidantsAsync();
+            return Ok(confidants);
+        }
+
+        [HttpGet]
+        [Route("confidant-requests-to-be-reviewed")]
+        public async Task<ActionResult<IEnumerable<ConfidantRequestDTO>>> GetConfidantRequestsToBeReviewedAsync()
+        {
+            var confidantRequests = await _socialContactQueries.GetConfidantRequestsToBeReviewedAsync();
+            return Ok(confidantRequests);
         }
     }
 }
