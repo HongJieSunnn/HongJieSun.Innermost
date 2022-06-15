@@ -236,7 +236,7 @@ namespace Innermost.Identity.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout(string logoutId)
         {
-            if (User.Identity.IsAuthenticated == false)
+            if (User.Identity!.IsAuthenticated == false)
             {
                 return await Logout(new LogoutModel { LogoutId = logoutId });
             }
@@ -294,7 +294,7 @@ namespace Innermost.Identity.API.Controllers
             //Or PostLogoutRedirectUri is null;
 
             if (logoutContext.PostLogoutRedirectUri is null)
-                return Redirect("localhost:3000/");
+                return Redirect("http://localhost:3000/");
 
             return Redirect(logoutContext.PostLogoutRedirectUri);
         }
