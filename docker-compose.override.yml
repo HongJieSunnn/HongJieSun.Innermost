@@ -1,0 +1,216 @@
+version: '3.4'
+
+services:
+  mysql:
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: hong456..
+      TZ: Asia/Shanghai
+    ports:
+      - "3306"
+    volumes:
+      - innermost-sqldata:/var/opt/mysql
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+
+  redis:
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - innermost-redis:/data/redis
+    command: redis-server --port 6379 --appendonly yes
+
+  innermost.identity.api:
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - ConnectionStrings__ConnectMySQL=Server=mysql;port=3306;database=Innermost.Identity;uid=root;pwd=hong456..;SslMode=None
+      - ConnectionStrings__Redis=redis
+      - Kestrel__Endpoints__Http__Url=http://innermost.identity.api
+      - Kestrel__Endpoints__Https__Url=https://innermost.identity.api
+      - Kestrel__Endpoints__Grpc__Url=http://innermost.identity.api:81
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "81"
+      - "5106:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  reactapp.httpaggregator:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106 #to make iss https://localhost:5106 valid
+      - IdentityServerUrl=http://innermost.identity.api
+      - urls__fileserver=http://innermost.fileserver.api
+      - urls__identity=http://innermost.identity.api
+      - urls__intelligence=http://innermost.intelligence.api
+      - urls__loglife=http://innermost.loglife.api
+      - urls__meet=http://innermost.meet.api
+      - urls__meetSignalRHub=http://innermost.meetSignalRHub.api
+      - urls__musicHub=http://innermost.musicHub.api
+      - urls__push=http://innermost.push.api
+      - urls__tagserver=http://innermost.tagserver.api
+      - IdentityGrpcAddress=http://innermost.identity.api:81
+      - IntelligenceGrpcAddress=http://innermost.intelligence.api:81
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7139:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.fileserver.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7009:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:roa
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.intelligence.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - MusicHubGrpcAddress=http://innermost.musicHub.api:81
+      - Kestrel__Endpoints__Http__Url=http://innermost.intelligence.api
+      - Kestrel__Endpoints__Https__Url=https://innermost.intelligence.api
+      - Kestrel__Endpoints__Grpc__Url=http://innermost.intelligence.api:81
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "81"
+      - "7238:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.loglife.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - ConnectionStrings__ConnectMySQL=Server=mysql;port=3306;database=Innermost.LogLife;uid=root;pwd=hong456..;SslMode=None
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7002:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.meet.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - ConnectionStrings__MongoDB=mongodb://root:hong456..@host.docker.internal:27018,host.docker.internal:27019,host.docker.internal:27020/?authSource=admin&replicaSet=mongo&readPreference=secondaryPreferred&appname=InnermostMeet
+      - IdentityGrpcAddress=http://innermost.identity.api:81
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7032:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.meet.signalrhub:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - ConnectionStrings__MongoDB=mongodb://root:hong456..@host.docker.internal:27018,host.docker.internal:27019,host.docker.internal:27020/?authSource=admin&replicaSet=mongo&readPreference=secondaryPreferred&appname=InnermostMeetSignalRHub
+      - ConnectionStrings__Redis=redis
+      - IdentityGrpcAddress=http://innermost.identity.api:81
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7182:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.musichub.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - ConnectionStrings__MongoDB=mongodb://root:hong456..@host.docker.internal:27018,host.docker.internal:27019,host.docker.internal:27020/?authSource=admin&replicaSet=mongo&readPreference=secondaryPreferred&appname=InnermostMusicHub
+      - Kestrel__Endpoints__Http__Url=http://innermost.musichub.api
+      - Kestrel__Endpoints__Https__Url=https://innermost.musichub.api
+      - Kestrel__Endpoints__Grpc__Url=http://innermost.musichub.api:81
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "81"
+      - "7037:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.push.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7266:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  innermost.tagserver.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - UseHttpsRedirection=false
+      - LocalhostValidIssuer=https://localhost:5106
+      - IdentityServerUrl=http://innermost.identity.api
+      - ConnectionStrings__MongoDB=mongodb://root:hong456..@host.docker.internal:27018,host.docker.internal:27019,host.docker.internal:27020/?authSource=admin&replicaSet=mongo&readPreference=secondaryPreferred&appname=InnermostTagServer
+      - TZ=Asia/Shanghai
+    ports:
+      - "80"
+      - "7075:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+volumes:
+  innermost-sqldata:
+    external: false
+  innermost-redis:
+    external: false

@@ -1,0 +1,104 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: mysql:8.0
+
+  redis:
+    image: redis:alpine
+
+  reactapp.httpaggregator:
+    image: ${DOCKER_REGISTRY-}react.apphttpaggregator
+    build:
+      context: .
+      dockerfile: ApiGateways/ReactApp.HttpAggregator/Dockerfile
+    depends_on:
+      - innermost.identity.api
+      - innermost.intelligence.api
+      - innermost.loglife.api
+      - innermost.meet.api
+      - innermost.meet.signalrhub
+      - innermost.musichub.api
+      - innermost.push.api
+      - innermost.tagserver.api
+
+  innermost.fileserver.api:
+    image: ${DOCKER_REGISTRY-}innermost.fileserver.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.FileServer/Innermost.FileServer.API/Dockerfile
+
+
+  innermost.identity.api:
+    image: ${DOCKER_REGISTRY-}innermost.identity.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.Identity/Innermost.Identity.API/Dockerfile
+    depends_on:
+      - mysql
+      - redis
+
+
+  innermost.intelligence.api:
+    image: ${DOCKER_REGISTRY-}innermost.intelligence.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.Intelligence/Innermost.Intelligence.API/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
+
+  innermost.loglife.api:
+    image: ${DOCKER_REGISTRY-}innermost.loglife.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.LogLife/Innermost.LogLife.API/Dockerfile
+    depends_on:
+      - mysql
+      - innermost.identity.api
+
+
+  innermost.meet.api:
+    image: ${DOCKER_REGISTRY-}innermost.meet.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.Meet/Innermost.Meet.API/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
+
+  innermost.meet.signalrhub:
+    image: ${DOCKER_REGISTRY-}innermost.meet.signalrhub
+    build:
+      context: .
+      dockerfile: Services/Innermost.Meet/Innermost.Meet.SignalRHub/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
+
+  innermost.musichub.api:
+    image: ${DOCKER_REGISTRY-}innermost.musichub.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.MusicHub/Innermost.MusicHub.API/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
+
+  innermost.push.api:
+    image: ${DOCKER_REGISTRY-}innermost.push.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.Push/Innermost.Push.API/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
+
+  innermost.tagserver.api:
+    image: ${DOCKER_REGISTRY-}innermost.tagserver.api
+    build:
+      context: .
+      dockerfile: Services/Innermost.TagServer/Innermost.TagServer.API/Dockerfile
+    depends_on:
+      - innermost.identity.api
+
