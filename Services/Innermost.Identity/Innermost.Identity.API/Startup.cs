@@ -169,7 +169,8 @@ namespace Innermost.Identity.API
             app.UseCors("WebApp");
             app.UseIdentityServer();
 
-            app.UseHttpsRedirection();
+            if(Configuration.GetValue<bool>("UseHttpsRedirection"))
+                app.UseHttpsRedirection();
 
             app.UseRouting();
 
