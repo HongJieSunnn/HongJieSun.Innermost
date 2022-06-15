@@ -7,13 +7,13 @@ namespace Innermost.TagServer.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReviewTagController : ControllerBase
+    public class ReviewedTagController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IIdentityService _identityService;
         private readonly ITagReviewedQueries _tagReviewedQueries;
-        private readonly ILogger<ReviewTagController> _logger;
-        public ReviewTagController(IMediator mediator,IIdentityService identityService,ITagReviewedQueries tagReviewedQueries,ILogger<ReviewTagController> logger)
+        private readonly ILogger<ReviewedTagController> _logger;
+        public ReviewedTagController(IMediator mediator,IIdentityService identityService,ITagReviewedQueries tagReviewedQueries,ILogger<ReviewedTagController> logger)
         {
             _mediator=mediator;
             _identityService=identityService;
@@ -48,7 +48,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpPost]
         [Route("pass")]
-        //[Authorize(Policy ="Admin")]//TODO uncomment
+        [Authorize(Policy ="Admin")]
         public async Task<IActionResult> PassReviewedTagAsync([FromBody] PassReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;
@@ -69,7 +69,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpPost]
         [Route("refuse")]
-        //[Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> RefuseReviewedTagAsync([FromBody] RefuseReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;
@@ -90,6 +90,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpGet]
         [Route("all")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IEnumerable<TagReviewedDTO>>> GetAllToBeReviewedTagsAsync()
         {
             var tags=await _tagReviewedQueries.GetTobeReviewedTagsAsync();
