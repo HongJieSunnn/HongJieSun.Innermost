@@ -14,6 +14,8 @@ namespace Innermost.Meet.API.Application.CommandHandlers.UserSocialContactAggreg
         public async Task<string> Handle(SetConfidantRequestStatueCommand request, CancellationToken cancellationToken)
         {
             var userToSet = await _userSocialContactRepository.GetUserSocialContactAsync(request.UserId!);
+            if (userToSet.Confidants.FirstOrDefault(c=>c.ConfidantUserId==request.RequestUserId) is not null)//to avoid request more than once.
+                return string.Empty;
 
             FilterDefinition<UserSocialContact>? setStatueFilter = null;
             UpdateDefinition<UserSocialContact>? setStatueUpdate = null;
@@ -34,7 +36,7 @@ namespace Innermost.Meet.API.Application.CommandHandlers.UserSocialContactAggreg
             var updateResult=await _userSocialContactRepository.UpdateUserSocialContactAsync(request.UserId!,setStatueUpdate,setStatueFilter);
 
             //if passed add confidant to each other.
-            if(request.ConfidantRequestStatue == ConfidantRequestStatue.Passed)
+            if(request.ConfidantRequestStatue == ConfidantRequestStatue.Passed&&!userToSet.Confidants.Any(c=>c.ConfidantUserId==request.RequestUserId))
             {
                 var requestUser = await _userSocialContactRepository.GetUserSocialContactAsync(request.RequestUserId);
 
