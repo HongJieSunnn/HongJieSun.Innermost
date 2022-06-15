@@ -93,8 +93,6 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId1 = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Title = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Text = table.Column<string>(type: "varchar(3000)", maxLength: 3000, nullable: false)
@@ -218,9 +216,9 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                 .Annotation("MySql:FullTextIndex", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_LifeRecords_UserId1",
+                name: "IX_LifeRecords_UserId",
                 table: "LifeRecords",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LifeRecordTagSummary_TagsTagId",

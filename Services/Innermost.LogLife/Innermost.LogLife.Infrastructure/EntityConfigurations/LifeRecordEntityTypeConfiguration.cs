@@ -10,7 +10,7 @@
             builder.HasKey(l => l.Id);
 
             builder.HasIndex(l => l.CreateTime);
-            builder.HasIndex(l => l.UserId);
+            builder.HasIndex("_userId");
             builder.HasIndex(l => l.Title).IsFullText(true);
             builder.HasIndex(l => l.Text).IsFullText(true);
             builder.HasIndex("_locationUId");

@@ -160,11 +160,6 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                         .HasColumnType("DateTime")
                         .HasColumnName("UpdateTime");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(95)")
-                        .HasColumnName("UserId1");
-
                     b.Property<bool>("_isShared")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("IsShared");
@@ -193,13 +188,13 @@ namespace Innermost.LogLife.API.Migrations.LifeRecord
                     b.HasIndex("Title")
                         .HasAnnotation("MySql:FullTextIndex", true);
 
-                    b.HasIndex("UserId");
-
                     b.HasIndex("_isShared");
 
                     b.HasIndex("_locationUId");
 
                     b.HasIndex("_musicRecordMId");
+
+                    b.HasIndex("_userId");
 
                     b.ToTable("LifeRecords", (string)null);
                 });

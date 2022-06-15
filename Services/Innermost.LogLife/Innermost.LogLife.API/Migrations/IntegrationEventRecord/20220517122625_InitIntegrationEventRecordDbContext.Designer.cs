@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Innermost.LogLife.API.Migrations.IntegrationEventRecord
 {
     [DbContext(typeof(IntegrationEventRecordDbContext))]
-    [Migration("20220328083636_InitIntegrationEventRecordDbContext")]
+    [Migration("20220517122625_InitIntegrationEventRecordDbContext")]
     partial class InitIntegrationEventRecordDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
