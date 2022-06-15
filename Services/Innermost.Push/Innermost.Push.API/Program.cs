@@ -46,7 +46,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("ReactApp");
-app.UseHttpsRedirection();
+
+if (configuration.GetValue<bool>("UseHttpsRedirection"))
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -84,8 +86,8 @@ partial class Program
     {
         var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                        .AddEnvironmentVariables();//no environmentvariables in this service
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables();
 
         var config = builder.Build();
 
@@ -108,7 +110,11 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                 options.Audience = "push";
+
+                if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
+                    options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
             });
 
         return services;
