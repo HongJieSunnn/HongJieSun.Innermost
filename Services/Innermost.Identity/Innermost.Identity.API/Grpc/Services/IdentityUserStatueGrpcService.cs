@@ -1,11 +1,9 @@
 ﻿using Grpc.Core;
-using Innermost.Identity.API.Services.UserStatueServices;
 using Innermost.Identity.API.UserStatue;
-using StackExchange.Redis;
 
 namespace Innermost.Identity.API.Grpc.Services
 {
-    public class IdentityUserStatueGrpcService:IdentityUserStatueGrpc.IdentityUserStatueGrpcBase
+    public class IdentityUserStatueGrpcService : IdentityUserStatueGrpc.IdentityUserStatueGrpcBase
     {
         private readonly IUserStatueService _userStatueService;
         public IdentityUserStatueGrpcService(IUserStatueService userStatueService)
@@ -29,7 +27,7 @@ namespace Innermost.Identity.API.Grpc.Services
 
         public override async Task<UsersStatueGrpcDTO> GetUsersStatue(UserIdsGrpcDTO request, ServerCallContext context)
         {
-            var onlineStatueRedisValues=await _userStatueService.GetUsersStatueAsync(request.UserIds);
+            var onlineStatueRedisValues = await _userStatueService.GetUsersStatueAsync(request.UserIds);
             var usersStatueDTO = new UsersStatueGrpcDTO();
 
             usersStatueDTO.UsersStatues.AddRange(onlineStatueRedisValues);

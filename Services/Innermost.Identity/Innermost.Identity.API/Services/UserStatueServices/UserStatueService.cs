@@ -54,6 +54,18 @@ namespace Innermost.Identity.API.Services.UserStatueServices
             user.UserStatue = statue;
 
             await _userManager.UpdateAsync(user);
+
+            await SetUserStatueToClaimAsync(user, statue);
+        }
+
+        private async Task SetUserStatueToClaimAsync(InnermostUser user, string statue)
+        {
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            var userStatueClaim = userClaims.FirstOrDefault(uc => uc.Type == "user_statue");
+
+            if(userStatueClaim is not null)
+                await _userManager.ReplaceClaimAsync(user, userStatueClaim, new Claim("user_statue", statue));
         }
 
         public async Task SetUserStatueFromMySQL(InnermostUser user)
