@@ -9,7 +9,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
         public long MusicId { get; private set; }
         public string MusicName { get; private set; }
         public string? TranslatedMusicName { get; private set; }
-        public string? Introduction { get; private set; }
+        public string Introduction { get;private set; }
         public string Genre { get; private set; }
         public string Language { get; private set; }
         public string AlbumCoverUrl { get; private set; }
@@ -27,7 +27,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
         public string PublishTime { get; private set; }
         public MusicRecord(
             string mid, long musicId,
-            string musicName, string? translatedMusicName,
+            string musicName, string? translatedMusicName,string? introduction,
             string genre, string language,
             string albumCoverUrl, string musicUrl, string? wikiUrl, string lyric,
             List<MusicRecordSinger> singers, MusicRecordAlbum album, string publishTime,
@@ -37,6 +37,7 @@ namespace Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate
             MusicName = musicName;
             MusicId = musicId;
             TranslatedMusicName = translatedMusicName;
+            Introduction = introduction ?? "";
             Genre = genre;
             Language = language;
             AlbumCoverUrl = albumCoverUrl;
