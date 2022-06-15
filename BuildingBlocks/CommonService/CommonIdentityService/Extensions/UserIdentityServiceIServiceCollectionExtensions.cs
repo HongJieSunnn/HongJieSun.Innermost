@@ -10,7 +10,7 @@ namespace CommonIdentityService.Extensions
         /// <summary>
         /// Add UserIdentityService and dependencies it needs.(IHttpContextAccessor and IdentityUserGrpc.IdentityUserGrpcClient)
         /// </summary>
-        public static IServiceCollection AddCommonUserIdentityService(this IServiceCollection services)
+        public static IServiceCollection AddCommonUserIdentityService(this IServiceCollection services,string grpcAddress)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserIdentityService, UserIdentityService>();
@@ -19,7 +19,7 @@ namespace CommonIdentityService.Extensions
             services
                 .AddGrpcClient<IdentityUserGrpc.IdentityUserGrpcClient>(options =>
                 {
-                    options.Address = new Uri("https://localhost:5106");
+                    options.Address = new Uri(grpcAddress);
                 });
 
             //We call grpc to Identity.API in services' actions and which means that if we can call these grpcs,we have already been verified.
