@@ -4,7 +4,7 @@
     {
         public string Type { get; init; }
         public string Content { get; init; }
-        public LogLifeRecommendationResult(string type,string content)
+        public LogLifeRecommendationResult(string type, string content)
         {
             Type = type;
             Content = content;

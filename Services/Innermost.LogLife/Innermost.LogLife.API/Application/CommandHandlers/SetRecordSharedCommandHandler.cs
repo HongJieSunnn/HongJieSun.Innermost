@@ -9,8 +9,8 @@
         }
         public async Task<bool> Handle(SetRecordSharedCommand request, CancellationToken cancellationToken)
         {
-            var record = await _lifeRecordRepository.GetRecordByIdAsync(request.RecordId,request.UserId!);
-            if(record is null)
+            var record = await _lifeRecordRepository.GetRecordByIdAsync(request.RecordId, request.UserId!);
+            if (record is null)
                 return false;
             record.SetShared();
             return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

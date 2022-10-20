@@ -110,7 +110,7 @@ internal static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddTencentCloudCos(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddTencentCloudCos(this IServiceCollection services, IConfiguration configuration)
     {
         var tencentCloudCosSection = configuration.GetSection("TencentCloudCos");
 

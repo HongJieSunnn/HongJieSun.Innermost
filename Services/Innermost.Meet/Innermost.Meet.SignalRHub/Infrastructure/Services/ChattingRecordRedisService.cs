@@ -28,7 +28,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
             return AddChattingRecordAsync(chattingContextId, chattingRecordJsonString);
         }
 
-        public Task<long> AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO,bool received)
+        public Task<long> AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO, bool received)
         {
             if (chattingRecordDTO.ChattingRecordId is null)
                 throw new ArgumentException("ChattingRecordDTO.ChattingRecordId must not be null while call method AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO)");
@@ -42,14 +42,14 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
 
-            var chattingRecordJsonStrings = (await _redis.Context().ListRangeAsync(chattingContextId, 0, listLength)).Select(rv=>rv.ToString());
+            var chattingRecordJsonStrings = (await _redis.Context().ListRangeAsync(chattingContextId, 0, listLength)).Select(rv => rv.ToString());
 
-            var chattingRecords = chattingRecordJsonStrings.Select(rv => JsonSerializer.Deserialize<ChattingRecordDTO>(rv.Substring(0,rv.Length-1)));
+            var chattingRecords = chattingRecordJsonStrings.Select(rv => JsonSerializer.Deserialize<ChattingRecordDTO>(rv.Substring(0, rv.Length - 1)));
 
             return chattingRecords ?? new List<ChattingRecordDTO>();
         }
 
-        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId,string connectedUserId)
+        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAsync(string chattingContextId, string connectedUserId)
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
             //list is order by CreateTime which means the right side chatting record is later record.
@@ -71,7 +71,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
                 //if connected User is the sendUser,break.
                 //if connected User is not the sendUser,it's obviouse that all the message on the right side of list with 0 is not received.
                 //there will be no intersection of 0 and 1
-                if (i == listLength - 1&&chattingRecord.SendUserId == connectedUserId)//only judge once.
+                if (i == listLength - 1 && chattingRecord.SendUserId == connectedUserId)//only judge once.
                     break;
                 ans.Add(chattingRecord);
             }
@@ -96,7 +96,7 @@ namespace Innermost.Meet.SignalRHub.Infrastructure.Services
             await _redis.Context().ListRightPushAsync(chattingContextId, chattingRecordArr);
         }
 
-        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId,string connectedUserId)
+        public async Task<IEnumerable<ChattingRecordDTO>> GetNotReceivedChattingRecordsAndSetAsReceivedAsync(string chattingContextId, string connectedUserId)
         {
             var listLength = await _redis.Context().ListLengthAsync(chattingContextId);
 

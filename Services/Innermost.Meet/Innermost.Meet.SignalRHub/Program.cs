@@ -1,14 +1,9 @@
 using Autofac.Extensions.DependencyInjection;
-using CommonService.IdentityService.Extensions;
-using EventBusCommon.Abstractions;
-using EventBusServiceBus;
 using EventBusServiceBus.Extensions;
-using Innermost.IServiceCollectionExtensions;
 using Innermost.Meet.Infrastructure.Repositories;
 using Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers;
 using Innermost.Meet.SignalRHub.Hubs;
 using Innermost.Meet.SignalRHub.Infrastructure.AutofacModules;
-using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
@@ -176,9 +171,9 @@ internal static class IServiceCollectionExtensions
 
         return services;
     }
-    public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddMeetSignalRHubGrpcClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options=>
+        services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options =>
         {
             options.Address = new Uri(configuration.GetValue<string>("IdentityGrpcAddress"));
         });

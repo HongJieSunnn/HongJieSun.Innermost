@@ -1,8 +1,6 @@
-﻿using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate;
-
-namespace Innermost.LogLife.Domain.Events.LifeRecordEvents
+﻿namespace Innermost.LogLife.Domain.Events.LifeRecordEvents
 {
-    public class LifeRecordDeletedDomainEvent:INotification
+    public class LifeRecordDeletedDomainEvent : INotification
     {
         public int RecordId { get; private set; }
         public string UserId { get; private set; }

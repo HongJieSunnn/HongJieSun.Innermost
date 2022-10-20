@@ -11,7 +11,7 @@
         public int AlbumSongCount { get; private set; }
         public string PublishCompany { get; private set; }
         public string PublishTime { get; private set; }
-        public SingerAlbum(string mid, string albumName, string albumDescriptions, string albumGenre, string albumLanguage,string albumCoverUrl, int albumSongCount, string publishCompany, string publishTime)
+        public SingerAlbum(string mid, string albumName, string albumDescriptions, string albumGenre, string albumLanguage, string albumCoverUrl, int albumSongCount, string publishCompany, string publishTime)
         {
             Id = ObjectId.GenerateNewId().ToString();
             AlbumMid = mid;

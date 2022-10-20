@@ -3,11 +3,11 @@
     public class Like : ValueObject
     {
         public string LikerUserId { get; private set; }
-        public string LikerUserName { get;private set; }
+        public string LikerUserName { get; private set; }
         public string LikerUserNickName { get; private set; }
         public string LikerUserAvatarUrl { get; private set; }
         public DateTime LikeTime { get; private set; }
-        public Like(string likerUserId, string likerUserName,string likerUserNickName, string likerUserAvatarUrl, DateTime likeTime)
+        public Like(string likerUserId, string likerUserName, string likerUserNickName, string likerUserAvatarUrl, DateTime likeTime)
         {
             LikerUserId = likerUserId;
             LikerUserName = likerUserName;

@@ -6,7 +6,7 @@
         {
             builder.ToTable("Locations");
 
-            builder.HasKey(l=>l.Id);
+            builder.HasKey(l => l.Id);
 
             builder
                 .Property(l => l.LocationName)

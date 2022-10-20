@@ -19,10 +19,10 @@
         public List<TagSummaryDTO> TagSummaries { get; init; }
         public MusicRecordDTO(
             string mid, long musicId,
-            string musicName, string? translatedMusicName,string? introduction,
+            string musicName, string? translatedMusicName, string? introduction,
             string genre, string language,
             string albumCoverUrl, string musicUrl, string? wikiUrl, string lyric,
-            List<MusicRecordSingerDTO> singers, MusicRecordAlbumDTO album, string publishTime,List<TagSummaryDTO> tagSummaries)
+            List<MusicRecordSingerDTO> singers, MusicRecordAlbumDTO album, string publishTime, List<TagSummaryDTO> tagSummaries)
         {
             Mid = mid;
             MusicName = musicName;
@@ -38,18 +38,18 @@
             Album = album ?? throw new ArgumentException("MusicRecord must contains in a album");
             PublishTime = publishTime;
             WikiUrl = wikiUrl;
-            TagSummaries= tagSummaries;
+            TagSummaries = tagSummaries;
         }
     }
-    
+
     public class TagSummaryDTO
     {
         public string TagId { get; init; }
         public string TagName { get; init; }
-        public TagSummaryDTO(string tagId,string tagName)
+        public TagSummaryDTO(string tagId, string tagName)
         {
-            TagId=tagId;
-            TagName=tagName;
+            TagId = tagId;
+            TagName = tagName;
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using CommonService.IdentityService.Extensions;
-using EventBusServiceBus.Extensions;
-using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
-using Innermost.LogLife.API.Infrastructure.AutofacModules;
+﻿using Innermost.LogLife.API.Infrastructure.AutofacModules;
 
 namespace Innermost.LogLife.API
 {

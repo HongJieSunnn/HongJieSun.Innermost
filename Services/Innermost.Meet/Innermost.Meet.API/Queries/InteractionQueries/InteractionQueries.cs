@@ -19,11 +19,11 @@
         private RecordLikeDTO MapToRecordLikeDTO(RecordLike recordLike)
         {
             return new RecordLikeDTO(
-                recordLike.Id!, 
-                recordLike.RecordUserId, recordLike.RecordUserName, recordLike.RecordUserNickName, recordLike.RecordUserAvatarUrl, 
-                recordLike.RecordTitle, recordLike.RecordText, 
-                recordLike.RecordMusicRecordName, 
-                recordLike.RecordLocation, 
+                recordLike.Id!,
+                recordLike.RecordUserId, recordLike.RecordUserName, recordLike.RecordUserNickName, recordLike.RecordUserAvatarUrl,
+                recordLike.RecordTitle, recordLike.RecordText,
+                recordLike.RecordMusicRecordName,
+                recordLike.RecordLocation,
                 recordLike.RecordCreateTime, recordLike.LikeTime);
         }
     }

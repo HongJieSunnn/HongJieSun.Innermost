@@ -21,7 +21,7 @@
         public DateTime? DeleteTime { get; init; }
 
         public SharedLifeRecordDTO(
-            string objectId, int recordId, string userId,string userName,string userNickName,string userAvatarUrl,
+            string objectId, int recordId, string userId, string userName, string userNickName, string userAvatarUrl,
             string? title, string text,
             LocationDTO? location, MusicRecordDTO? musicRecord,
             List<string>? imagePaths, int likesCount, List<LikeDTO>? likes, List<TagSummaryDTO> tagSummaries,
@@ -72,7 +72,7 @@
 
             ImagePaths = sharedLifeRecord.ImagePaths?.ToList();
             LikesCount = sharedLifeRecord.LikesCount;
-            Likes = sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikerUserId, l.LikerUserName,l.LikerUserNickName, l.LikerUserAvatarUrl, l.LikeTime)).ToList();
+            Likes = sharedLifeRecord.Likes.Select(l => new LikeDTO(l.LikerUserId, l.LikerUserName, l.LikerUserNickName, l.LikerUserAvatarUrl, l.LikeTime)).ToList();
             TagSummaries = sharedLifeRecord.Tags.Select(t => new TagSummaryDTO(t.TagId, t.TagName)).ToList();
             CreateTime = sharedLifeRecord.CreateTime;
             UpdateTime = sharedLifeRecord.UpdateTime;
@@ -126,11 +126,11 @@
         public string LikerUserNickName { get; init; }
         public string LikerUserAvatarUrl { get; init; }
         public DateTime LikeTime { get; init; }
-        public LikeDTO(string likerUserId, string likerUserName,string likerUserNickeName, string likerUserAvatarUrl, DateTime likeTime)
+        public LikeDTO(string likerUserId, string likerUserName, string likerUserNickeName, string likerUserAvatarUrl, DateTime likeTime)
         {
             LikerUserId = likerUserId;
             LikerUserName = likerUserName;
-            LikerUserNickName=likerUserNickeName;
+            LikerUserNickName = likerUserNickeName;
             LikerUserAvatarUrl = likerUserAvatarUrl;
             LikeTime = likeTime;
         }

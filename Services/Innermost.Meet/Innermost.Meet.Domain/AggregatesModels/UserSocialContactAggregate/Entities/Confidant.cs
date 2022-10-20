@@ -12,7 +12,7 @@
         public DateTime CreateTime { get; private set; }
         public Confidant(string confidantUserId, string chattingContextId, DateTime createTime)
         {
-            Id=ObjectId.GenerateNewId().ToString();
+            Id = ObjectId.GenerateNewId().ToString();
             ConfidantUserId = confidantUserId;
             ChattingContextId = chattingContextId;
             CreateTime = createTime;

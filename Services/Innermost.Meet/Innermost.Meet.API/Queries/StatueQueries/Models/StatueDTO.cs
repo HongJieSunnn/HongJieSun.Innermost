@@ -4,7 +4,7 @@
     {
         public bool OnlineStatue { get; set; }
         public string UserStatue { get; set; }
-        public StatueDTO(bool onlineStatue,string userStatue)
+        public StatueDTO(bool onlineStatue, string userStatue)
         {
             OnlineStatue = onlineStatue;
             UserStatue = userStatue;

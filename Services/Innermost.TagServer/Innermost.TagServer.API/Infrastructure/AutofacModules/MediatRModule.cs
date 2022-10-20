@@ -2,7 +2,7 @@
 
 namespace Innermost.TagServer.API.Infrastructure.AutofacModules
 {
-    internal class MediatRModule:Autofac.Module//TODO there is the dependencyInjection lib writed by MediatR official.
+    internal class MediatRModule : Autofac.Module//TODO there is the dependencyInjection lib writed by MediatR official.
     {
         protected override void Load(ContainerBuilder builder)
         {

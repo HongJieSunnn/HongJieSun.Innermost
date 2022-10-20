@@ -1,5 +1,4 @@
 ﻿using DomainSeedWork.Abstractions;
-using Innermost.IdempotentCommand.Infrastructure.EntityConfigurations;
 
 namespace Innermost.LogLife.Infrastructure
 {
@@ -9,7 +8,7 @@ namespace Innermost.LogLife.Infrastructure
         public DbSet<MusicRecord> MusicRecords { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ImagePath> ImagePaths { get; set; }
-        public DbSet<TagSummary<int,LifeRecord>> TagSummaries { get; set; }
+        public DbSet<TagSummary<int, LifeRecord>> TagSummaries { get; set; }
 
         private readonly IMediator _mediator;
 
@@ -42,9 +41,9 @@ namespace Innermost.LogLife.Infrastructure
             _mediator = mediatR ?? throw new ArgumentNullException(nameof(mediatR));
         }
 
-        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken),bool saveChanges=true)
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken), bool saveChanges = true)
         {
-            if(saveChanges)
+            if (saveChanges)
                 await base.SaveChangesAsync(cancellationToken);
 
             await _mediator.DisPatchDomainEvents(this);
@@ -104,7 +103,7 @@ namespace Innermost.LogLife.Infrastructure
             }
         }
 
-        public Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
+        public Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>, IAggregateRoot
         {
             throw new NotImplementedException();
         }

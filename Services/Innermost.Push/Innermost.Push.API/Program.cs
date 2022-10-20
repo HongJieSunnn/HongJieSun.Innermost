@@ -1,5 +1,4 @@
 using Autofac.Extensions.DependencyInjection;
-using EventBusServiceBus;
 using EventBusServiceBus.Extensions;
 using Innermost.Push.API.Application.IntegrationEventHandlers;
 using Innermost.Push.API.Infrastructure.AutofacModules;
@@ -120,18 +119,18 @@ internal static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddEmailService(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
     {
         var mailGunSection = configuration.GetSection("MailGun");
         var fromEmail = mailGunSection.GetValue<string>("FromEmail");
-        var fromName= mailGunSection.GetValue<string>("FromName");
-        var domainName= mailGunSection.GetValue<string>("DomainName");
-        var apiKey= mailGunSection.GetValue<string>("ApiKey");
+        var fromName = mailGunSection.GetValue<string>("FromName");
+        var domainName = mailGunSection.GetValue<string>("DomainName");
+        var apiKey = mailGunSection.GetValue<string>("ApiKey");
         services
             .AddFluentEmail(fromEmail, fromName)
             .AddMailGunSender(domainName, apiKey);
 
-        services.AddTransient<ISendEmailService,SendEmailService>();
+        services.AddTransient<ISendEmailService, SendEmailService>();
 
         return services;
     }

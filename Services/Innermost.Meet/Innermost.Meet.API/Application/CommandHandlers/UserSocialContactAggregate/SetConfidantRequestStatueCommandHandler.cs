@@ -14,7 +14,7 @@ namespace Innermost.Meet.API.Application.CommandHandlers.UserSocialContactAggreg
         public async Task<string> Handle(SetConfidantRequestStatueCommand request, CancellationToken cancellationToken)
         {
             var userToSet = await _userSocialContactRepository.GetUserSocialContactAsync(request.UserId!);
-            if (userToSet.Confidants.FirstOrDefault(c=>c.ConfidantUserId==request.RequestUserId) is not null)//to avoid request more than once.
+            if (userToSet.Confidants.FirstOrDefault(c => c.ConfidantUserId == request.RequestUserId) is not null)//to avoid request more than once.
                 return string.Empty;
 
             FilterDefinition<UserSocialContact>? setStatueFilter = null;
@@ -25,26 +25,26 @@ namespace Innermost.Meet.API.Application.CommandHandlers.UserSocialContactAggreg
 
             if (request.ConfidantRequestStatue == ConfidantRequestStatue.Passed)
                 (setStatueFilter, setStatueUpdate) = userToSet.SetConfidantRequestPassed(request.ConfidantRequestId);
-            else if(request.ConfidantRequestStatue == ConfidantRequestStatue.Refused)
+            else if (request.ConfidantRequestStatue == ConfidantRequestStatue.Refused)
                 (setStatueFilter, setStatueUpdate) = userToSet.SetConfidantRequestRefused(request.ConfidantRequestId);
-            else if(request.ConfidantRequestStatue == ConfidantRequestStatue.RefusedAndNotReceiveRequestAnyMore)
+            else if (request.ConfidantRequestStatue == ConfidantRequestStatue.RefusedAndNotReceiveRequestAnyMore)
                 (setStatueFilter, setStatueUpdate) = userToSet.SetConfidantRequestRefusedAndNotReceiveRequestAnyMore(request.ConfidantRequestId);
 
             if (setStatueFilter is null || setStatueUpdate is null)
                 return $"ConfidantRequest(Id:{request.ConfidantRequestId}) is not existed or the request's statue has been set.";
 
-            var updateResult=await _userSocialContactRepository.UpdateUserSocialContactAsync(request.UserId!,setStatueUpdate,setStatueFilter);
+            var updateResult = await _userSocialContactRepository.UpdateUserSocialContactAsync(request.UserId!, setStatueUpdate, setStatueFilter);
 
             //if passed add confidant to each other.
-            if(request.ConfidantRequestStatue == ConfidantRequestStatue.Passed&&!userToSet.Confidants.Any(c=>c.ConfidantUserId==request.RequestUserId))
+            if (request.ConfidantRequestStatue == ConfidantRequestStatue.Passed && !userToSet.Confidants.Any(c => c.ConfidantUserId == request.RequestUserId))
             {
                 var requestUser = await _userSocialContactRepository.GetUserSocialContactAsync(request.RequestUserId);
 
-                var chattingContextId=ObjectId.GenerateNewId().ToString();
+                var chattingContextId = ObjectId.GenerateNewId().ToString();
 
-                var addConfidantTime=DateTime.Now;
+                var addConfidantTime = DateTime.Now;
                 var addConfidantUpdateUserToSet = userToSet.AddConfidant(new Confidant(request.RequestUserId, chattingContextId, addConfidantTime));
-                var addConfidantUpdateRequestUser=requestUser.AddConfidant(new Confidant(request.UserId!, chattingContextId, addConfidantTime));
+                var addConfidantUpdateRequestUser = requestUser.AddConfidant(new Confidant(request.UserId!, chattingContextId, addConfidantTime));
 
                 await _userSocialContactRepository.UpdateUserSocialContactAsync(request.UserId!, addConfidantUpdateUserToSet);
                 await _userSocialContactRepository.UpdateUserSocialContactAsync(request.RequestUserId!, addConfidantUpdateRequestUser);

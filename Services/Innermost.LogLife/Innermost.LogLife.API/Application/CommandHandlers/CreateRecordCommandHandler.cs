@@ -1,6 +1,4 @@
-﻿using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.ValueObjects;
-
-namespace Innermost.LogLife.API.Application.CommandHandlers
+﻿namespace Innermost.LogLife.API.Application.CommandHandlers
 {
     public class CreateRecordCommandHandler : IRequestHandler<CreateRecordCommand, bool>
     {
@@ -16,14 +14,14 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
             List<TagSummary<int, LifeRecord>> tagSummaries = request.TagSummaries!.Select(t => new TagSummary<int, LifeRecord>(t.Key, t.Value)).ToList();//at least one emotion tag.
             LifeRecord lifeRecord = new LifeRecord(request.UserId!, request.Title, request.Text, request.LocationUId, request.MusicId, request.CreateTime!.Value, null, null, request.IsShared, imagePaths, tagSummaries);
 
-            if(request.LocationUId is not null)
+            if (request.LocationUId is not null)
             {
                 Location location = new Location(
-                    request.LocationUId, 
-                    request.LocationName??throw new NullReferenceException(nameof(request.LocationName)), 
-                    request.Province ?? throw new NullReferenceException(nameof(request.Province)), 
-                    request.City ?? throw new NullReferenceException(nameof(request.City)), 
-                    request.Address ?? throw new NullReferenceException(nameof(request.Address)), 
+                    request.LocationUId,
+                    request.LocationName ?? throw new NullReferenceException(nameof(request.LocationName)),
+                    request.Province ?? throw new NullReferenceException(nameof(request.Province)),
+                    request.City ?? throw new NullReferenceException(nameof(request.City)),
+                    request.Address ?? throw new NullReferenceException(nameof(request.Address)),
                     new BaiduPOI(request.Longitude!.Value, request.Latitude!.Value),
                     request.District
                 );
@@ -31,22 +29,22 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
                 lifeRecord.Location = location;
             }
 
-            if(request.MusicId is not null)
+            if (request.MusicId is not null)
             {
                 MusicRecord musicRecord = new MusicRecord(
-                    request.MusicId, 
-                    request.MusicName ?? throw new NullReferenceException(nameof(request.MusicName)), 
-                    request.Singer ?? throw new NullReferenceException(nameof(request.Singer)), 
+                    request.MusicId,
+                    request.MusicName ?? throw new NullReferenceException(nameof(request.MusicName)),
+                    request.Singer ?? throw new NullReferenceException(nameof(request.Singer)),
                     request.Album ?? throw new NullReferenceException(nameof(request.Album))
                 );
 
-                lifeRecord.MusicRecord=musicRecord;
+                lifeRecord.MusicRecord = musicRecord;
             }
 
             await _lifeRecordRepository.AddAsync(lifeRecord);
             await _lifeRecordRepository.UnitOfWork.SaveChangesAsync();
 
-            if(request.IsShared)
+            if (request.IsShared)
             {
                 lifeRecord.SetShared();
             }
@@ -56,7 +54,7 @@ namespace Innermost.LogLife.API.Application.CommandHandlers
                 lifeRecord.AddDomainEventForAddingTag(tag);
             }
 
-            return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken,false);
+            return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken, false);
         }
     }
 

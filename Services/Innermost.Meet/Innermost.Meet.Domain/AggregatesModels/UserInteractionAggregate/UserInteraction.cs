@@ -15,7 +15,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate
         public UserInteraction(string userId, List<RecordLike>? recordLikes)
         {
             UserId = userId;
-            _recordLikes = recordLikes??new List<RecordLike>();
+            _recordLikes = recordLikes ?? new List<RecordLike>();
         }
 
         public UpdateDefinition<UserInteraction> AddRecordLike(RecordLike recordLike)

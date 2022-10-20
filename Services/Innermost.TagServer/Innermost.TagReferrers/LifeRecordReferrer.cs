@@ -33,19 +33,19 @@ namespace Innermost.TagReferrers
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime? DeleteTime { get; set; }
-        
+
         public LifeRecordReferrer(int recordId, string userId, string? title, string text,
             string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
             string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
-            DateTime createTime, DateTime? updateTime, DateTime? deleteTime):base(recordId)
+            DateTime createTime, DateTime? updateTime, DateTime? deleteTime) : base(recordId)
         {
             UserId = userId; Title = title; Text = text;
 
             LocationUId = locationUId; LocationName = locationName; Province = province; City = city; District = district; Address = address;
             //Location can be null.However,the baiduPOI with geo index can not be null.
             //So if location is null,we add longitude and latitude of "天涯海角" to record.
-            Longitude=longitude??(float)109.359673; Latitude=latitude?? (float)18.298693;
+            Longitude = longitude ?? (float)109.359673; Latitude = latitude ?? (float)18.298693;
 
             MusicRecordMId = musicId; MusicName = musicName; Singer = singer; Album = album;
 

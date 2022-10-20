@@ -24,7 +24,7 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UpdateResult> UpdateUserSocialContactAsync(string userSocialContactUserId, UpdateDefinition<UserSocialContact> updateDefinition, params FilterDefinition<UserSocialContact>[] filterDefinitions)
         {
-            var idFilter=Builders<UserSocialContact>.Filter.Eq(usc => usc.UserId, userSocialContactUserId);
+            var idFilter = Builders<UserSocialContact>.Filter.Eq(usc => usc.UserId, userSocialContactUserId);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.UserSocialContacts.UpdateOneAsync(filter, updateDefinition);

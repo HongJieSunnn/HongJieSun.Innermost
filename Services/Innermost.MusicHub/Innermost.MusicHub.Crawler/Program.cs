@@ -1,6 +1,5 @@
 ﻿using Innermost.MusicHub.Crawler;
 using Innermost.MusicHub.Crawler.Migrations;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 

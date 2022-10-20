@@ -12,7 +12,7 @@ namespace Innermost.MusicHub.Crawler.Migrations
         {
             _crawlerMongoDBContext = DependencyInjection.ServiceProvider.GetRequiredService<CrawlerMongoDBContext>();
             _context = DependencyInjection.ServiceProvider.GetRequiredService<MusicHubMongoDBContext>();
-            _logger= DependencyInjection.ServiceProvider.GetRequiredService<Serilog.ILogger>();
+            _logger = DependencyInjection.ServiceProvider.GetRequiredService<Serilog.ILogger>();
         }
 
         public async Task MigrateSingerToMusicHubMongoDBContext()
@@ -21,23 +21,23 @@ namespace Innermost.MusicHub.Crawler.Migrations
             var singerCount = await _crawlerMongoDBContext.Singers.CountDocumentsAsync(_ => true);
 
             List<SingerEntity> singerEntities;
-            IEnumerable<Task<Singer>>? singers=null;
+            IEnumerable<Task<Singer>>? singers = null;
             for (int i = 0; i < singerCount; i += 1000)
             {
-                _logger.Information($"Migrate singers from {i} to {i+1000}");
+                _logger.Information($"Migrate singers from {i} to {i + 1000}");
                 singerEntities = await _crawlerMongoDBContext.Singers.Find(_ => true).Skip(i).Limit(1000).ToListAsync();
                 _logger.Information($"Get singer entities count {singerEntities.Count}");
 
                 singers = singerEntities.Select(async s =>
                 {
                     var singerAlbumEntities = await _crawlerMongoDBContext.Albums.Find(a => a.SingerMid == s.SingerMid).ToListAsync();
-                    singerAlbumEntities=singerAlbumEntities.OrderByDescending(a => a.PublishDate).ToList();
+                    singerAlbumEntities = singerAlbumEntities.OrderByDescending(a => a.PublishDate).ToList();
                     return new Singer(
                         s.SingerMid, s.SingerId,
                         s.SingerName, s.SingerAlias,
                         s.SingerNationality, s.SingerBirthplace, s.SingerOccupation, s.SingerBirthplace, s.SingerRepresentativeWorks, s.SingerRegion, s.SingerCoverUrl,
 
-                        singerAlbumEntities.Select(sa => new SingerAlbum(sa.AlbumMid, sa.AlbumName, sa.AlbumDescriptions, sa.AlbumGenre, sa.AlbumLanguage,sa.AlbumCoverUrl, sa.AlbumSongCount, sa.PublishCompany, sa.PublishDate)).ToList()
+                        singerAlbumEntities.Select(sa => new SingerAlbum(sa.AlbumMid, sa.AlbumName, sa.AlbumDescriptions, sa.AlbumGenre, sa.AlbumLanguage, sa.AlbumCoverUrl, sa.AlbumSongCount, sa.PublishCompany, sa.PublishDate)).ToList()
                     );
                 });
                 _logger.Information("Start insert singers");

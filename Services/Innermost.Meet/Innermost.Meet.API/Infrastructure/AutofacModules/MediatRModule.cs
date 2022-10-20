@@ -1,11 +1,8 @@
-﻿using CommonService.Behaviors;
-using Innermost.Meet.API.Application.IntegrationEventHandles;
-using MediatR.Extensions.Autofac.DependencyInjection;
-using TagS.Microservices.Client.AutofacExtensions;
+﻿using MediatR.Extensions.Autofac.DependencyInjection;
 
 namespace Innermost.Meet.API.Infrastructure.AutofacModules
 {
-    internal class MediatRModule: Autofac.Module
+    internal class MediatRModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {

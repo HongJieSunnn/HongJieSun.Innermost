@@ -2,16 +2,16 @@
 {
     public class SingerAlbumDTO
     {
-        public string Mid { get;private set; }
+        public string Mid { get; private set; }
         public string AlbumName { get; private set; }
         public string AlbumDescriptions { get; private set; }
         public string AlbumGenre { get; private set; }
         public string AlbumLanguage { get; private set; }
-        public string AlbumCoverUrl { get;private set; }
+        public string AlbumCoverUrl { get; private set; }
         public int AlbumSongCount { get; private set; }
         public string PublishCompany { get; private set; }
         public string PublishTime { get; private set; }
-        public SingerAlbumDTO(string mid, string albumName, string albumDescriptions, string albumGenre, string albumLanguage,string albumCoverUrl, int albumSongCount, string publishCompany, string publishTime)
+        public SingerAlbumDTO(string mid, string albumName, string albumDescriptions, string albumGenre, string albumLanguage, string albumCoverUrl, int albumSongCount, string publishCompany, string publishTime)
         {
             Mid = mid;
             AlbumName = albumName;

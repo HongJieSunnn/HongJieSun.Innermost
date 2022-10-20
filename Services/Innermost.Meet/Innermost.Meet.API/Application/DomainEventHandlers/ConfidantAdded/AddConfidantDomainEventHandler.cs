@@ -8,7 +8,7 @@ namespace Innermost.Meet.API.Application.DomainEventHandlers.ConfidantAdded
         private readonly IUserChattingContextRepository _userChattingContextRepository;
         public AddConfidantDomainEventHandler(IUserChattingContextRepository userChattingContextRepository)
         {
-            _userChattingContextRepository= userChattingContextRepository;
+            _userChattingContextRepository = userChattingContextRepository;
         }
         public async Task Handle(AddConfidantDomainEvent notification, CancellationToken cancellationToken)
         {

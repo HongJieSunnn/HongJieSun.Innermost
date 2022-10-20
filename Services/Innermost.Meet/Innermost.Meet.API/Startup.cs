@@ -1,12 +1,8 @@
-﻿using CommonIdentityService.Extensions;
-using EventBusServiceBus.Extensions;
-using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
+﻿using EventBusServiceBus.Extensions;
 using Innermost.Identity.API.UserStatue;
-using Innermost.IServiceCollectionExtensions;
 using Innermost.Meet.API.Application.IntegrationEventHandles;
 using Innermost.Meet.API.Infrastructure.AutofacModules;
 using Innermost.Meet.Infrastructure.Repositories;
-using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
@@ -117,7 +113,7 @@ namespace Innermost.Meet.API
                     options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                     options.Audience = "meet";
 
-                    if(configuration.GetValue<string>("LocalhostValidIssuer")!=null)
+                    if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
                         options.TokenValidationParameters.ValidIssuers = new[] { configuration.GetValue<string>("LocalhostValidIssuer") };
                 });
 
@@ -172,7 +168,7 @@ namespace Innermost.Meet.API
             return services;
         }
 
-        public static IServiceCollection AddMeetGrpcClients(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddMeetGrpcClients(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options =>
             {

@@ -7,15 +7,15 @@ namespace Innermost.Meet.Infrastructure.Repositories
         private readonly IClientSessionHandle _session;
         public IUnitOfWork UnitOfWork => _context;
 
-        public UserInteractionRepository(MeetMongoDBContext context,IClientSessionHandle session)
+        public UserInteractionRepository(MeetMongoDBContext context, IClientSessionHandle session)
         {
-            _context=context;
-            _session=session;
+            _context = context;
+            _session = session;
         }
 
         public Task<UserInteraction> GetUserInteractionAsync(string interactiveUserId)
         {
-            return _context.UserInteractions.Find(ui=>ui.UserId==interactiveUserId).FirstAsync();
+            return _context.UserInteractions.Find(ui => ui.UserId == interactiveUserId).FirstAsync();
         }
 
         public Task AddUserInteractionAsync(UserInteraction userInteraction)
@@ -33,10 +33,10 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UpdateResult> UpdateManyUserInteractionsAsync(IEnumerable<string> interactiveUserIds, UpdateDefinition<UserInteraction> updateDefinition, params FilterDefinition<UserInteraction>[] filterDefinitions)
         {
-            var idFilter=Builders<UserInteraction>.Filter.In(ui => ui.UserId, interactiveUserIds);
+            var idFilter = Builders<UserInteraction>.Filter.In(ui => ui.UserId, interactiveUserIds);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
-            return _context.UserInteractions.UpdateManyAsync(_session,filter, updateDefinition);
+            return _context.UserInteractions.UpdateManyAsync(_session, filter, updateDefinition);
         }
     }
 }

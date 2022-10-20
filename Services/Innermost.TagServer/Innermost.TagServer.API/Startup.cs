@@ -1,7 +1,4 @@
-﻿using CommonService.IdentityService.Extensions;
-using EventBusServiceBus.Extensions;
-using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
-using Innermost.IServiceCollectionExtensions;
+﻿using EventBusServiceBus.Extensions;
 using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
 using IntegrationEventServiceMongoDB.Extensions;

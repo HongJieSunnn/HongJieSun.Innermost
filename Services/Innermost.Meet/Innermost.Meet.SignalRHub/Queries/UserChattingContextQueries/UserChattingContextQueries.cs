@@ -7,10 +7,10 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
     {
         private readonly MeetMongoDBContext _context;
         private readonly IChattingRecordRedisService _chattingRecordRedisService;
-        public UserChattingContextQueries(MeetMongoDBContext context,IChattingRecordRedisService chattingRecordRedisService)
+        public UserChattingContextQueries(MeetMongoDBContext context, IChattingRecordRedisService chattingRecordRedisService)
         {
-            _context=context;
-            _chattingRecordRedisService=chattingRecordRedisService;
+            _context = context;
+            _chattingRecordRedisService = chattingRecordRedisService;
         }
         public async Task<IEnumerable<string>> GetAllChattingContextIdsOfUserAsync(string userId)
         {
@@ -26,9 +26,9 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
             var users = new[] { userId1, userId2 }.OrderBy(s => s).ToArray();
 
             var filter = Builders<UserChattingContext>.Filter.Eq(ucc => ucc.Users, users);
-            var chattingContextIdProjection=Builders<UserChattingContext>.Projection.Include("_id");//To avoid take chattingRecords which may be very large.
+            var chattingContextIdProjection = Builders<UserChattingContext>.Projection.Include("_id");//To avoid take chattingRecords which may be very large.
 
-            var chattingContext =await _context.UserChattingContexts.Find(filter).Project(chattingContextIdProjection).FirstAsync();
+            var chattingContext = await _context.UserChattingContexts.Find(filter).Project(chattingContextIdProjection).FirstAsync();
 
             return chattingContext["_id"].ToString()!;
         }
@@ -36,9 +36,9 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
         public async Task<IEnumerable<ChattingRecordDTO>> GetChattingRecordsAsync(string chattingContextId, int page = 1, int limit = 50)
         {
             var chattingRecordsInRedisList = new List<ChattingRecordDTO>();
-            var chattingRecordsInRedis=await _chattingRecordRedisService.GetAllChattingRecordsAsync(chattingContextId);
+            var chattingRecordsInRedis = await _chattingRecordRedisService.GetAllChattingRecordsAsync(chattingContextId);
 
-            if(chattingRecordsInRedis.Any())
+            if (chattingRecordsInRedis.Any())
             {
                 chattingRecordsInRedisList.AddRange(chattingRecordsInRedis.Skip((page - 1) * limit).Take(limit));
 
@@ -56,7 +56,7 @@ namespace Innermost.Meet.SignalRHub.Queries.UserChattingContextQueries
 
             //Slice:https://www.mongodb.com/docs/manual/reference/operator/aggregation/slice/#mongodb-expression-exp.-slice
             //Projections:https://mongodb.github.io/mongo-csharp-driver/2.14/reference/driver/definitions/
-            var projection =Builders<UserChattingContext>.Projection.Slice("ChattingRecords", skipForMongoDB, limitForMongoDB);
+            var projection = Builders<UserChattingContext>.Projection.Slice("ChattingRecords", skipForMongoDB, limitForMongoDB);
 
             var chattingRecordsInMongoDB = await _context.UserChattingContexts.Find(filter).Project<UserChattingContext>(projection).FirstAsync();
 

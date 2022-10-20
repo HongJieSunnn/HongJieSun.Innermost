@@ -1,8 +1,6 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
 using Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate;
 using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate;
-using Innermost.MongoDBContext;
-using Innermost.MongoDBContext.Configurations;
 using MediatR;
 
 namespace Innermost.Meet.Infrastructure
@@ -20,9 +18,9 @@ namespace Innermost.Meet.Infrastructure
 
         }
 
-        public MeetMongoDBContext(MongoDBContextConfiguration<MeetMongoDBContext> contextConfiguration,IMediator mediator) : base(contextConfiguration)
+        public MeetMongoDBContext(MongoDBContextConfiguration<MeetMongoDBContext> contextConfiguration, IMediator mediator) : base(contextConfiguration)
         {
-            _mediator=mediator;
+            _mediator = mediator;
             CreateIndexes();
         }
 
@@ -40,17 +38,17 @@ namespace Innermost.Meet.Infrastructure
             {
                 var recordIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.RecordId);
                 var userIdIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.UserId);
-                var textIndex= Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.Text);
-                var locationUidIndex= Builders<SharedLifeRecord>.IndexKeys.Ascending("Location.LocationUid");
+                var textIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.Text);
+                var locationUidIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending("Location.LocationUid");
                 var locationIndex = Builders<SharedLifeRecord>.IndexKeys.Geo2DSphere("Location.BaiduPOI");
                 var musicMidIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending("MusicRecord.MusicMid");
-                var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl=>sl.CreateTime);
-                var likecountIndex = Builders<SharedLifeRecord>.IndexKeys.Descending(sl=>sl.LikesCount);
+                var createTimeIndex = Builders<SharedLifeRecord>.IndexKeys.Ascending(sl => sl.CreateTime);
+                var likecountIndex = Builders<SharedLifeRecord>.IndexKeys.Descending(sl => sl.LikesCount);
 
 
 
-                var createUniqueIndexModels = new[] { recordIdIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al,new CreateIndexOptions() { Unique=true}));
-                var createIndexModels = new[] { userIdIndex,textIndex, locationIndex,createTimeIndex, locationUidIndex, musicMidIndex, likecountIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
+                var createUniqueIndexModels = new[] { recordIdIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al, new CreateIndexOptions() { Unique = true }));
+                var createIndexModels = new[] { userIdIndex, textIndex, locationIndex, createTimeIndex, locationUidIndex, musicMidIndex, likecountIndex }.Select(al => new CreateIndexModel<SharedLifeRecord>(al)).ToList();
 
                 createIndexModels.AddRange(createUniqueIndexModels);
                 if (createIndexModels.Any())
@@ -62,10 +60,10 @@ namespace Innermost.Meet.Infrastructure
         {
             if (!UserInteractions!.Indexes.List().Any())
             {
-                var userIdIndex= Builders<UserInteraction>.IndexKeys.Ascending(sl => sl.UserId);
+                var userIdIndex = Builders<UserInteraction>.IndexKeys.Ascending(sl => sl.UserId);
 
                 var createUniqueIndexModels = new[] { userIdIndex }.Select(al => new CreateIndexModel<UserInteraction>(al, new CreateIndexOptions() { Unique = true }));
-                var createIndexModels = new IndexKeysDefinition<UserInteraction>[] {  }.Select(al => new CreateIndexModel<UserInteraction>(al)).ToList();
+                var createIndexModels = new IndexKeysDefinition<UserInteraction>[] { }.Select(al => new CreateIndexModel<UserInteraction>(al)).ToList();
 
                 createIndexModels.AddRange(createUniqueIndexModels);
                 if (createIndexModels.Any())
@@ -94,7 +92,7 @@ namespace Innermost.Meet.Infrastructure
             {
                 var usersIndex = Builders<UserChattingContext>.IndexKeys.Ascending("Users");
 
-                var createUniqueIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al,new CreateIndexOptions()
+                var createUniqueIndexModels = new IndexKeysDefinition<UserChattingContext>[] { }.Select(al => new CreateIndexModel<UserChattingContext>(al, new CreateIndexOptions()
                 {
                     Unique = true,
                 }));
@@ -107,7 +105,7 @@ namespace Innermost.Meet.Infrastructure
             }
         }
 
-        public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>,IAggregateRoot
+        public async Task<bool> SaveEntitiesAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : Entity<string>, IAggregateRoot
         {
             if (entity.DomainEvents is not null)
             {

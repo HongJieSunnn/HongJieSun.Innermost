@@ -2,9 +2,9 @@
 {
     public class LifeRecordDeletedDomainEventHandler : INotificationHandler<LifeRecordDeletedDomainEvent>
     {
-        private readonly ILogger<LifeRecordDeletedDomainEventHandler> _logger; 
+        private readonly ILogger<LifeRecordDeletedDomainEventHandler> _logger;
         private readonly ILogLifeIntegrationEventService _logLifeIntegrationEventService;
-        public LifeRecordDeletedDomainEventHandler(ILogger<LifeRecordDeletedDomainEventHandler> logger,ILogLifeIntegrationEventService logLifeIntegrationEventService)
+        public LifeRecordDeletedDomainEventHandler(ILogger<LifeRecordDeletedDomainEventHandler> logger, ILogLifeIntegrationEventService logLifeIntegrationEventService)
         {
             _logger = logger;
             _logLifeIntegrationEventService = logLifeIntegrationEventService;

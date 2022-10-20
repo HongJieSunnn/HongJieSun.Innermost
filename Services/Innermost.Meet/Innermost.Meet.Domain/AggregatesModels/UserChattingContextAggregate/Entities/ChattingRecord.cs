@@ -1,7 +1,4 @@
-﻿using TagS.Microservices.Client.DomainSeedWork;
-using TagS.Microservices.Client.Models;
-
-namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate.Entities
+﻿namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate.Entities
 {
     /// <summary>
     /// ChattingRecord tagable entity.
@@ -13,9 +10,9 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate.Entities
         public string SendUserId { get; init; }
         public string RecordMessage { get; init; }
         public DateTime CreateTime { get; init; }
-        public ChattingRecord(string sendUserId,string recordMessage,DateTime createTime,List<TagSummary> tagSummaries) : base(tagSummaries)
+        public ChattingRecord(string sendUserId, string recordMessage, DateTime createTime, List<TagSummary> tagSummaries) : base(tagSummaries)
         {
-            Id=ObjectId.GenerateNewId().ToString();
+            Id = ObjectId.GenerateNewId().ToString();
             SendUserId = sendUserId;
             RecordMessage = recordMessage;
             CreateTime = createTime;

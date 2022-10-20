@@ -5,6 +5,6 @@
         /// <summary>
         /// Key is full name.Value is short name.
         /// </summary>
-        public static Dictionary<string,string> CategoriesFullNameDictionary = new Dictionary<string,string>();
+        public static Dictionary<string, string> CategoriesFullNameDictionary = new Dictionary<string, string>();
     }
 }

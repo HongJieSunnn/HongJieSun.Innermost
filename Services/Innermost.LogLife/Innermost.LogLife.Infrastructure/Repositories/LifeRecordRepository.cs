@@ -14,7 +14,7 @@ namespace Innermost.LogLife.Infrastructure.Repositories
 
         public async Task<LifeRecord> AddAsync(LifeRecord lifeRecord)
         {
-            var entry=_context.Update(lifeRecord);
+            var entry = _context.Update(lifeRecord);
 
             await AddLocationAsync(lifeRecord);
             await AddMusicRecordAsync(lifeRecord);
@@ -31,8 +31,8 @@ namespace Innermost.LogLife.Infrastructure.Repositories
 
         public async Task<LifeRecord?> DeleteAsync(int id, string userId)
         {
-            var records=await _context.LifeRecords.Where(l=>l.Id == id&&l.DeleteTime == null).Include(l=>l.Tags).ToListAsync();
-            var record=records.FirstOrDefault(l=>l.UserId==userId);//if record is not existed.The First method will throw exceptions.
+            var records = await _context.LifeRecords.Where(l => l.Id == id && l.DeleteTime == null).Include(l => l.Tags).ToListAsync();
+            var record = records.FirstOrDefault(l => l.UserId == userId);//if record is not existed.The First method will throw exceptions.
             record?.SetDeleted();
             return record;
         }
@@ -42,17 +42,17 @@ namespace Innermost.LogLife.Infrastructure.Repositories
             //if we return _context.LifeRecords.FirstOrDefaultAsync(l => l.Id == id&&l.UserId==userId)
             //there calls error : Translation of member 'UserId' on entity type 'LifeRecord' failed. This commonly occurs when the specified member is unmapped.
             //I guess that we mapped _userId field instead of UserId property,so efcore can not transalate that expression to SQL.see https://docs.microsoft.com/zh-cn/ef/core/querying/client-eval
-            var records =await _context.LifeRecords.Where(l => l.Id == id).ToListAsync();
-            return records.FirstOrDefault(r=>r.UserId== userId);
+            var records = await _context.LifeRecords.Where(l => l.Id == id).ToListAsync();
+            return records.FirstOrDefault(r => r.UserId == userId);
         }
 
         private async Task AddLocationAsync(LifeRecord lifeRecord)
         {
-            if(lifeRecord.Location is not null)
+            if (lifeRecord.Location is not null)
             {
-                var existed=await _context.Locations.ContainsAsync(lifeRecord.Location);
+                var existed = await _context.Locations.ContainsAsync(lifeRecord.Location);
 
-                if(!existed)
+                if (!existed)
                 {
                     var location = _context.ChangeTracker.Entries<Location>().First(e => e.Entity.Id == lifeRecord.LocationUId && e.State == EntityState.Modified);
                     var baiduPOI = _context.ChangeTracker.Entries<BaiduPOI>().First(e => e.Properties.FirstOrDefault(p => p.CurrentValue == lifeRecord.LocationUId) is not null && e.State == EntityState.Modified);
@@ -72,7 +72,7 @@ namespace Innermost.LogLife.Infrastructure.Repositories
                 if (!existed)
                 {
                     var musicRecord = _context.ChangeTracker.Entries<MusicRecord>().First(e => e.Entity.Id == lifeRecord.MusicRecordMId && e.State == EntityState.Modified);
-                    
+
                     musicRecord.State = EntityState.Added;
                 }
             }
@@ -80,12 +80,12 @@ namespace Innermost.LogLife.Infrastructure.Repositories
 
         private async Task AddTagSummariesAsync(LifeRecord lifeRecord)
         {
-            var tagSummariesExisted =await _context.TagSummaries.Where(t => lifeRecord.Tags.Contains(t)).ToListAsync();
+            var tagSummariesExisted = await _context.TagSummaries.Where(t => lifeRecord.Tags.Contains(t)).ToListAsync();
             var tagSummariesTrackers = _context.ChangeTracker.Entries<TagSummary<int, LifeRecord>>().Where(t => !tagSummariesExisted.Contains(t.Entity));
 
-            foreach(var tagSummary in tagSummariesTrackers)
+            foreach (var tagSummary in tagSummariesTrackers)
             {
-                tagSummary.State= EntityState.Added;
+                tagSummary.State = EntityState.Added;
             }
         }
     }

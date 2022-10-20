@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using TagS.Microservices.Client.Models;
 
 namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
 {
@@ -18,7 +17,7 @@ namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
 
             List<SharedLifeRecord> records;
 
-            if(filter is null)
+            if (filter is null)
                 records = await _context.SharedLifeRecords.AsQueryable().Where(l => l.UserId != userId).Sample(limit).ToListAsync();//Method Sample(in MongoDD.Driver.Linq) is to get random limit count records.
             else
                 records = await _context.SharedLifeRecords.AsQueryable().Where(l => l.UserId != userId).Where(filter).Sample(limit).ToListAsync();

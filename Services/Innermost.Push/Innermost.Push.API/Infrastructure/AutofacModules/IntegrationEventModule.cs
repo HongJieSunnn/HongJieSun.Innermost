@@ -1,5 +1,4 @@
-﻿using Autofac;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Innermost.Push.API.Infrastructure.AutofacModules
 {

@@ -1,9 +1,9 @@
 ﻿namespace Innermost.LogLife.Domain.Events.LifeRecordEvents
 {
-    public class LifeRecordSetSharedDomainEvent:INotification
+    public class LifeRecordSetSharedDomainEvent : INotification
     {
         public int RecordId { get; private set; }
-        public string UserId { get;private set; }
+        public string UserId { get; private set; }
         public string? Title { get; private set; }
         public string Text { get; private set; }
 
@@ -30,25 +30,25 @@
         public List<(string TagId, string TagName)> TagSummaries { get; private set; }
 
         public LifeRecordSetSharedDomainEvent(
-            int recordId,string userId,string? title,string text,
-            string? locationUId,string? locationName,string? province,string? city,string? district,string? address,float? longitude,float? latitude,
-            string? musicId,string? musicName,string? singer,string? album,
+            int recordId, string userId, string? title, string text,
+            string? locationUId, string? locationName, string? province, string? city, string? district, string? address, float? longitude, float? latitude,
+            string? musicId, string? musicName, string? singer, string? album,
             List<string>? imagePaths,
-            DateTime createTime,DateTime? updateTime,DateTime? deleteTime,
+            DateTime createTime, DateTime? updateTime, DateTime? deleteTime,
             List<(string TagId, string TagName)> tagSummaries
         )
         {
-            RecordId= recordId; UserId=userId; Title=title; Text=text; 
+            RecordId = recordId; UserId = userId; Title = title; Text = text;
 
-            LocationUId=locationUId; LocationName = locationName;Province=province; City=city; District=district; Address=address;Longitude=longitude;Latitude=latitude;
+            LocationUId = locationUId; LocationName = locationName; Province = province; City = city; District = district; Address = address; Longitude = longitude; Latitude = latitude;
 
-            MusicId=musicId; MusicName=musicName; Singer=singer; Album=album; 
+            MusicId = musicId; MusicName = musicName; Singer = singer; Album = album;
 
-            ImagePaths=imagePaths;
+            ImagePaths = imagePaths;
 
-            CreateTime = createTime; UpdateTime=updateTime; DeleteTime=deleteTime;
+            CreateTime = createTime; UpdateTime = updateTime; DeleteTime = deleteTime;
 
-            TagSummaries=tagSummaries;
+            TagSummaries = tagSummaries;
         }
     }
 }

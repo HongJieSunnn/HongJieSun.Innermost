@@ -12,12 +12,12 @@ namespace Innermost.Intelligence.API.Services.Recommendations
         private readonly Random _random;
         private readonly Dictionary<string, Func<Task<LogLifeRecommendationResult>>> _negativeEmotionRecommendationFunctions;
         private const string mixedRecommandationReulstContent = "很少有记录对应的情绪会被系统判断为 mixed ，我们相信，留下这段记录的你一定是一个具有深度思想的人，希望你能尽情遨游在自己的思想海洋中，希望你能慢慢探索至你的 Innermost。";
-        public LifeRecordRecommendationService(IDailySentenceService dailySentenceService,MusicRecordGrpc.MusicRecordGrpcClient musicRecordGrpcClient)
+        public LifeRecordRecommendationService(IDailySentenceService dailySentenceService, MusicRecordGrpc.MusicRecordGrpcClient musicRecordGrpcClient)
         {
-            _dailySentenceService=dailySentenceService;
-            _musicRecordGrpcClient=musicRecordGrpcClient;
+            _dailySentenceService = dailySentenceService;
+            _musicRecordGrpcClient = musicRecordGrpcClient;
 
-            _random=new Random();
+            _random = new Random();
             _negativeEmotionRecommendationFunctions = new Dictionary<string, Func<Task<LogLifeRecommendationResult>>>
             {
                 { "NegativeEmotionMusicRecommendationResult",GetNegativeEmotionMusicRecommendationAsync},
@@ -41,7 +41,7 @@ namespace Innermost.Intelligence.API.Services.Recommendations
 
         private async Task<LogLifeRecommendationResult> GetPositiveEmotionRecommendationAsync()
         {
-            var dailySentence =await _dailySentenceService.GetRandomDateDailySentenceAsync();
+            var dailySentence = await _dailySentenceService.GetRandomDateDailySentenceAsync();
             return new LogLifeRecommendationResult("PositiveEmotionRecommendationResult", dailySentence);
         }
 
@@ -59,7 +59,7 @@ namespace Innermost.Intelligence.API.Services.Recommendations
             var musicRecordTagGrpcDTO = new MusicRecordTagGrpcDTO();
             musicRecordTagGrpcDTO.TagName.Add(randomMusicTag);
 
-            var musicRecord =await _musicRecordGrpcClient.GetRandomMusicRecordByTagAsync(musicRecordTagGrpcDTO);
+            var musicRecord = await _musicRecordGrpcClient.GetRandomMusicRecordByTagAsync(musicRecordTagGrpcDTO);
 
             return new LogLifeRecommendationResult("NegativeEmotionMusicRecommendationResult", JsonSerializer.Serialize(musicRecord));
         }

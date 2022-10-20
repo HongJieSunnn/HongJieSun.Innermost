@@ -1,6 +1,4 @@
-﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate;
-
-namespace Innermost.Meet.Domain.Repositories
+﻿namespace Innermost.Meet.Domain.Repositories
 {
     public interface ISharedLifeRecordRepository : IRepository<SharedLifeRecord>
     {
@@ -17,7 +15,7 @@ namespace Innermost.Meet.Domain.Repositories
         /// <param name="filterDefinitions">Sometimes we may update elements,so we need more filterDefinitions.</param>
         /// <returns></returns>
         Task<UpdateResult> UpdateSharedLifeRecordAsync(string sharedLifeRecordObjectId, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions);
-        Task<UpdateResult> UpdateSharedLifeRecordAsync(int lifeRecordId, UpdateDefinition<SharedLifeRecord> updateDefinition,params FilterDefinition<SharedLifeRecord>[] filterDefinitions);
+        Task<UpdateResult> UpdateSharedLifeRecordAsync(int lifeRecordId, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions);
         Task<ReplaceOneResult> UpdateSharedLifeRecordAsync(SharedLifeRecord sharedLifeRecord);
 
 

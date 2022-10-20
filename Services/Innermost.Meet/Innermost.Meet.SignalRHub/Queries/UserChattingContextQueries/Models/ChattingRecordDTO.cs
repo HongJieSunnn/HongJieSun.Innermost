@@ -7,13 +7,13 @@
         public string RecordMessage { get; init; }
         public List<TagSummaryDTO> TagSummaries { get; init; }
         public DateTime CreateTime { get; init; }
-        public ChattingRecordDTO(string chattingRecordId,string sendUserId,string recordMessage,DateTime createTime, List<TagSummaryDTO>? tagSummaries)
+        public ChattingRecordDTO(string chattingRecordId, string sendUserId, string recordMessage, DateTime createTime, List<TagSummaryDTO>? tagSummaries)
         {
-            ChattingRecordId=chattingRecordId;
-            SendUserId=sendUserId;
-            RecordMessage=recordMessage;
-            TagSummaries=tagSummaries??new List<TagSummaryDTO>();
-            CreateTime=createTime;
+            ChattingRecordId = chattingRecordId;
+            SendUserId = sendUserId;
+            RecordMessage = recordMessage;
+            TagSummaries = tagSummaries ?? new List<TagSummaryDTO>();
+            CreateTime = createTime;
         }
     }
 
@@ -21,7 +21,7 @@
     {
         public string TagId { get; init; }
         public string TagName { get; init; }
-        public TagSummaryDTO(string tagId,string tagName)
+        public TagSummaryDTO(string tagId, string tagName)
         {
             TagId = tagId;
             TagName = tagName;

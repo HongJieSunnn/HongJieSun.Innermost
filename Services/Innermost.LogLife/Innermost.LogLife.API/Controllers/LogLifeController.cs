@@ -31,9 +31,9 @@
         {
             bool commandResult = false;
 
-            if(record.UserId is null)
+            if (record.UserId is null)
             {
-                record.UserId =_identityService.GetUserId();
+                record.UserId = _identityService.GetUserId();
             }
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
@@ -59,9 +59,9 @@
         {
             var commandResult = false;
 
-            if(command.UserId is null)
+            if (command.UserId is null)
             {
-                command.UserId =_identityService.GetUserId();
+                command.UserId = _identityService.GetUserId();
             }
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
@@ -87,9 +87,9 @@
         {
             var commandResult = false;
 
-            if(command.UserId ==null)
+            if (command.UserId == null)
             {
-                command.UserId=_identityService.GetUserId();
+                command.UserId = _identityService.GetUserId();
             }
 
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
@@ -111,8 +111,8 @@
         [Route("records")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetAllRecordsAsync()
-        { 
-            var records =await _lifeRecordQueries.GetAllRecordsAsync()??new List<LifeRecordDTO>();
+        {
+            var records = await _lifeRecordQueries.GetAllRecordsAsync() ?? new List<LifeRecordDTO>();
             return Ok(records.Reverse());
         }
 
@@ -123,7 +123,7 @@
         public async Task<ActionResult<LifeRecordDTO>> GetRecordByIdAsync(int id)
         {
             var records = await _lifeRecordQueries.FindRecordByRecordId(id);
-            if(records is null)
+            if (records is null)
                 return BadRequest($"The record with id:{id} is not existed.");
             return Ok(records);
         }
@@ -134,7 +134,7 @@
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByTagIdAsync(string tagId)
         {
-            var records = await _lifeRecordQueries.FindRecordsByTagIdAsync(tagId)??new List<LifeRecordDTO>();
+            var records = await _lifeRecordQueries.FindRecordsByTagIdAsync(tagId) ?? new List<LifeRecordDTO>();
             return Ok(records);
         }
 
@@ -142,10 +142,10 @@
         [Route("records/datetime")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year,string? month,string? day,string findType)
+        public async Task<ActionResult<IEnumerable<LifeRecordDTO>>> GetRecordByDateTimeAsync(string year, string? month, string? day, string findType)
         {
-            var dateTimeToFind=new DateTimeToFind(year,month,day,findType);
-            Validator.ValidateObject(dateTimeToFind,new ValidationContext(dateTimeToFind));
+            var dateTimeToFind = new DateTimeToFind(year, month, day, findType);
+            Validator.ValidateObject(dateTimeToFind, new ValidationContext(dateTimeToFind));
             var records = await _lifeRecordQueries.FindRecordsByCreateTimeAsync(dateTimeToFind) ?? new List<LifeRecordDTO>();
             return Ok(records);
         }

@@ -26,9 +26,9 @@
         }
         public MusicRecordEntity(
             string mid, int musicId,
-            string musicName, string? translatedMusicName,string? introduction,
+            string musicName, string? translatedMusicName, string? introduction,
             string? genre, string? language, string albumMid,
-            string albumCoverUrl, string musicUrl, string? wikiUrl, string? lyric, List<string> singerMids,List<string> singerNames,
+            string albumCoverUrl, string musicUrl, string? wikiUrl, string? lyric, List<string> singerMids, List<string> singerNames,
             string? publishTime)
         {
             MusicMid = mid;

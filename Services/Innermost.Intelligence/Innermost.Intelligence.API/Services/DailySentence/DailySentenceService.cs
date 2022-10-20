@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace Innermost.Intelligence.API.Services.DailySentence
+﻿namespace Innermost.Intelligence.API.Services.DailySentence
 {
     public class DailySentenceService : IDailySentenceService
     {
@@ -10,15 +8,15 @@ namespace Innermost.Intelligence.API.Services.DailySentence
         private const string DailySentenceUrl = "http://open.iciba.com/dsapi";
         public DailySentenceService(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory=httpClientFactory;
+            _httpClientFactory = httpClientFactory;
             _random = new Random();
         }
         public async Task<string> GetDailySentenceAsync()
         {
-            var client=_httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient();
 
-            var response =await client.GetAsync(DailySentenceUrl);
-            if(response.IsSuccessStatusCode)
+            var response = await client.GetAsync(DailySentenceUrl);
+            if (response.IsSuccessStatusCode)
             {
                 var content = new JObject(await response.Content.ReadAsStringAsync());
 
@@ -42,7 +40,7 @@ namespace Innermost.Intelligence.API.Services.DailySentence
             {
                 var content = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-                var sentence= content["note"]?.ToString();
+                var sentence = content["note"]?.ToString();
 
                 if (sentence is not null)
                     return sentence;

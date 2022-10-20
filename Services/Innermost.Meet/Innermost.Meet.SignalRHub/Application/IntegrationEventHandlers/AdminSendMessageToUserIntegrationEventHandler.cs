@@ -11,7 +11,7 @@ namespace Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers
         public AdminSendMessageToUserIntegrationEventHandler(
             IHubContext<ChatHub> hubContext,
             IUserChattingContextQueries userChattingContextQueries,
-            IChattingRecordRedisService chattingRecordRedisService, 
+            IChattingRecordRedisService chattingRecordRedisService,
             IdentityUserStatueGrpc.IdentityUserStatueGrpcClient identityUserStatueGrpcClient)
         {
             _hubContext = hubContext;
@@ -21,7 +21,7 @@ namespace Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers
         }
         public async Task Handle(AdminSendMessageToUserIntegrationEvent @event)
         {
-            var chattingContextId=await _userChattingContextQueries.GetChattingContextIdOfUsers(GetConnectedUserId(),@event.ToUserId);
+            var chattingContextId = await _userChattingContextQueries.GetChattingContextIdOfUsers(GetConnectedUserId(), @event.ToUserId);
 
             await SendMessageToUser(@event.ToUserId, chattingContextId, @event.Message);
         }

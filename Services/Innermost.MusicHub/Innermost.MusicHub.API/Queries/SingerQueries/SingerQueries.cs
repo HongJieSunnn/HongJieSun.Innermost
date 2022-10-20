@@ -24,7 +24,7 @@ namespace Innermost.MusicHub.API.Queries.SingerQueries
                 singer.SingerMid!, singer.SingerId, singer.SingerName, singer.SingerAlias,
                 singer.SingerNationality, singer.SingerBirthplace,
                 singer.SingerOccupation, singer.SingerBirthday, singer.SingerRepresentativeWorks, singer.SingerRegion, singer.SingerCoverUrl,
-                singer.SingerAlbums.Select(sa=>new SingerAlbumDTO(sa.AlbumMid,sa.AlbumName,sa.AlbumDescriptions,sa.AlbumGenre,sa.AlbumLanguage,sa.AlbumCoverUrl,sa.AlbumSongCount,sa.PublishCompany,sa.PublishTime)).ToList()
+                singer.SingerAlbums.Select(sa => new SingerAlbumDTO(sa.AlbumMid, sa.AlbumName, sa.AlbumDescriptions, sa.AlbumGenre, sa.AlbumLanguage, sa.AlbumCoverUrl, sa.AlbumSongCount, sa.PublishCompany, sa.PublishTime)).ToList()
             );
         }
     }

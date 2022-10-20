@@ -50,7 +50,7 @@
         private static List<TagSummaryDTO> MapToTagSummaryDTOs(dynamic record)
         {
             var tagSummaries = record.Tags.Split(",") as IEnumerable<string>;
-            return tagSummaries is not null ? 
+            return tagSummaries is not null ?
                 tagSummaries.Select(t =>
                 {
                     var kv = t.Split('-');

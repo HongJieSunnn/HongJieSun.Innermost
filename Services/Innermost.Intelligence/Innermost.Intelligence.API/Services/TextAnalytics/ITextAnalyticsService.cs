@@ -1,6 +1,4 @@
-﻿using Azure.AI.TextAnalytics;
-
-namespace Innermost.Intelligence.API.Services.TextAnalytics
+﻿namespace Innermost.Intelligence.API.Services.TextAnalytics
 {
     public interface ITextAnalyticsService
     {

@@ -60,7 +60,7 @@ namespace Innermost.Meet.SignalRHub.Hubs
 
             foreach (var chattingContextId in chattingContextIds)
             {
-                var notReceivedMessages = await _chattingRecordRedisService.GetNotReceivedChattingRecordsAsync(chattingContextId,connectedUserId);
+                var notReceivedMessages = await _chattingRecordRedisService.GetNotReceivedChattingRecordsAsync(chattingContextId, connectedUserId);
                 var setNotReceivedChattingRecordsReceivedTask = _chattingRecordRedisService.SetNotReceivedChattingRecordsReceivedAsync(chattingContextId, notReceivedMessages.Count());
 
                 foreach (var message in notReceivedMessages)

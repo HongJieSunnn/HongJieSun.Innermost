@@ -1,7 +1,5 @@
 ﻿using Innermost.MusicHub.API.Queries.MusicRecordQueries.Models;
 using Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate;
-using Innermost.MusicHub.Domain.AggregatesModels.MusicRecordAggregate.Entities;
-using System.Linq.Expressions;
 
 namespace Innermost.MusicHub.API.Queries.MusicRecordQueries
 {
@@ -18,24 +16,24 @@ namespace Innermost.MusicHub.API.Queries.MusicRecordQueries
             MusicRecord music;
 
             if (filter is not null)
-                music = await _context.MusicRecords.AsQueryable().Where(_=>filter.Inject()).Sample(1).FirstAsync();
+                music = await _context.MusicRecords.AsQueryable().Where(_ => filter.Inject()).Sample(1).FirstAsync();
             else
-                music= await _context.MusicRecords.AsQueryable().Sample(1).FirstAsync();
+                music = await _context.MusicRecords.AsQueryable().Sample(1).FirstAsync();
 
 
             return MapToMusicRecordDTO(music);
         }
 
-        public async Task<IEnumerable<MusicRecordDTO>> SearchMusicRecordAsync(string musicRecordName,int page=1,int limit=25)
+        public async Task<IEnumerable<MusicRecordDTO>> SearchMusicRecordAsync(string musicRecordName, int page = 1, int limit = 25)
         {
-            var names=musicRecordName.Split('-');
+            var names = musicRecordName.Split('-');
             names = names.Select(n => n.Trim()).ToArray();
             var textFilter = Builders<MusicRecord>.Filter.Regex(mr => mr.MusicName, $"/^{names[0]}/i");
-            if(names.Length > 1)
+            if (names.Length > 1)
                 //textFilter = textFilter & Builders<MusicRecord>.Filter.ElemMatch("Singers",Builders<MusicRecordSinger>.Filter.Regex(mrs=>mrs.SingerName, $"/^{names[1]}/i"));
                 textFilter = textFilter & Builders<MusicRecord>.Filter.Eq("Singers.SingerName", $"{names[1]}");
 
-            return (await _context.MusicRecords.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).OrderBy(t=>t.PublishTime).Select(m => MapToMusicRecordDTO(m));
+            return (await _context.MusicRecords.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).OrderBy(t => t.PublishTime).Select(m => MapToMusicRecordDTO(m));
         }
 
         private MusicRecordDTO MapToMusicRecordDTO(MusicRecord musicRecord)

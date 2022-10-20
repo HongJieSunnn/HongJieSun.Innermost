@@ -1,6 +1,4 @@
-﻿using Azure.AI.TextAnalytics;
-
-namespace Innermost.Intelligence.API.Infrastructure.Dictionaries
+﻿namespace Innermost.Intelligence.API.Infrastructure.Dictionaries
 {
     public class EmotionTagDictionary
     {

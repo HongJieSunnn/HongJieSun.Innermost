@@ -55,7 +55,7 @@
             var responseLyric = await responseLyricTask;
             var lyric = new JsonSelectable(await responseLyric.Content.ReadAsStringAsync()).JsonPath("$.response.lyric")?.Value ?? "";
 
-            var musicRecord = new MusicRecordEntity(musicMid, int.Parse(musicId), musicName, transName,introduction, genre, language, albumMid, (string)albumCoverUrl!, musicUrl, wikiUrl, lyric, singerMids, singerNames, publishTime);
+            var musicRecord = new MusicRecordEntity(musicMid, int.Parse(musicId), musicName, transName, introduction, genre, language, albumMid, (string)albumCoverUrl!, musicUrl, wikiUrl, lyric, singerMids, singerNames, publishTime);
 
             await _dbContext.MusicRecords.InsertOneAsync(musicRecord);
         }

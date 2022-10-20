@@ -1,5 +1,4 @@
-﻿using IEnumerableExtensions;
-using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
+﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
 
 namespace Innermost.Meet.Infrastructure.Repositories
 {
@@ -10,15 +9,15 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public UserChattingContextRepository(MeetMongoDBContext context,IClientSessionHandle session)
+        public UserChattingContextRepository(MeetMongoDBContext context, IClientSessionHandle session)
         {
             _context = context;
-            _session=session;
+            _session = session;
         }
 
         public Task<UserChattingContext> GetUserChattingContextAsync(string chattingContextId)
         {
-            return _context.UserChattingContexts.Find(ucc=>ucc.Id==chattingContextId).FirstAsync();
+            return _context.UserChattingContexts.Find(ucc => ucc.Id == chattingContextId).FirstAsync();
         }
 
         public Task AddUserChattingContextAsync(UserChattingContext userChattingContext)
@@ -28,11 +27,11 @@ namespace Innermost.Meet.Infrastructure.Repositories
 
         public Task<UpdateResult> UpdateUserChattingContextAsync(string chattingContextId, UpdateDefinition<UserChattingContext> updateDefinition, params FilterDefinition<UserChattingContext>[] filterDefinitions)
         {
-            var chattingContextIdFilter = Builders<UserChattingContext>.Filter.Eq(uc=>uc.Id, chattingContextId);
+            var chattingContextIdFilter = Builders<UserChattingContext>.Filter.Eq(uc => uc.Id, chattingContextId);
 
-            var filter=filterDefinitions.CombineFilterDefinitions(chattingContextIdFilter);
+            var filter = filterDefinitions.CombineFilterDefinitions(chattingContextIdFilter);
 
-            return _context.UserChattingContexts.UpdateOneAsync(_session,filter, updateDefinition);
+            return _context.UserChattingContexts.UpdateOneAsync(_session, filter, updateDefinition);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Innermost.Meet.Domain.Repositories
 {
-    public interface IUserSocialContactRepository:IRepository<UserSocialContact>
+    public interface IUserSocialContactRepository : IRepository<UserSocialContact>
     {
         Task<UserSocialContact> GetUserSocialContactAsync(string userSocialContactUserId);
 

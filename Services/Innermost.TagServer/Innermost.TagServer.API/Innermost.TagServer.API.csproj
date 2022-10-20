@@ -30,7 +30,6 @@
     <ProjectReference Include="..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Server\TagS.Microservices.Server.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceMongoDB\IntegrationEventServiceMongoDB.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IServiceCollectionExtensions\IServiceCollectionExtensions.csproj" />
     <ProjectReference Include="..\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 

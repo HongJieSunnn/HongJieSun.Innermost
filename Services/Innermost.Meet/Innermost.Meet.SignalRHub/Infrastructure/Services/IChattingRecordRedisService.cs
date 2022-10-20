@@ -3,7 +3,7 @@
     public interface IChattingRecordRedisService
     {
         Task<long> AddChattingRecordAsync(string chattingContextId, string chattingRecord);
-        Task<long> AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO,bool received);
+        Task<long> AddChattingRecordAsync(string chattingContextId, ChattingRecordDTO chattingRecordDTO, bool received);
         Task<long> AddChattingRecordAsync(string chattingContextId, string sendUserId, string message, bool received);
 
 

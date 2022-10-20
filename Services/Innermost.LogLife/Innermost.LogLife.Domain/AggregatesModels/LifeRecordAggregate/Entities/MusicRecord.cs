@@ -13,12 +13,12 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Entities
 
         }
 
-        public MusicRecord(string mid,string musicName,string singer,string album)
+        public MusicRecord(string mid, string musicName, string singer, string album)
         {
-            Id=mid;
-            MusicName=musicName;
-            Singer=singer;
-            Album=album;
+            Id = mid;
+            MusicName = musicName;
+            Singer = singer;
+            Album = album;
         }
     }
 }

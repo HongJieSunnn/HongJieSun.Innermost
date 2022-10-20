@@ -14,7 +14,7 @@
 
         public string TagId { get; set; }
         public string TagName { get; set; }
-        public TagSummary(string tagId,string tagName)
+        public TagSummary(string tagId, string tagName)
         {
             TagId = tagId;
             TagName = tagName;

@@ -1,6 +1,5 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using Innermost.MusicHub.API.Grpc.Services;
 using Innermost.MusicHub.API.Infrastructure.AutofacModules;
 using Innermost.MusicHub.API.Queries.AlbumQueries;
@@ -10,10 +9,8 @@ using Innermost.MusicHub.Domain.Repositories;
 using Innermost.MusicHub.Infrastructure.Repositories;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using System.Net;
 
 IConfiguration configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);

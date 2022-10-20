@@ -1,6 +1,4 @@
-﻿using CommonService.Behaviors;
-using MediatR.Extensions.Autofac.DependencyInjection;
-using TagS.Microservices.Client.AutofacExtensions;
+﻿using MediatR.Extensions.Autofac.DependencyInjection;
 
 namespace Innermost.Meet.SignalRHub.Infrastructure.AutofacModules
 {

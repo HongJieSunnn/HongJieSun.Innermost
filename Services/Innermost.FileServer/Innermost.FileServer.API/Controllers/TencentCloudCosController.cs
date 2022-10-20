@@ -18,7 +18,7 @@ namespace Innermost.FileServer.API.Controllers
         public async Task<IActionResult> GetTencentCloudCosTemporaryCredentialAsync()
         {
             var temporaryCredential = await _tencentClouldCosSTSService.GetTemporaryCredentialAsync();
-            var json=JsonConvert.SerializeObject(temporaryCredential);
+            var json = JsonConvert.SerializeObject(temporaryCredential);
 
             return Ok(json);
         }

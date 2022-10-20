@@ -11,17 +11,17 @@
         public string ConfidantRequestStatue { get; init; }
         public DateTime RequestTime { get; init; }
         public DateTime? UpdateTime { get; init; }
-        public ConfidantRequestDTO(string requestId,string requestUserId,string requestUserName,string requestUserNickName,string requestUserAvatarUrl,string requestMessage,string confidantRequestStatue,DateTime requestTime,DateTime? updateTime)
+        public ConfidantRequestDTO(string requestId, string requestUserId, string requestUserName, string requestUserNickName, string requestUserAvatarUrl, string requestMessage, string confidantRequestStatue, DateTime requestTime, DateTime? updateTime)
         {
             RequestId = requestId;
-            RequestUserId= requestUserId;
-            RequestUserName= requestUserName;
-            RequestUserNickName= requestUserNickName;
-            RequestUserAvatarUrl= requestUserAvatarUrl;
-            RequestMessage= requestMessage;
-            ConfidantRequestStatue= confidantRequestStatue;
-            RequestTime= requestTime;
-            UpdateTime= updateTime;
+            RequestUserId = requestUserId;
+            RequestUserName = requestUserName;
+            RequestUserNickName = requestUserNickName;
+            RequestUserAvatarUrl = requestUserAvatarUrl;
+            RequestMessage = requestMessage;
+            ConfidantRequestStatue = confidantRequestStatue;
+            RequestTime = requestTime;
+            UpdateTime = updateTime;
         }
     }
 }

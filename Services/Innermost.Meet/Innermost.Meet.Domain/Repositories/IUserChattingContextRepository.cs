@@ -2,7 +2,7 @@
 
 namespace Innermost.Meet.Domain.Repositories
 {
-    public interface IUserChattingContextRepository:IRepository<UserChattingContext>
+    public interface IUserChattingContextRepository : IRepository<UserChattingContext>
     {
         Task<UserChattingContext> GetUserChattingContextAsync(string chattingContextId);
 

@@ -23,8 +23,8 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
         public UserSocialContact(string userId, List<ConfidantRequest>? confidantRequests, List<Confidant>? confidants)
         {
             UserId = userId;
-            _confidantRequests = confidantRequests??new List<ConfidantRequest>();
-            _confidants = confidants??new List<Confidant>();
+            _confidantRequests = confidantRequests ?? new List<ConfidantRequest>();
+            _confidants = confidants ?? new List<Confidant>();
         }
 
         public UpdateDefinition<UserSocialContact> AddConfidant(Confidant confidant)
@@ -80,15 +80,15 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate
         }
 
         private (FilterDefinition<UserSocialContact>? updateElementFilter, UpdateDefinition<UserSocialContact>? updateDefinition) GetFilterAndUpdateForSetConfidantRequestStatue(
-            string confidantRequestId, 
+            string confidantRequestId,
             UserSocialContactAggregate.Enumerations.ConfidantRequestStatue confidantRequestStatue
         )
         {
             var updateDefinition = Builders<UserSocialContact>
                                             .Update
-                                            .Set(uc=>uc._confidantRequests[-1].ConfidantRequestStatue, confidantRequestStatue)
+                                            .Set(uc => uc._confidantRequests[-1].ConfidantRequestStatue, confidantRequestStatue)
                                             .Set(uc => uc._confidantRequests[-1].UpdateTime, DateTime.Now);
-            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch(uc=>uc._confidantRequests, cr=>cr.Id==confidantRequestId);
+            var updateElementFilter = Builders<UserSocialContact>.Filter.ElemMatch(uc => uc._confidantRequests, cr => cr.Id == confidantRequestId);
 
             return (updateElementFilter, updateDefinition);
         }

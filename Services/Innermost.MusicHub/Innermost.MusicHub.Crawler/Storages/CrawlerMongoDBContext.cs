@@ -1,7 +1,4 @@
-﻿using Innermost.MongoDBContext.Configurations;
-using MongoDB.Driver;
-
-namespace Innermost.MusicHub.Crawler.Storages
+﻿namespace Innermost.MusicHub.Crawler.Storages
 {
     internal class CrawlerMongoDBContext : MongoDBContextBase
     {

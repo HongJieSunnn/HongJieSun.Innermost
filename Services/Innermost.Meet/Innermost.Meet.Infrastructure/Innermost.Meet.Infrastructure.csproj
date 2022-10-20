@@ -13,7 +13,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext\Innermost.MongoDBContext.csproj" />
-		<ProjectReference Include="..\..\..\BuildingBlocks\Extensions\IEnumerableExtensions\IEnumerableExtensions.csproj" />
 		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
 		<ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
 	</ItemGroup>

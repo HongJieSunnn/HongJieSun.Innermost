@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceMongoDB\IntegrationEventServiceMongoDB.csproj" />
     <ProjectReference Include="..\Innermost.MusicHub.Infrastructure\Innermost.MusicHub.Infrastructure.csproj" />
   </ItemGroup>

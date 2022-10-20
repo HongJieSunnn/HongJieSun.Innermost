@@ -5,7 +5,7 @@
         private readonly ISendEmailService _sendEmailService;
         public SendMailIntegrationEventHandler(ISendEmailService sendEmailService)
         {
-            _sendEmailService=sendEmailService;
+            _sendEmailService = sendEmailService;
         }
         public async Task Handle(SendMailIntegrationEvent @event)
         {

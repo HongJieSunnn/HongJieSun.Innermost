@@ -1,6 +1,4 @@
-﻿using CommonService.IdentityService;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Innermost.Meet.SignalRHub.Controllers
@@ -12,7 +10,7 @@ namespace Innermost.Meet.SignalRHub.Controllers
     {
         private readonly IUserChattingContextQueries _userChattingContextQueries;
         private readonly IIdentityService _identityService;
-        public ChattingContextController(IUserChattingContextQueries userChattingContextQueries,IIdentityService identityService)
+        public ChattingContextController(IUserChattingContextQueries userChattingContextQueries, IIdentityService identityService)
         {
             _userChattingContextQueries = userChattingContextQueries;
             _identityService = identityService;
@@ -27,7 +25,7 @@ namespace Innermost.Meet.SignalRHub.Controllers
             if (!chattingContextIds.Contains(chattingContextId))
                 return Unauthorized($"ChattingContext(id:{chattingContextId}) does not belong to requested user(id:{userId})");
 
-            var chattingRecords=await _userChattingContextQueries.GetChattingRecordsAsync(chattingContextId, page, limit);
+            var chattingRecords = await _userChattingContextQueries.GetChattingRecordsAsync(chattingContextId, page, limit);
             return Ok(chattingRecords);
         }
     }

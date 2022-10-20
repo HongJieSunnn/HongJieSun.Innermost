@@ -1,5 +1,4 @@
-﻿using DotnetSpider.Proxy;
-using DotnetSpider.Scheduler;
+﻿using DotnetSpider.Scheduler;
 using DotnetSpider.Scheduler.Component;
 using Innermost.MusicHub.Crawler.Spiders;
 using Microsoft.Extensions.Hosting;

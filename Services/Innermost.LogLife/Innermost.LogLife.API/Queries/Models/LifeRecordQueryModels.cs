@@ -19,17 +19,17 @@
 
         public List<TagSummaryDTO> TagSummaries { get; init; }
 
-        public LifeRecordDTO(int recordId,string? title,string text,bool isShared,LocationDTO? locationDTO,MusicRecordDTO? musicRecordDTO,List<string>? imagePaths,DateTime createTime, List<TagSummaryDTO> tagSummaries)
+        public LifeRecordDTO(int recordId, string? title, string text, bool isShared, LocationDTO? locationDTO, MusicRecordDTO? musicRecordDTO, List<string>? imagePaths, DateTime createTime, List<TagSummaryDTO> tagSummaries)
         {
-            RecordId=recordId;
-            Title=title;
-            Text=text;
-            IsShared=isShared;
-            Location=locationDTO;
-            MusicRecord=musicRecordDTO;
-            CreateTime=createTime;
-            ImagePaths=imagePaths;
-            TagSummaries=tagSummaries;
+            RecordId = recordId;
+            Title = title;
+            Text = text;
+            IsShared = isShared;
+            Location = locationDTO;
+            MusicRecord = musicRecordDTO;
+            CreateTime = createTime;
+            ImagePaths = imagePaths;
+            TagSummaries = tagSummaries;
         }
     }
 
@@ -43,15 +43,15 @@
         public string Address { get; init; }
         public float Longitude { get; init; }
         public float Latitude { get; init; }
-        public LocationDTO(string locationUId,string locationName,string province,string city,string district,string address,float longitude,float latitue)
+        public LocationDTO(string locationUId, string locationName, string province, string city, string district, string address, float longitude, float latitue)
         {
-            LocationUId=locationUId;
-            LocationName=locationName;
-            Province=province;
-            City=city;
-            District=district;
-            Address=address;
-            Longitude=longitude;
+            LocationUId = locationUId;
+            LocationName = locationName;
+            Province = province;
+            City = city;
+            District = district;
+            Address = address;
+            Longitude = longitude;
             Latitude = latitue;
         }
     }
@@ -62,12 +62,12 @@
         public string MusicName { get; init; }
         public string Singer { get; init; }
         public string Album { get; init; }
-        public MusicRecordDTO(string musicId,string musicName,string singer,string album)
+        public MusicRecordDTO(string musicId, string musicName, string singer, string album)
         {
-            MusicId=musicId;
-            MusicName=musicName;
-            Singer=singer;
-            Album=album;
+            MusicId = musicId;
+            MusicName = musicName;
+            Singer = singer;
+            Album = album;
         }
     }
 
@@ -75,10 +75,10 @@
     {
         public string TagId { get; init; }
         public string TagName { get; init; }
-        public TagSummaryDTO(string tagId,string tagName)
+        public TagSummaryDTO(string tagId, string tagName)
         {
-            TagId=tagId;
-            TagName=tagName;
+            TagId = tagId;
+            TagName = tagName;
         }
     }
 }

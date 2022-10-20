@@ -1,6 +1,5 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
 using MongoDB.Driver.GeoJsonObjectModel;
-using TagS.Microservices.Client.Models;
 
 namespace Innermost.Meet.API.Application.IntegrationEventHandles
 {

@@ -1,15 +1,12 @@
 using Autofac.Extensions.DependencyInjection;
 using Azure;
-using EventBusCommon.Abstractions;
 using Innermost.Intelligence.API.Grpc.Services;
 using Innermost.Intelligence.API.Services.DailySentence;
 using Innermost.Intelligence.API.Services.Recommendations;
 using Innermost.Intelligence.API.Services.TextAnalytics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using System.Net;
 
 IConfiguration configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
@@ -145,7 +142,7 @@ internal static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddIntelligenceGrpcClients(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddIntelligenceGrpcClients(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddGrpcClient<MusicRecordGrpc.MusicRecordGrpcClient>(options =>
         {

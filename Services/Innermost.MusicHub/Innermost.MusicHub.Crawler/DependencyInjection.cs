@@ -1,10 +1,5 @@
-﻿using Autofac.Core;
-using IdentityModel;
-using IdentityModel.Client;
-using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
-using Innermost.MusicHub.Infrastructure;
+﻿using IdentityModel.Client;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -64,7 +59,7 @@ namespace Innermost.MusicHub.Crawler
                 return tokenResponse;
             });
 
-            _serivces.AddHttpClient("IdentifiedHttpClient",(service,options) =>
+            _serivces.AddHttpClient("IdentifiedHttpClient", (service, options) =>
             {
                 var token = service.GetRequiredService<TokenResponse>();
 

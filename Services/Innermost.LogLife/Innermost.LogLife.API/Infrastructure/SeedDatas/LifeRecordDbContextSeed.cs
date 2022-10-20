@@ -14,7 +14,7 @@
             await context.Locations.AddRangeAsync(locations);
             await context.LifeRecords.AddRangeAsync(seeders);
             await context.MusicRecords.AddRangeAsync(musicRecords);
-            
+
 
             await context.SaveChangesAsync();
         }

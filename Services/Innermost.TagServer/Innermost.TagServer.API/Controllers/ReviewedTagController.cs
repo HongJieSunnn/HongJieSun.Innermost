@@ -1,8 +1,4 @@
-﻿using Innermost.TagReferrers;
-using TagS.Microservices.Server.Queries.TagReviewedQueries;
-using TagS.Microservices.Server.Repositories.TagWithReferrerRepository;
-
-namespace Innermost.TagServer.API.Controllers
+﻿namespace Innermost.TagServer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,12 +9,12 @@ namespace Innermost.TagServer.API.Controllers
         private readonly IIdentityService _identityService;
         private readonly ITagReviewedQueries _tagReviewedQueries;
         private readonly ILogger<ReviewedTagController> _logger;
-        public ReviewedTagController(IMediator mediator,IIdentityService identityService,ITagReviewedQueries tagReviewedQueries,ILogger<ReviewedTagController> logger)
+        public ReviewedTagController(IMediator mediator, IIdentityService identityService, ITagReviewedQueries tagReviewedQueries, ILogger<ReviewedTagController> logger)
         {
-            _mediator=mediator;
-            _identityService=identityService;
-            _tagReviewedQueries=tagReviewedQueries;
-            _logger=logger;
+            _mediator = mediator;
+            _identityService = identityService;
+            _tagReviewedQueries = tagReviewedQueries;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -27,7 +23,7 @@ namespace Innermost.TagServer.API.Controllers
         {
             var commandSuccess = false;
 
-            if(command.UserId is null)
+            if (command.UserId is null)
             {
                 command.UserId = _identityService.GetUserId();
             }
@@ -48,7 +44,7 @@ namespace Innermost.TagServer.API.Controllers
 
         [HttpPost]
         [Route("pass")]
-        [Authorize(Policy ="Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> PassReviewedTagAsync([FromBody] PassReviewedTagCommand command, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var commandSuccess = false;
@@ -93,7 +89,7 @@ namespace Innermost.TagServer.API.Controllers
         [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IEnumerable<TagReviewedDTO>>> GetAllToBeReviewedTagsAsync()
         {
-            var tags=await _tagReviewedQueries.GetTobeReviewedTagsAsync();
+            var tags = await _tagReviewedQueries.GetTobeReviewedTagsAsync();
             return Ok(tags);
         }
     }

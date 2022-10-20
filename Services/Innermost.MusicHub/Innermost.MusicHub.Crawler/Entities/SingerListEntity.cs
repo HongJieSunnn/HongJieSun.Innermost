@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace Innermost.MusicHub.Crawler.Entities
+﻿namespace Innermost.MusicHub.Crawler.Entities
 {
     internal class SingerListEntity
     {

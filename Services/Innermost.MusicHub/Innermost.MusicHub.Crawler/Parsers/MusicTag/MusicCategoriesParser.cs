@@ -11,7 +11,7 @@
         protected override async Task ParseAsync(DataFlowContext context)
         {
             var categoryGroupNames = new[] { "流派", "主题", "心情", "场景" };
-            var categoryGroupCounts = new[] { 16,16,9,13 };
+            var categoryGroupCounts = new[] { 16, 16, 9, 13 };
             var categoryIds = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:].items.[*].categoryId")).Select(c => int.Parse(c.Value)).ToList();
             var categoryNames = context.Selectable.SelectList(Selectors.JsonPath("$.response.data.categories.[2:].items.[*].categoryName")).Select(c => c.Value).ToList();//short name for crawl
 
@@ -25,9 +25,9 @@
             List<CategoryEntity> categories = new List<CategoryEntity>(categoryIds.Count);
 
             int indexOfName = 0;
-            for (int j= 0;j < 4;++j)
+            for (int j = 0; j < 4; ++j)
             {
-                for(int i= 0; i < categoryGroupCounts[j]; i++)
+                for (int i = 0; i < categoryGroupCounts[j]; i++)
                 {
                     var fullName = $"音乐:{categoryGroupNames[j]}:{categoryNames[indexOfName]}";
 

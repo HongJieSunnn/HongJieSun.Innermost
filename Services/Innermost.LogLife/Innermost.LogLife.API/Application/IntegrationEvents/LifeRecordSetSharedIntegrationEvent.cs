@@ -1,6 +1,6 @@
 ﻿namespace Innermost.LogLife.API.Application.IntegrationEvents
 {
-    public record LifeRecordSetSharedIntegrationEvent:IntegrationEvent
+    public record LifeRecordSetSharedIntegrationEvent : IntegrationEvent
     {
         public int RecordId { get; private set; }
         public string UserId { get; private set; }

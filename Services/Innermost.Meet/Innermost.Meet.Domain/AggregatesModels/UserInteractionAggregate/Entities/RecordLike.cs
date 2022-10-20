@@ -19,8 +19,8 @@
         public RecordLike(
             string sharedRecordObjectId,
             string recordUserId, string recordUserName, string recordUserNickName, string recordUserAvatarUrl,
-            string? recordTitle, string recordText, string? recordMusicRecordName, string? recordLocation, 
-            DateTime recordCreateTime,DateTime likeTime)
+            string? recordTitle, string recordText, string? recordMusicRecordName, string? recordLocation,
+            DateTime recordCreateTime, DateTime likeTime)
         {
             Id = sharedRecordObjectId;
             RecordUserId = recordUserId;

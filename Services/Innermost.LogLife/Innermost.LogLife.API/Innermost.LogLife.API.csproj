@@ -48,12 +48,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventRecord\IntegrationEventRecord.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\TypeExtensions\TypeExtensions.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\WebHost\WebHost.Extensions\WebHost.CustomExtensions.csproj" />
     <ProjectReference Include="..\Innermost.LogLife.Infrastructure\Innermost.LogLife.Infrastructure.csproj" />
   </ItemGroup>
 

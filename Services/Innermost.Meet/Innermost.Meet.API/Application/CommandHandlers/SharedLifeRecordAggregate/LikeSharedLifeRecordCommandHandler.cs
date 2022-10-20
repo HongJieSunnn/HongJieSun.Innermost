@@ -1,5 +1,4 @@
-﻿using Innermost.IdempotentCommand.Infrastructure.Repositories;
-using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.ValueObjects;
+﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.ValueObjects;
 
 namespace Innermost.Meet.API.Application.CommandHandlersAggregate
 {
@@ -7,7 +6,7 @@ namespace Innermost.Meet.API.Application.CommandHandlersAggregate
     {
         private readonly ISharedLifeRecordRepository _sharedLifeRecordRepository;
         private readonly IUserIdentityService _userIdentityService;
-        public LikeSharedLifeRecordCommandHandler(ISharedLifeRecordRepository sharedLifeRecordRepository,IUserIdentityService userIdentityService)
+        public LikeSharedLifeRecordCommandHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IUserIdentityService userIdentityService)
         {
             _sharedLifeRecordRepository = sharedLifeRecordRepository;
             _userIdentityService = userIdentityService;
@@ -16,9 +15,9 @@ namespace Innermost.Meet.API.Application.CommandHandlersAggregate
         public async Task<bool> Handle(LikeSharedLifeRecordCommand request, CancellationToken cancellationToken)
         {
             var getUserNamesTask = _userIdentityService.GetUserNamesAsync();
-            var getUserAvatarUrlTask=_userIdentityService.GetUserAvatarUrlAsync();
+            var getUserAvatarUrlTask = _userIdentityService.GetUserAvatarUrlAsync();
 
-            var sharedRecord =await _sharedLifeRecordRepository.GetSharedLifeRecordAsync(request.SharedLifeRecordObjectId);
+            var sharedRecord = await _sharedLifeRecordRepository.GetSharedLifeRecordAsync(request.SharedLifeRecordObjectId);
             if (sharedRecord is null)
                 return false;
 
@@ -31,7 +30,7 @@ namespace Innermost.Meet.API.Application.CommandHandlersAggregate
             var like = new Like(request.LikerUserId!, userNames.userName, userNames.userNickName, userAvatarUrl, request.LikeTime!.Value);
             var update = sharedRecord.AddLike(like);
 
-            var updateResult= await _sharedLifeRecordRepository.UpdateSharedLifeRecordAsync(request.SharedLifeRecordObjectId, update);
+            var updateResult = await _sharedLifeRecordRepository.UpdateSharedLifeRecordAsync(request.SharedLifeRecordObjectId, update);
 
             await _sharedLifeRecordRepository.UnitOfWork.SaveEntitiesAsync(sharedRecord, cancellationToken);
 

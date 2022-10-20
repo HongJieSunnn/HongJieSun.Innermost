@@ -11,7 +11,7 @@
 
         public async Task<bool> Handle(DeleteRecordCommand request, CancellationToken cancellationToken)
         {
-            var record= await _lifeRecordRepository.DeleteAsync(request.RecordId,request.UserId!);
+            var record = await _lifeRecordRepository.DeleteAsync(request.RecordId, request.UserId!);
             if (record is null)
                 return false;
             return await _lifeRecordRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

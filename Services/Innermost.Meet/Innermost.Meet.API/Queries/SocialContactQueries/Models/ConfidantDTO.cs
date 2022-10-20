@@ -10,7 +10,7 @@
         public string ConfidantStatue { get; set; }
         public string ChattingContextId { get; set; }
 
-        public ConfidantDTO(string confidantUserId, string confidantUserName, string confidantUserNickName, string confidantAvatarUrl, string confidantStatue, bool confidantOnline,string chattingContextId)
+        public ConfidantDTO(string confidantUserId, string confidantUserName, string confidantUserNickName, string confidantAvatarUrl, string confidantStatue, bool confidantOnline, string chattingContextId)
         {
             ConfidantUserId = confidantUserId;
             ConfidantUserName = confidantUserName;

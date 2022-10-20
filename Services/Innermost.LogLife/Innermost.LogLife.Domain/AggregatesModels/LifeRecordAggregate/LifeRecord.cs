@@ -1,12 +1,9 @@
 ﻿using Innermost.TagReferrers;
-using TagS.Microservices.Client.DomainEvents;
-using TagS.Microservices.Client.DomainSeedWork;
-using TagS.Microservices.Client.Models;
 
 namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
 {
     public class LifeRecord
-        : TagableEntity<int,LifeRecord>, IAggregateRoot
+        : TagableEntity<int, LifeRecord>, IAggregateRoot
     {
         private string _userId;
         public string UserId => _userId;
@@ -32,12 +29,12 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         public IReadOnlyCollection<ImagePath>? ImagePaths => _imagePaths?.AsReadOnly();
 
         private bool _isShared;
-        
+
         public DateTime CreateTime { get; private set; }
         public DateTime? UpdateTime { get; private set; }
         public DateTime? DeleteTime { get; private set; }
 
-        protected LifeRecord():base(new List<TagSummary<int, LifeRecord>>())
+        protected LifeRecord() : base(new List<TagSummary<int, LifeRecord>>())
         {
         }
 
@@ -52,25 +49,25 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             DateTime? deleteTime,
             bool isShared,
             List<ImagePath>? imagePaths,
-            List<TagSummary<int,LifeRecord>> tagSummaries
-        ):base(tagSummaries)
+            List<TagSummary<int, LifeRecord>> tagSummaries
+        ) : base(tagSummaries)
         {
-            _userId=userId; 
-            Title=title;
-            Text=text;
-            _locationUId=locationUId;
-            _musicRecordMId=mId;
-            CreateTime= createTime;
+            _userId = userId;
+            Title = title;
+            Text = text;
+            _locationUId = locationUId;
+            _musicRecordMId = mId;
+            CreateTime = createTime;
             UpdateTime = updateTime;
             DeleteTime = deleteTime;
-            _imagePaths=imagePaths;
+            _imagePaths = imagePaths;
             _isShared = false;
         }
 
         public void SetDeleted()
         {
             DeleteTime = DateTime.Now;
-            AddDomainEvent(new LifeRecordDeletedDomainEvent(Id,UserId));
+            AddDomainEvent(new LifeRecordDeletedDomainEvent(Id, UserId));
             foreach (var tagSummary in Tags)
             {
                 AddDomainEventForRemovingTag(tagSummary);
@@ -83,12 +80,12 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
             {
                 _isShared = true;
                 AddDomainEvent(new LifeRecordSetSharedDomainEvent(
-                    Id,UserId,Title,Text,
-                    _locationUId,Location?.LocationName,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
-                    MusicRecord?.Id,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
-                    ImagePaths?.Select(i=>i.Path).ToList(),
-                    CreateTime,UpdateTime,DeleteTime,
-                    Tags.Select(t=>(t.TagId,t.TagName)).ToList()
+                    Id, UserId, Title, Text,
+                    _locationUId, Location?.LocationName, Location?.Province, Location?.City, Location?.District, Location?.Address, Location?.BaiduPOI.Longitude, Location?.BaiduPOI.Latitude,
+                    MusicRecord?.Id, MusicRecord?.MusicName, MusicRecord?.Singer, MusicRecord?.Album,
+                    ImagePaths?.Select(i => i.Path).ToList(),
+                    CreateTime, UpdateTime, DeleteTime,
+                    Tags.Select(t => (t.TagId, t.TagName)).ToList()
                     ));
             }
         }
@@ -98,11 +95,11 @@ namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
         public override IReferrer ToReferrer()
         {
             var referrer = new LifeRecordReferrer(
-                Id,UserId,Title,Text,
-                LocationUId,Location?.LocationName,Location?.Province,Location?.City,Location?.District,Location?.Address,Location?.BaiduPOI.Longitude,Location?.BaiduPOI.Latitude,
-                MusicRecordMId,MusicRecord?.MusicName,MusicRecord?.Singer,MusicRecord?.Album,
-                ImagePaths?.Select(i=>i.Path).ToList(),
-                CreateTime,UpdateTime,DeleteTime
+                Id, UserId, Title, Text,
+                LocationUId, Location?.LocationName, Location?.Province, Location?.City, Location?.District, Location?.Address, Location?.BaiduPOI.Longitude, Location?.BaiduPOI.Latitude,
+                MusicRecordMId, MusicRecord?.MusicName, MusicRecord?.Singer, MusicRecord?.Album,
+                ImagePaths?.Select(i => i.Path).ToList(),
+                CreateTime, UpdateTime, DeleteTime
             );
 
             return referrer;

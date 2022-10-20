@@ -1,11 +1,6 @@
-﻿global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Text;
-global using System.Threading.Tasks;
+﻿global using DomainSeedWork;
 global using DomainSeedWork.Abstractions;
-global using TagS.Microservices.Client.DomainSeedWork;
-global using TagS.Microservices.Client.Models;
-global using DomainSeedWork;
-global using MongoDB.Bson.Serialization.Attributes;
 global using MongoDB.Bson;
+global using MongoDB.Bson.Serialization.Attributes;
+global using System;
+global using System.Collections.Generic;

@@ -1,6 +1,4 @@
-﻿using TagS.Microservices.Server.Queries.TagQueries;
-
-namespace Innermost.TagServer.API.Controllers
+﻿namespace Innermost.TagServer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -9,7 +7,7 @@ namespace Innermost.TagServer.API.Controllers
     {
         private readonly ITagQueries _tagQueries;
         private readonly ILogger<TagController> _logger;
-        public TagController(ITagQueries tagQueries,ILogger<TagController> logger)
+        public TagController(ITagQueries tagQueries, ILogger<TagController> logger)
         {
             _tagQueries = tagQueries;
             _logger = logger;
@@ -19,7 +17,7 @@ namespace Innermost.TagServer.API.Controllers
         [Route("all")]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetAllTagsAsync()//TODO can select from TagReferrer
         {
-            var tags=await _tagQueries.GetAllTagsAsync();
+            var tags = await _tagQueries.GetAllTagsAsync();
             return Ok(tags);
         }
 
@@ -27,7 +25,7 @@ namespace Innermost.TagServer.API.Controllers
         [Route("first")]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetFirstLevelTagsAsync()//TODO FirstLevelTagDTO
         {
-            var tags=await _tagQueries.GetAllFirstLevelTagsAsync();
+            var tags = await _tagQueries.GetAllFirstLevelTagsAsync();
             return Ok(tags);
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Innermost.Meet.API.Application.IntegrationEventHandles.IntegrationEvents
 {
-    public record LifeRecordSetSharedIntegrationEvent:IntegrationEvent
+    public record LifeRecordSetSharedIntegrationEvent : IntegrationEvent
     {
         public int RecordId { get; private set; }
         public string UserId { get; private set; }

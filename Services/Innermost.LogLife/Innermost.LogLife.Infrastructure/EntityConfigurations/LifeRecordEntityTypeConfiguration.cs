@@ -82,7 +82,7 @@
                 .IsRequired(false);
 
             builder
-                .HasOne(l=>l.MusicRecord)
+                .HasOne(l => l.MusicRecord)
                 .WithMany()
                 .HasForeignKey("_musicRecordMId")
                 .OnDelete(DeleteBehavior.NoAction)

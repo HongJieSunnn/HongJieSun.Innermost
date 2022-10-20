@@ -4,10 +4,10 @@
     {
         private readonly ILogger<LifeRecordSetSharedDomainEventHandler> _logger;
         private readonly ILogLifeIntegrationEventService _logLifeIntegrationEventService;
-        public LifeRecordSetSharedDomainEventHandler(ILogger<LifeRecordSetSharedDomainEventHandler> logger,ILogLifeIntegrationEventService logLifeIntegrationEventService)
+        public LifeRecordSetSharedDomainEventHandler(ILogger<LifeRecordSetSharedDomainEventHandler> logger, ILogLifeIntegrationEventService logLifeIntegrationEventService)
         {
-            _logger=logger;
-            _logLifeIntegrationEventService=logLifeIntegrationEventService;
+            _logger = logger;
+            _logLifeIntegrationEventService = logLifeIntegrationEventService;
         }
         public async Task Handle(LifeRecordSetSharedDomainEvent notification, CancellationToken cancellationToken)
         {

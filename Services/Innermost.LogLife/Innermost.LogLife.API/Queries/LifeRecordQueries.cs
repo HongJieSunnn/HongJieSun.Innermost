@@ -7,7 +7,7 @@ namespace Innemost.LogLife.API.Queries
     {
         private readonly string _connectionString = string.Empty;
         private readonly IIdentityService _identityService;
-        public LifeRecordQueries(string connectionString,IIdentityService identityService)
+        public LifeRecordQueries(string connectionString, IIdentityService identityService)
         {
             _connectionString = connectionString;
             _identityService = identityService;
@@ -60,7 +60,7 @@ namespace Innemost.LogLife.API.Queries
                     WHERE lr.UserId=@userId
                     GROUP BY lr.Id";
 
-            var records = await connection.QueryAsync<dynamic>(sql, new {userId=userId});
+            var records = await connection.QueryAsync<dynamic>(sql, new { userId = userId });
 
             return QueryModelMapper.MapToLifeRecordDTOs(records);
         }

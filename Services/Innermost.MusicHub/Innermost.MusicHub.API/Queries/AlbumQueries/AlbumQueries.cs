@@ -8,13 +8,13 @@ namespace Innermost.MusicHub.API.Queries.AlbumQueries
         private readonly MusicHubMongoDBContext _context;
         public AlbumQueries(MusicHubMongoDBContext context)
         {
-            _context=context;
+            _context = context;
         }
         public async Task<IEnumerable<AlbumDTO>> SearchAlbum(string albumName, int page = 1, int limit = 10)
         {
-            var textFilter = Builders<Album>.Filter.Regex(mr => mr.AlbumName, new BsonRegularExpression($"^{albumName}","i"));
+            var textFilter = Builders<Album>.Filter.Regex(mr => mr.AlbumName, new BsonRegularExpression($"^{albumName}", "i"));
 
-            return (await _context.Albums.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).OrderBy(a=>a.PublishTime).Select(m => MapToAlbumDTO(m));
+            return (await _context.Albums.Find(textFilter).Skip((page - 1) * limit).Limit(limit).ToListAsync()).OrderBy(a => a.PublishTime).Select(m => MapToAlbumDTO(m));
         }
 
         private AlbumDTO MapToAlbumDTO(Album album)
@@ -32,15 +32,15 @@ namespace Innermost.MusicHub.API.Queries.AlbumQueries
                 album.AlbumSongCount,
                 album.PublishCompany,
                 album.PublishTime,
-                album.MusicRecords.Select(mr=>
+                album.MusicRecords.Select(mr =>
                     new AlbumMusicRecordDTO(
                         mr.MusicMid,
                         mr.MusicName,
-                        mr.TranslatedMusicName??"",
+                        mr.TranslatedMusicName ?? "",
                         mr.Genre,
                         mr.Language,
                         mr.MusicUrl,
-                        mr.AlbumSingers.Select(s=>new AlbumSingerDTO(s.Id,s.SingerName)).ToList()
+                        mr.AlbumSingers.Select(s => new AlbumSingerDTO(s.Id, s.SingerName)).ToList()
                     )
                 ).ToList()
             );

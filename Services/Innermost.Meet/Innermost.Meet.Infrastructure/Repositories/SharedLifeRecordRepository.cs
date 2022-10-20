@@ -14,7 +14,7 @@
 
         public Task<SharedLifeRecord> GetSharedLifeRecordAsync(string sharedLifeRecordObjectId)
         {
-            return _context.SharedLifeRecords.Find(l=>l.Id==sharedLifeRecordObjectId).FirstAsync();
+            return _context.SharedLifeRecords.Find(l => l.Id == sharedLifeRecordObjectId).FirstAsync();
         }
 
         public Task AddSharedLifeRecordAsync(SharedLifeRecord sharedLifeRecord)
@@ -27,7 +27,7 @@
             var idFilter = Builders<SharedLifeRecord>.Filter.Eq(l => l.Id, sharedLifeRecordObjectId);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
-            return _context.SharedLifeRecords.UpdateOneAsync(_session, filter , updateDefinition);
+            return _context.SharedLifeRecords.UpdateOneAsync(_session, filter, updateDefinition);
         }
 
         public Task<UpdateResult> UpdateSharedLifeRecordAsync(int lifeRecordId, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
@@ -46,7 +46,7 @@
 
         public Task<UpdateResult> UpdateManySharedLifeRecordsAsync(IEnumerable<int> lifeRecordIds, UpdateDefinition<SharedLifeRecord> updateDefinition, params FilterDefinition<SharedLifeRecord>[] filterDefinitions)
         {
-            var idFilter= Builders<SharedLifeRecord>.Filter.In(l=>l.RecordId, lifeRecordIds);
+            var idFilter = Builders<SharedLifeRecord>.Filter.In(l => l.RecordId, lifeRecordIds);
             var filter = filterDefinitions.CombineFilterDefinitions(idFilter);
 
             return _context.SharedLifeRecords.UpdateOneAsync(_session, filter, updateDefinition);

@@ -1,7 +1,4 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate.Entities;
-using System.Security.Cryptography;
-using TagS.Microservices.Client.DomainSeedWork;
-using TagS.Microservices.Client.Models;
 
 namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate
 {
@@ -24,18 +21,18 @@ namespace Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate
         private List<ChattingRecord> _chattingRecords;
         public IReadOnlyCollection<ChattingRecord> ChattingRecords => _chattingRecords;
 
-        public UserChattingContext(string id,string userId1,string userId2,List<ChattingRecord>? chattingRecords)
+        public UserChattingContext(string id, string userId1, string userId2, List<ChattingRecord>? chattingRecords)
         {
-            Id= id;
-            _users=new string[2] {userId1,userId2}.OrderBy(s=>s).ToArray();
-            _chattingRecords=chattingRecords??new List<ChattingRecord>();
+            Id = id;
+            _users = new string[2] { userId1, userId2 }.OrderBy(s => s).ToArray();
+            _chattingRecords = chattingRecords ?? new List<ChattingRecord>();
         }
 
-        public UserChattingContext(string id,string[] users, List<ChattingRecord>? chattingRecords)
+        public UserChattingContext(string id, string[] users, List<ChattingRecord>? chattingRecords)
         {
-            Id=id;
-            _users = users.Length == 2 ? users.OrderBy(s=>s).ToArray() : throw new ArgumentException("UserChattingContext's users must be only two.");
-            _chattingRecords = chattingRecords??new List<ChattingRecord>();
+            Id = id;
+            _users = users.Length == 2 ? users.OrderBy(s => s).ToArray() : throw new ArgumentException("UserChattingContext's users must be only two.");
+            _chattingRecords = chattingRecords ?? new List<ChattingRecord>();
         }
 
         public UpdateDefinition<UserChattingContext> AddManyChattingRecords(IEnumerable<ChattingRecord> chattingRecords)

@@ -1,8 +1,6 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.Entities;
 using Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate.ValueObjects;
 using Innermost.Meet.Domain.Events.SharedLifeRecordEvents;
-using TagS.Microservices.Client.DomainSeedWork;
-using TagS.Microservices.Client.Models;
 
 namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate
 {
@@ -40,7 +38,7 @@ namespace Innermost.Meet.Domain.AggregatesModels.SharedLifeRecordAggregate
         public DateTime? UpdateTime { get; private set; }
         public DateTime? DeleteTime { get; private set; }
         public SharedLifeRecord(
-            string? objectId, int recordId, string userId,string userName,string userNickName,string userAvatarUrl,
+            string? objectId, int recordId, string userId, string userName, string userNickName, string userAvatarUrl,
             string? title, string text,
             Location? location, MusicRecord? musicRecord,
             List<string>? imagePaths, int likesCount, List<Like>? likes, List<TagSummary> tagSummaries,
