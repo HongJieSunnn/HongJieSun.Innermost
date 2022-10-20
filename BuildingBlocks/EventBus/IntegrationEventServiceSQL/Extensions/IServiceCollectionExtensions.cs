@@ -21,7 +21,7 @@ namespace IntegrationEventServiceSQL.Extensions
                 var eventBus = s.GetRequiredService<IAsyncEventBus>();
                 var logger = s.GetRequiredService<ILogger<CommonIntegrationEventServiceSQL<TDbContext>>>();
 
-                return new CommonIntegrationEventServiceSQL<TDbContext>(context,eventBus, logger);
+                return new CommonIntegrationEventServiceSQL<TDbContext>(context, eventBus, logger);
             });
 
             return services;

@@ -5,7 +5,7 @@ namespace IntegrationEventServiceSQL.Extensions
 {
     internal static class DbContextExtensions
     {
-        private static readonly MethodInfo ContainsMethod =typeof(Enumerable).GetMethods()
+        private static readonly MethodInfo ContainsMethod = typeof(Enumerable).GetMethods()
                 .FirstOrDefault(m => m.Name == "Contains" && m.GetParameters().Length == 2)
                 .MakeGenericMethod(typeof(object));
         public static Task<T[]> FindAllAsync<T>(this DbContext dbContext, params object[] keyValues)

@@ -14,7 +14,7 @@ namespace IntegrationEventServiceMongoDB
         public int TimeSend { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateTime { get; set; }
-        public IntegrationEventMongoDBModel(Guid eventId, string eventName, IntegrationEvent eventContent, DateTime createTime, string? sessionId=null)
+        public IntegrationEventMongoDBModel(Guid eventId, string eventName, IntegrationEvent eventContent, DateTime createTime, string? sessionId = null)
         {
             EventId = eventId;
             EventName = eventName;

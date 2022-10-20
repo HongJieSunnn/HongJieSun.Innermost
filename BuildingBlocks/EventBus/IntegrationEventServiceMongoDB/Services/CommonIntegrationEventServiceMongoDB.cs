@@ -1,7 +1,4 @@
-﻿using ILoggerExtensions;
-using MongoDBExtensions;
-
-namespace IntegrationEventServiceMongoDB.Services
+﻿namespace IntegrationEventServiceMongoDB.Services
 {
     public class CommonIntegrationEventServiceMongoDB : IIntegrationEventService
     {
@@ -60,7 +57,7 @@ namespace IntegrationEventServiceMongoDB.Services
 
         public async Task PublishEventsAsync(IEnumerable<Guid> eventIds)
         {
-            var recordFilter = Builders<IntegrationEventMongoDBModel>.Filter.In("_id", eventIds.Select(e=>e.ToString()));
+            var recordFilter = Builders<IntegrationEventMongoDBModel>.Filter.In("_id", eventIds.Select(e => e.ToString()));
             var records = await _integrationEvents.Find(recordFilter).ToListAsync();
 
             foreach (var record in records)

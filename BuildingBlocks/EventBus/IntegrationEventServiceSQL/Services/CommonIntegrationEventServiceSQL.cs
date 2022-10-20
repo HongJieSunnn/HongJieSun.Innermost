@@ -1,5 +1,4 @@
 ﻿using EventBusCommon.Abstractions;
-using ILoggerExtensions;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
