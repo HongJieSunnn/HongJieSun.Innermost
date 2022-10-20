@@ -1,13 +1,14 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace EventBusCommon
 {
     public record IntegrationEvent
     {
-        [JsonProperty]
+        [JsonInclude]
         public Guid Id { get; private init; }
 
-        [JsonProperty]
+        [JsonInclude]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreationDate { get; private init; }
 
