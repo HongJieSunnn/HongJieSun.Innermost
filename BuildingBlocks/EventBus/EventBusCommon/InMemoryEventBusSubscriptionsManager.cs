@@ -84,7 +84,7 @@ namespace EventBusCommon
         /// </summary>
         /// <param name="eventName">eventName</param>
         /// <param name="subscription">subscription of one event want to be removed</param>
-        private void DoRemoveSubScription(string eventName, Type subscription)
+        private void DoRemoveSubScription(string eventName, Type? subscription)
         {
             if (subscription != null)
             {
@@ -108,7 +108,7 @@ namespace EventBusCommon
         /// <typeparam name="T">eventType</typeparam>
         /// <typeparam name="TH">handlerType</typeparam>
         /// <returns></returns>
-        private Type FindSubscriptionToRemove<T, TH>()
+        private Type? FindSubscriptionToRemove<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler
         {
@@ -117,7 +117,7 @@ namespace EventBusCommon
 
             return DoFindSubscriptionToRemove(eventName, handlerType);
         }
-        
+
         /// <summary>
         /// Do FindSubscription to remove
         /// </summary>
