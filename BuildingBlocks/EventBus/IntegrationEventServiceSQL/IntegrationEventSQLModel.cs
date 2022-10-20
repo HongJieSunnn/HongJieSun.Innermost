@@ -19,15 +19,12 @@ namespace IntegrationEventServiceSQL
         [NotMapped]
         public IntegrationEvent? IntegrationEvent { get; private set; }
 
-        private IntegrationEventSQLModel()
+        public IntegrationEventSQLModel(IntegrationEvent @event, Guid? transactionId)
         {
             _jsonSettings = new JsonSerializerSettings();
             _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
             _jsonSettings.StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
-        }
 
-        public IntegrationEventSQLModel(IntegrationEvent @event, Guid? transactionId) : this()
-        {
             EventId = @event.Id;
             TransactionId = transactionId?.ToString();
             EventTypeName = @event.GetType().FullName ?? throw new NullReferenceException("The fullname of event is null.");
