@@ -7,7 +7,7 @@
 
 namespace EventBusCommon.Abstractions
 {
-    public interface IIntegrationEventHandler<TIntegrationEvent> :IIntegrationEventHandler
+    public interface IIntegrationEventHandler<TIntegrationEvent> : IIntegrationEventHandler
         where TIntegrationEvent : IntegrationEvent
     {
         Task Handle(TIntegrationEvent @event);

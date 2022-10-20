@@ -7,13 +7,13 @@ namespace EventBusServiceBus.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddDefaultAzureServiceBusEventBus(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddDefaultAzureServiceBusEventBus(this IServiceCollection services, IConfiguration configuration)
         {
-            var subcriptionName = configuration["SubscriptionClientName"]??throw new NullReferenceException("SubscriptionClientName is not contained in appsettings.json.");
+            var subcriptionName = configuration["SubscriptionClientName"] ?? throw new NullReferenceException("SubscriptionClientName is not contained in appsettings.json.");
 
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
-                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"]?? throw new NullReferenceException("EventBusConnections.ConnectAzureServiceBus is not contained in appsettings.json.");
+                var connectionString = configuration.GetSection("EventBusConnections")["ConnectAzureServiceBus"] ?? throw new NullReferenceException("EventBusConnections.ConnectAzureServiceBus is not contained in appsettings.json.");
                 var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
                 return new DefaultServiceBusPersisterConnection(connectionString, logger);

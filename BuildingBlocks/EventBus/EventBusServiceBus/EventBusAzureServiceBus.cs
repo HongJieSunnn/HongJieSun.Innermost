@@ -25,10 +25,10 @@ namespace EventBusServiceBus
         /// <summary>
         /// To ensure deserialization successful while use polumorphic.
         /// </summary>
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { TypeNameHandling=TypeNameHandling.Auto,StringEscapeHandling=StringEscapeHandling.EscapeNonAscii};
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto, StringEscapeHandling = StringEscapeHandling.EscapeNonAscii };
 
         public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, ILogger<EventBusAzureServiceBus> logger,
-            IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac,string subscriptionClientName)
+            IEventBusSubscriptionManager subscriptionManager, string subscriptionName, ILifetimeScope autofac, string subscriptionClientName)
         {
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _logger = logger ?? throw new ArgumentException(nameof(logger));
@@ -53,7 +53,7 @@ namespace EventBusServiceBus
         public async Task Publish(IntegrationEvent @event)
         {
             var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
-            var eventJsonStr = JsonConvert.SerializeObject(@event,_jsonSerializerSettings);
+            var eventJsonStr = JsonConvert.SerializeObject(@event, _jsonSerializerSettings);
             var messageBody = new BinaryData(eventJsonStr);
 
             ServiceBusMessage message = new ServiceBusMessage
@@ -118,16 +118,16 @@ namespace EventBusServiceBus
         {
             try
             {
-                var sub =_serviceBusAdministrationClient.GetSubscriptionAsync(TOPIC_NAME,_subscriptionName).GetAwaiter().GetResult();
+                var sub = _serviceBusAdministrationClient.GetSubscriptionAsync(TOPIC_NAME, _subscriptionName).GetAwaiter().GetResult();
             }
             catch (ServiceBusException ex) when (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
             {
                 _serviceBusAdministrationClient.CreateSubscriptionAsync(
-                        new CreateSubscriptionOptions(TOPIC_NAME, _subscriptionName) 
-                        { 
-                            MaxDeliveryCount=300,
-                            DeadLetteringOnMessageExpiration=true,
-                            EnableDeadLetteringOnFilterEvaluationExceptions=false
+                        new CreateSubscriptionOptions(TOPIC_NAME, _subscriptionName)
+                        {
+                            MaxDeliveryCount = 300,
+                            DeadLetteringOnMessageExpiration = true,
+                            EnableDeadLetteringOnFilterEvaluationExceptions = false
                         }).GetAwaiter().GetResult();
             }
         }
@@ -173,7 +173,7 @@ namespace EventBusServiceBus
 
         private async Task<bool> ProcessEvent(string eventName, string messageData)
         {
-            _logger.LogInformation("Enter ProcessEvent Delegate for event({eventName})",eventName);
+            _logger.LogInformation("Enter ProcessEvent Delegate for event({eventName})", eventName);
             bool processed = false;
 
             try
@@ -188,9 +188,9 @@ namespace EventBusServiceBus
                             //得到 handler 实例->获取正确的泛型类型->正确的类型通过 handler 实例调用 Handle 函数。
                             var handler = scope.ResolveOptional(subscription);
                             if (handler == null) continue;
-                            _logger.LogInformation("EventHandler for event({eventName}) is not null",eventName);
+                            _logger.LogInformation("EventHandler for event({eventName}) is not null", eventName);
                             var eventType = _subscriptionManager.GetEventTypeByName(eventName)!;//因为模板实现的handler类需要对应事件的类型，通过Publish时发送的Json存储的EventName获得EventType，Body反序列化得到对应事件 not null
-                            var integrationEvent = JsonConvert.DeserializeObject(messageData, eventType,_jsonSerializerSettings);
+                            var integrationEvent = JsonConvert.DeserializeObject(messageData, eventType, _jsonSerializerSettings);
                             var handlerConcreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);//将对应事件的类型填入模板组成完整的handler类型
                             await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                         }
