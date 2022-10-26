@@ -1,4 +1,4 @@
-﻿ using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +19,7 @@ namespace Microsoft.AspNetCore.Hosting
         public static bool IsInKubernetes(this IHost host)
         {
             var cfg = host.Services.GetService(typeof(IConfiguration)) as IConfiguration;
-            var orchestratorType = cfg["OrchestratorType"];
+            var orchestratorType = cfg?["OrchestratorType"];
             return orchestratorType?.ToUpper() == "K8S";
         }
 
