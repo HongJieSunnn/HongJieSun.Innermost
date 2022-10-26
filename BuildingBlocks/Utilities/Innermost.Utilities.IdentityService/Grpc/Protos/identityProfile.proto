@@ -1,0 +1,48 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Innermost.IdentityService.Grpc";
+
+package IdentityProfileApi;
+
+service IdentityProfileGrpc{
+	rpc GetUserProfileForLike(UserIdGrpcDTO) returns (UserProfileForLikeGrpcDTO){}
+	rpc GetUserProfileSummary(UserIdGrpcDTO) returns (UserProfileSummaryGrpcDTO){}
+	rpc GetUserProfile(UserIdGrpcDTO) returns (UserGrpcDTO){}
+}
+
+message UserIdGrpcDTO{
+	string userId=1;
+}
+
+message UserProfileForLikeGrpcDTO{
+	string userName=1;
+	string userNickName=2;
+	string userAvatarUrl=3;
+}
+
+message UserProfileSummaryGrpcDTO{
+	string userName=1;
+	string userNickName=2;
+	string userStatue=3;
+	string selfDescription=5;
+	string userAvatarUrl=6;
+	string userBackgroundImageUrl=7;
+}
+
+message UserGrpcDTO{
+	string userName=1;
+	string userNickName=2;
+	string realName=3;
+	string userEmail=4;
+	string userStatue=5;
+	uint32 age=6;
+	string gender=7;
+	string school=8;
+	string province=9;
+	string city=10;
+	string selfDescription=11;
+	string birthday=12;
+	string userAvatarUrl=13;
+	string userBackgroundImageUrl=14;
+	string createTime=15;
+}
