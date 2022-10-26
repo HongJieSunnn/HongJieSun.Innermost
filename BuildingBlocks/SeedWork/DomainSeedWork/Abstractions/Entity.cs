@@ -28,7 +28,7 @@ namespace DomainSeedWork.Abstractions
         private List<INotification>? _domainEvents;
         [NotMapped]
         [BsonIgnore]
-        public virtual IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+        public virtual IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
         public virtual void AddDomainEvent(INotification eventItem)
         {
             _domainEvents = _domainEvents ?? new List<INotification>();
@@ -47,10 +47,10 @@ namespace DomainSeedWork.Abstractions
 
         public virtual bool IsTransient()
         {
-            return this.Id.Equals(default(TId)) && this.Id.CompareTo(default(TId)) == 0;
+            return this.Id!.Equals(default(TId)) && this.Id.CompareTo(default(TId)) == 0;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null || !(obj is Entity<TId>))
                 return false;
@@ -67,7 +67,7 @@ namespace DomainSeedWork.Abstractions
             if (entity.IsTransient() || this.IsTransient())
                 return false;
             else
-                return entity.Id.Equals(this.Id);//如果不是一个实例，但是Id相等，由于实体具有唯一的Id，所以也相等。
+                return entity.Id!.Equals(this.Id);//如果不是一个实例，但是Id相等，由于实体具有唯一的Id，所以也相等。
         }
 
         public override int GetHashCode()
@@ -76,7 +76,7 @@ namespace DomainSeedWork.Abstractions
             {
                 if (!_requestedHashCode.HasValue)
                 {
-                    _requestedHashCode = this.Id.GetHashCode() ^ 31;
+                    _requestedHashCode = this.Id!.GetHashCode() ^ 31;
                 }
                 return _requestedHashCode.Value;
             }
