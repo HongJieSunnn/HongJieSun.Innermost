@@ -6,7 +6,7 @@
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory());
 
-            var options = EntityFrameworkFactoryService.GetDbContextOptionsMySQL<ConfigurationDbContext>(basePath,typeof(Program));
+            var options = new DbContextOptionsBuilder<ConfigurationDbContext>().BuildLocalDbContextOptionsMySQL(basePath, typeof(Program));
 
             return new ConfigurationDbContext(options, new IdentityServer4.EntityFramework.Options.ConfigurationStoreOptions());
         }

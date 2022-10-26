@@ -6,7 +6,7 @@
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory());
 
-            var options = EntityFrameworkFactoryService.GetDbContextOptionsMySQL<InnermostIdentityDbContext>(basePath,typeof(Program));
+            var options = new DbContextOptionsBuilder<InnermostIdentityDbContext>().BuildLocalDbContextOptionsMySQL(basePath, typeof(Program));
 
             return new InnermostIdentityDbContext(options);
         }

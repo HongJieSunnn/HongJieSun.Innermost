@@ -6,7 +6,7 @@
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory());
 
-            var options = EntityFrameworkFactoryService.GetDbContextOptionsMySQL<PersistedGrantDbContext>(basePath,typeof(Program));
+            var options = new DbContextOptionsBuilder<PersistedGrantDbContext>().BuildLocalDbContextOptionsMySQL(basePath, typeof(Program));
 
             return new PersistedGrantDbContext(options, new IdentityServer4.EntityFramework.Options.OperationalStoreOptions());
         }
