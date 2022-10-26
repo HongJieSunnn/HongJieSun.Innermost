@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<Protobuf Include="Grpc\Protos\identityUser.proto" GrpcServices="Server" />
+	<Protobuf Include="Grpc\Protos\identityProfile.proto" GrpcServices="Server" />
   </ItemGroup>
   <ItemGroup>
 	<Protobuf Include="Grpc\Protos\userStatue.proto" GrpcServices="Server" />
@@ -26,34 +26,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
-    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
+    <PackageReference Include="Innermost.EventBus.EventBusServiceBus" Version="0.8.0" />
+    <PackageReference Include="Innermost.EventBus.IntegrationEventServiceSQL" Version="0.8.1" />
+    <PackageReference Include="Innermost.Extensions.EntityFrameworkExtensions" Version="0.8.2" />
+    <PackageReference Include="Innermost.Extensions.IHostExtensions" Version="0.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceSQL\IntegrationEventServiceSQL.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\WebHost\WebHost.Extensions\WebHost.CustomExtensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
