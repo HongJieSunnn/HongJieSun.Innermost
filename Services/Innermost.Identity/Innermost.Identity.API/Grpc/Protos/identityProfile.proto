@@ -4,7 +4,7 @@ option csharp_namespace = "Innermost.Identity.API.User";
 
 package IdentityUserApi;
 
-service IdentityUserGrpc{
+service IdentityProfileGrpc{
 	rpc GetUserProfileForLike(UserIdGrpcDTO) returns (UserProfileForLikeGrpcDTO){}
 	rpc GetUserProfileSummary(UserIdGrpcDTO) returns (UserProfileSummaryGrpcDTO){}
 	rpc GetUserProfile(UserIdGrpcDTO) returns (UserGrpcDTO){}

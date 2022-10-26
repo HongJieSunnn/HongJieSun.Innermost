@@ -3,10 +3,10 @@ using Innermost.Identity.API.User;
 
 namespace Innermost.Identity.API.Grpc.Services
 {
-    public class IdentityUserGrpcService:IdentityUserGrpc.IdentityUserGrpcBase
+    public class IdentityProfileGrpcService : IdentityProfileGrpc.IdentityProfileGrpcBase
     {
         private readonly UserManager<InnermostUser> _userManager;
-        public IdentityUserGrpcService(UserManager<InnermostUser> userManager)
+        public IdentityProfileGrpcService(UserManager<InnermostUser> userManager)
         {
             _userManager = userManager;
         }
@@ -18,7 +18,7 @@ namespace Innermost.Identity.API.Grpc.Services
                 UserName = user.UserName,
                 UserNickName = user.NickName,
                 UserEmail = user.Email,
-                UserStatue=user.UserStatue,
+                UserStatue = user.UserStatue,
                 RealName = user.RealName,
                 Age = user.Age,
                 Gender = user.Gender,
@@ -27,8 +27,8 @@ namespace Innermost.Identity.API.Grpc.Services
                 City = user.City,
                 SelfDescription = user.SelfDescription,
                 Birthday = user.Birthday,
-                UserAvatarUrl=user.UserAvatarUrl,
-                UserBackgroundImageUrl=user.UserBackgroundImageUrl,
+                UserAvatarUrl = user.UserAvatarUrl,
+                UserBackgroundImageUrl = user.UserBackgroundImageUrl,
                 CreateTime = user.CreateTime.ToString()
             };
         }
