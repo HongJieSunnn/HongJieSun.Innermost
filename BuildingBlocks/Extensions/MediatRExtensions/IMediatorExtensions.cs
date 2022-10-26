@@ -1,11 +1,9 @@
-﻿using DomainSeedWork;
-using DomainSeedWork.Abstractions;
-using MediatR;
+﻿using DomainSeedWork.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediatRExtensions
+namespace MediatR
 {
-    public static class MediatRDispatchExtension
+    public static class IMediatorExtensions
     {
         public static async Task DisPatchDomainEvents<TDbContext>(this IMediator mediatR, TDbContext context)
             where TDbContext : DbContext
