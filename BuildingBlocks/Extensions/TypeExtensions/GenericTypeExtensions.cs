@@ -1,4 +1,4 @@
-﻿namespace TypeExtensions
+﻿namespace System
 {
     public static class GenericTypeExtensions
     {
