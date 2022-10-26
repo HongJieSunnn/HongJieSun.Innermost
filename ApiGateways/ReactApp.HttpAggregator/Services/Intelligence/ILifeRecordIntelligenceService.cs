@@ -4,6 +4,6 @@
     {
         Task<(string tagId, string tagName)> GetLifeRecordEmotionTagAsync(string text);
 
-        Task<(string type,string content)> GetLifeRecordRecommendationAsync(string predictedTagName);
+        Task<(string type, string content)> GetLifeRecordRecommendationAsync(string predictedTagName);
     }
 }

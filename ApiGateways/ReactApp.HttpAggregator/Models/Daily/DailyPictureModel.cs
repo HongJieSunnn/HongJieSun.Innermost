@@ -6,7 +6,7 @@
         public string PictureUrl { get; set; }
         public string Copyright { get; set; }
         public string CopyrightLink { get; set; }
-        public DailyPictureModel(string title,string pictureUrl,string copyright,string copyrightLink)
+        public DailyPictureModel(string title, string pictureUrl, string copyright, string copyrightLink)
         {
             Title = title;
             PictureUrl = pictureUrl;

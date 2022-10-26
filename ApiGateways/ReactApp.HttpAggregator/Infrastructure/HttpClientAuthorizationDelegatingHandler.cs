@@ -34,7 +34,7 @@ namespace ReactApp.HttpAggregator.Infrastructure
                 request.Headers.Add("Authorization", new List<string>() { authorizationHeader });
             }
 
-            if(string.IsNullOrWhiteSpace(xrequestIdHeader))
+            if (string.IsNullOrWhiteSpace(xrequestIdHeader))
             {
                 request.Headers.Add("x-requestid", Guid.NewGuid().ToString());
             }

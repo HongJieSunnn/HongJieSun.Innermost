@@ -52,7 +52,7 @@
             Album = album;
             ImagePaths = imagePaths;
             CreateTime = createTime ?? DateTime.Now;
-            TagSummaries = tagSummaries??new Dictionary<string, string>();
+            TagSummaries = tagSummaries ?? new Dictionary<string, string>();
         }
     }
 }

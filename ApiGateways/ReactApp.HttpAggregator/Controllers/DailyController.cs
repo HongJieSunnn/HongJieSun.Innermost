@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ReactApp.HttpAggregator.Services.Daily;
 
 namespace ReactApp.HttpAggregator.Controllers
@@ -11,14 +10,14 @@ namespace ReactApp.HttpAggregator.Controllers
         private readonly IDailyService _dailyService;
         public DailyController(IDailyService dailyService)
         {
-            _dailyService=dailyService;
+            _dailyService = dailyService;
         }
 
         [HttpGet]
         [Route("sentence")]
         public async Task<IActionResult> GetDailySentenceAsync()
         {
-            var dailySentence=await _dailyService.GetDailySentenceAsync();
+            var dailySentence = await _dailyService.GetDailySentenceAsync();
 
             return Ok(dailySentence);
         }

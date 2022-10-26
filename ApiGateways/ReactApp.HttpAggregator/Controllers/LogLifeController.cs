@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ReactApp.HttpAggregator.Infrastructure.Enumerations;
 using ReactApp.HttpAggregator.Services.Intelligence;
 using ReactApp.HttpAggregator.Services.LogLife;
@@ -13,17 +12,17 @@ namespace ReactApp.HttpAggregator.Controllers
     {
         private readonly ILogLifeApiHttpClient _logLifeApiHttpClient;
         private readonly ILifeRecordIntelligenceService _lifeRecordIntelligenceService;
-        public LogLifeController(ILogLifeApiHttpClient logLifeApiHttpClient,ILifeRecordIntelligenceService lifeRecordIntelligenceService)
+        public LogLifeController(ILogLifeApiHttpClient logLifeApiHttpClient, ILifeRecordIntelligenceService lifeRecordIntelligenceService)
         {
-            _logLifeApiHttpClient=logLifeApiHttpClient;
-            _lifeRecordIntelligenceService=lifeRecordIntelligenceService;
+            _logLifeApiHttpClient = logLifeApiHttpClient;
+            _lifeRecordIntelligenceService = lifeRecordIntelligenceService;
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateLifeRecordAsync([FromBody]LifeRecordModel lifeRecordModel)
+        public async Task<IActionResult> CreateLifeRecordAsync([FromBody] LifeRecordModel lifeRecordModel)
         {
-            var predictedTag =await _lifeRecordIntelligenceService.GetLifeRecordEmotionTagAsync(lifeRecordModel.Text);
+            var predictedTag = await _lifeRecordIntelligenceService.GetLifeRecordEmotionTagAsync(lifeRecordModel.Text);
 
             lifeRecordModel.TagSummaries!.Add(predictedTag.tagId, predictedTag.tagName);
 

@@ -1,6 +1,6 @@
 ﻿namespace ReactApp.HttpAggregator.Services.LogLife
 {
-    public class LogLifeApiHttpClient:ILogLifeApiHttpClient
+    public class LogLifeApiHttpClient : ILogLifeApiHttpClient
     {
         private readonly HttpClient _client;
         private readonly ILogger<LogLifeApiHttpClient> _logger;
@@ -18,7 +18,7 @@
             var content = new StringContent(JsonSerializer.Serialize(lifeRecordModel), System.Text.Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(url, content);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
                 return true;
 
             return false;

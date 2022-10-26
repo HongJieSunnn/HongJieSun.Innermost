@@ -1,5 +1,4 @@
 using Autofac.Extensions.DependencyInjection;
-using CommonService.IdentityService.Extensions;
 using Innermost.Intelligence.API.LifeRecord;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ReactApp.HttpAggregator.Infrastructure;
@@ -48,7 +47,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("ReactApp");
 
-if(configuration.GetValue<bool>("UseHttpsRedirection"))
+if (configuration.GetValue<bool>("UseHttpsRedirection"))
     app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -100,7 +99,7 @@ internal static class IServiceCollectionExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority = identityServerUrl;
-                options.RequireHttpsMetadata= configuration.GetValue<bool>("UseHttpsRedirection");
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("UseHttpsRedirection");
                 options.Audience = "reactapigateway";
 
                 if (configuration.GetValue<string>("LocalhostValidIssuer") != null)
@@ -110,7 +109,7 @@ internal static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddReactAppHttpAggregatorConfigurations(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddReactAppHttpAggregatorConfigurations(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<UrlsConfig>(configuration.GetSection("urls"));
 
@@ -138,7 +137,7 @@ internal static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddReactAppHttpAggregatorGrpcClients(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddReactAppHttpAggregatorGrpcClients(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddGrpcClient<IdentityUserStatueGrpc.IdentityUserStatueGrpcClient>(options =>
         {

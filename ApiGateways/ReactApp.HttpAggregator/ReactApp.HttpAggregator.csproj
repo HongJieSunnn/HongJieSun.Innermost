@@ -20,7 +20,6 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
 		<PackageReference Include="Google.Protobuf" Version="3.20.1" />
-		<PackageReference Include="Grpc.Net.Client" Version="2.45.0" />
 		<PackageReference Include="Grpc.Net.ClientFactory" Version="2.45.0" />
 		<PackageReference Include="Grpc.Tools" Version="2.45.0">
 			<PrivateAssets>all</PrivateAssets>
@@ -33,10 +32,6 @@
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\BuildingBlocks\CommonService\CommonService\CommonService.csproj" />
 	</ItemGroup>
 
 </Project>

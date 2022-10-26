@@ -7,7 +7,7 @@ namespace ReactApp.HttpAggregator.Services.Intelligence
         private readonly IntelligenceLifeRecordRecommendationGrpc.IntelligenceLifeRecordRecommendationGrpcClient _intelligenceLifeRecordRecommendationGrpcClient;
         public LifeRecordIntelligenceService(IntelligenceLifeRecordRecommendationGrpc.IntelligenceLifeRecordRecommendationGrpcClient intelligenceLifeRecordRecommendationGrpcClient)
         {
-            _intelligenceLifeRecordRecommendationGrpcClient=intelligenceLifeRecordRecommendationGrpcClient;
+            _intelligenceLifeRecordRecommendationGrpcClient = intelligenceLifeRecordRecommendationGrpcClient;
         }
         public async Task<(string tagId, string tagName)> GetLifeRecordEmotionTagAsync(string text)
         {
