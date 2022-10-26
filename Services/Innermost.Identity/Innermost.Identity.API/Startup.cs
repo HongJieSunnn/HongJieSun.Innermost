@@ -119,7 +119,7 @@ namespace Innermost.Identity.API
             });
 
             //configure lifetime of tokens for confirm
-            builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>o.TokenLifespan = TimeSpan.FromMinutes(10));
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromMinutes(10));
 
             //配置cookie
             services.ConfigureApplicationCookie(options =>
@@ -149,7 +149,7 @@ namespace Innermost.Identity.API
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -169,7 +169,7 @@ namespace Innermost.Identity.API
             app.UseCors("WebApp");
             app.UseIdentityServer();
 
-            if(Configuration.GetValue<bool>("UseHttpsRedirection"))
+            if (Configuration.GetValue<bool>("UseHttpsRedirection"))
                 app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -179,7 +179,7 @@ namespace Innermost.Identity.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGrpcService<IdentityUserGrpcService>();
+                endpoints.MapGrpcService<IdentityProfileGrpcService>();
                 endpoints.MapGrpcService<IdentityUserStatueGrpcService>();
             });
         }

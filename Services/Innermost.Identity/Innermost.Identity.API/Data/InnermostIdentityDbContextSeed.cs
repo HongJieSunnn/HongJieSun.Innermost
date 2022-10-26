@@ -1,12 +1,11 @@
-﻿using EventBusCommon.Abstractions;
-using Innermost.Identity.API.IntegrationEvents;
+﻿using Innermost.Identity.API.IntegrationEvents;
 
 namespace Innermost.Identity.API.Data
 {
     public class InnermostIdentityDbContextSeed
     {
         private readonly IPasswordHasher<InnermostUser> _passwordHasher = new PasswordHasher<InnermostUser>();
-        public async Task SeedAsync(InnermostIdentityDbContext context, UserManager<InnermostUser> userManager,IIntegrationEventService integrationEventService,IUserStatueService userStatueService, IConfiguration configuration)
+        public async Task SeedAsync(InnermostIdentityDbContext context, UserManager<InnermostUser> userManager, IIntegrationEventService integrationEventService, IUserStatueService userStatueService, IConfiguration configuration)
         {
             if (context.Users.Any())
                 return;
@@ -23,12 +22,12 @@ namespace Innermost.Identity.API.Data
             await ConfigureSeedUser(userManager, integrationEventService, hongJieSunUser);
             await ConfigureSeedUser(userManager, integrationEventService, testerUser);
 
-            await ConfigureSeedUserStatue(userStatueService, adminUser.Id,true);//Admin always online.
+            await ConfigureSeedUserStatue(userStatueService, adminUser.Id, true);//Admin always online.
             await ConfigureSeedUserStatue(userStatueService, hongJieSunUser.Id);
             await ConfigureSeedUserStatue(userStatueService, testerUser.Id);
         }
 
-        private async Task ConfigureSeedUser(UserManager<InnermostUser> userManager,IIntegrationEventService integrationEventService,InnermostUser user)
+        private async Task ConfigureSeedUser(UserManager<InnermostUser> userManager, IIntegrationEventService integrationEventService, InnermostUser user)
         {
             if (user.UserName == "Admin")
             {
@@ -47,10 +46,10 @@ namespace Innermost.Identity.API.Data
 
             var integrationEvent = new UserRegisteredIntegrationEvent(user.Id);
             await integrationEventService.SaveEventAsync(integrationEvent);
-            await integrationEventService.PublishEventsAsync(new[] {integrationEvent.Id});
+            await integrationEventService.PublishEventsAsync(new[] { integrationEvent.Id });
         }
 
-        private async Task ConfigureSeedUserStatue(IUserStatueService userStatueService,string userId,bool onlined=false)
+        private async Task ConfigureSeedUserStatue(IUserStatueService userStatueService, string userId, bool onlined = false)
         {
             await userStatueService.SetUserOnlineStatueAsync(userId, onlined);
             await userStatueService.SetUserStatueAsync(userId, "NORMAL");
@@ -90,7 +89,7 @@ namespace Innermost.Identity.API.Data
             };
             var test = new InnermostUser()
             {
-                Id= "d6afbed6-3df6-47d4-a105-a2f1885b8ffa",
+                Id = "d6afbed6-3df6-47d4-a105-a2f1885b8ffa",
                 UserName = "Tester",
                 NormalizedUserName = "TESTER",
                 Email = "Test@Innermost.com",

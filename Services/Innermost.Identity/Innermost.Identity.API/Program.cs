@@ -1,8 +1,3 @@
-
-
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using System.Net;
-
 string Namespace = typeof(Startup).Namespace;
 string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
@@ -13,7 +8,7 @@ Log.Logger = CreateSerilogLogger(configuration);
 try
 {
     Log.Information("Configuring web host ({ApplicationContext})...", AppName);
-    var host = CreateHostBuilder(configuration,args);
+    var host = CreateHostBuilder(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", AppName);
     host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
@@ -21,9 +16,9 @@ try
         {
             var userManager = services.GetRequiredService<UserManager<InnermostUser>>();
             var integrationEventService = services.GetRequiredService<IIntegrationEventService>();
-            var userStatueService=services.GetRequiredService<IUserStatueService>();
+            var userStatueService = services.GetRequiredService<IUserStatueService>();
             new InnermostIdentityDbContextSeed()
-                .SeedAsync(dbContext, userManager, integrationEventService,userStatueService, configuration)
+                .SeedAsync(dbContext, userManager, integrationEventService, userStatueService, configuration)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((dbContext, services) =>

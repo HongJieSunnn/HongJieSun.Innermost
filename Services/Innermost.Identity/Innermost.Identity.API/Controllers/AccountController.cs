@@ -1,5 +1,4 @@
-﻿using EventBusCommon.Abstractions;
-using Innermost.Identity.API.IntegrationEvents;
+﻿using Innermost.Identity.API.IntegrationEvents;
 
 namespace Innermost.Identity.API.Controllers
 {
@@ -96,19 +95,19 @@ namespace Innermost.Identity.API.Controllers
 
         private async Task SendConfirmEmailAsync(InnermostUser user)
         {
-            var confirmToken =await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             var expiredTime = DateTime.Now.AddMinutes(10).ToString("yyyy-MM-ddTHH:mm:ss");
 
             var confirmTokenEscaped = Uri.EscapeDataString(confirmToken);
-            var confirmUri=new Uri($"https://localhost:5106/account/email-confirm?userId={user.Id}&confirmToken={confirmTokenEscaped}&expiredTime={expiredTime}");
+            var confirmUri = new Uri($"https://localhost:5106/account/email-confirm?userId={user.Id}&confirmToken={confirmTokenEscaped}&expiredTime={expiredTime}");
 
-            var body = 
+            var body =
                 $@"
                     Hi,<b><font size={"5"}>{user.NickName}</font></b> @{user.UserName}<br/><br/>
                     感谢您注册 <b>Innermost</b> <br/> 
                     请点击该链接进行账号邮箱验证:<a href={confirmUri}>验证地址</a><br/>
-                    请在 {expiredTime.Replace('T',' ')} 前完成验证
+                    请在 {expiredTime.Replace('T', ' ')} 前完成验证
                 ";
             var sendEmailIntegrationEvent = new SendMailIntegrationEvent(user.Email, "Innermost账号注册邮箱验证", body, true);
             await _integrationEventService.SaveEventAsync(sendEmailIntegrationEvent);
@@ -117,25 +116,25 @@ namespace Innermost.Identity.API.Controllers
 
         private async Task PublishUserRegisteredIntegrationEventToMeet(string userId)
         {
-            var integrationEvent=new UserRegisteredIntegrationEvent(userId);
+            var integrationEvent = new UserRegisteredIntegrationEvent(userId);
             await _integrationEventService.SaveEventAsync(integrationEvent);
-            await _integrationEventService.PublishEventsAsync(new[] {integrationEvent.Id});
+            await _integrationEventService.PublishEventsAsync(new[] { integrationEvent.Id });
         }
 
         [HttpGet]
         [Route("email-confirm")]
-        public async Task<IActionResult> ConfirmEmail(string userId,string confirmToken,string expiredTime)
+        public async Task<IActionResult> ConfirmEmail(string userId, string confirmToken, string expiredTime)
         {
-            if(DateTime.Parse(expiredTime)<DateTime.Now)
+            if (DateTime.Parse(expiredTime) < DateTime.Now)
                 return Redirect("http://localhost:3000/auth/confirm-failed?errorType=\"验证码已过期\"");
 
-            var user=await _userManager.FindByIdAsync(userId);
-            if(user.EmailConfirmed)
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user.EmailConfirmed)
                 return Redirect("http://localhost:3000/auth/confirm-failed?errorType=\"已验证，请勿再点击该链接\"");
 
-            var result =await _userManager.ConfirmEmailAsync(user, confirmToken);
+            var result = await _userManager.ConfirmEmailAsync(user, confirmToken);
 
-            if(result.Errors.Count()>0)
+            if (result.Errors.Count() > 0)
             {
                 return Redirect("http://localhost:3000/auth/confirm-failed");
             }

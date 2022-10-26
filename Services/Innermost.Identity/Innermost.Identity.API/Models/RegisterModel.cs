@@ -53,19 +53,19 @@
             string? city
         )
         {
-            UserName=userName;
-            Email=email;
-            Password=password;
-            ConfirmPassword=confirmPassword;
-            NickName=nickName;
-            Birthday=birthday;
-            UserAvatarUrl=userAvatarUrl;
-            UserBackgroundImageUrl=userBackgroundImageUrl;
-            Gender=gender;
-            SelfDescription=selfDescription;
-            School=school;
-            Province=province;
-            City=city;
+            UserName = userName;
+            Email = email;
+            Password = password;
+            ConfirmPassword = confirmPassword;
+            NickName = nickName;
+            Birthday = birthday;
+            UserAvatarUrl = userAvatarUrl;
+            UserBackgroundImageUrl = userBackgroundImageUrl;
+            Gender = gender;
+            SelfDescription = selfDescription;
+            School = school;
+            Province = province;
+            City = city;
         }
     }
 }

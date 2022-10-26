@@ -62,29 +62,29 @@
             string userAvatarUrl,
             string userBackgroundImageUrl,
             DateTime createTime,
-            string userStatue="NORMAL",
-            string? realName=null,
-            DateTime? updateTime=null,
-            DateTime? deleteTime=null
+            string userStatue = "NORMAL",
+            string? realName = null,
+            DateTime? updateTime = null,
+            DateTime? deleteTime = null
         )
         {
-            UserName=userName;
-            Email=email;
-            Age=(uint)age;
-            Gender=gender;
-            NickName=nickName;
-            School=school;
-            Province=province;
-            City=city;
-            SelfDescription=selfDescription;
-            Birthday=birthday;
-            UserAvatarUrl=userAvatarUrl;
-            UserBackgroundImageUrl=userBackgroundImageUrl;
-            CreateTime=createTime==default(DateTime)?DateTime.Now:createTime;
-            UserStatue=userStatue;
-            RealName=realName;
-            UpdateTime=updateTime;
-            DeleteTime=deleteTime;
+            UserName = userName;
+            Email = email;
+            Age = (uint)age;
+            Gender = gender;
+            NickName = nickName;
+            School = school;
+            Province = province;
+            City = city;
+            SelfDescription = selfDescription;
+            Birthday = birthday;
+            UserAvatarUrl = userAvatarUrl;
+            UserBackgroundImageUrl = userBackgroundImageUrl;
+            CreateTime = createTime == default(DateTime) ? DateTime.Now : createTime;
+            UserStatue = userStatue;
+            RealName = realName;
+            UpdateTime = updateTime;
+            DeleteTime = deleteTime;
         }
     }
 }
