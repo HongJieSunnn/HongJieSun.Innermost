@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace ConfigurationExtensions
+﻿namespace Microsoft.Extensions.Configuration
 {
     public static class ConfigurationBuilderExtensions
     {
