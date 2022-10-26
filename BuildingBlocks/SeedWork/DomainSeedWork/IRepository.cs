@@ -13,7 +13,7 @@ namespace DomainSeedWork
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IRepository<T>
-        where T: IAggregateRoot
+        where T : IAggregateRoot
     {
         IUnitOfWork UnitOfWork { get; }
     }

@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <Authors>HongJie Sun</Authors>
+	  <PackageId>Innermost.$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
