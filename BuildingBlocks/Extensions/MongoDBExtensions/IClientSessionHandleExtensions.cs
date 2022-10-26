@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver;
-
-namespace MongoDBExtensions
+﻿namespace MongoDB.Driver
 {
     public static class IClientSessionHandleExtensions
     {
