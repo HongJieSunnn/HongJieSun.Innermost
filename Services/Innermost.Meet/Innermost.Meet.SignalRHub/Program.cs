@@ -4,6 +4,7 @@ using Innermost.Meet.Infrastructure.Repositories;
 using Innermost.Meet.SignalRHub.Application.IntegrationEventHandlers;
 using Innermost.Meet.SignalRHub.Hubs;
 using Innermost.Meet.SignalRHub.Infrastructure.AutofacModules;
+using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
