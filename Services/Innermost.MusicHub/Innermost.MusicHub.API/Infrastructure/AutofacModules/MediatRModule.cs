@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using Innermost.Architecture.Consistency.MongoDB;
 using MediatR;
 using MediatR.Extensions.Autofac.DependencyInjection;
+using TagS.Microservices.Client.AutofacExtensions;
 
 namespace Innermost.MusicHub.API.Infrastructure.AutofacModules
 {

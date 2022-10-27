@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using Innermost.MusicHub.API.Grpc.Services;
 using Innermost.MusicHub.API.Infrastructure.AutofacModules;
 using Innermost.MusicHub.API.Queries.AlbumQueries;
