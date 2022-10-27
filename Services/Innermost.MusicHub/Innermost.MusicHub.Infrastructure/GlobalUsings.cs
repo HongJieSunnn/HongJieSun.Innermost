@@ -5,3 +5,5 @@ global using MongoDB.Driver;
 global using System;
 global using System.Linq;
 global using System.Threading.Tasks;
+global using Innermost.MongoDBContext;
+global using Innermost.MongoDBContext.Configurations;
