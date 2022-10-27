@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\TagS.Microservices.Client.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
     <ProjectReference Include="..\..\Innermost.TagServer\Innermost.TagReferrers\Innermost.TagReferrers.csproj" />
   </ItemGroup>
 

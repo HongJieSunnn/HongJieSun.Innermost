@@ -1,4 +1,5 @@
 ﻿global using DomainSeedWork;
+global using DomainSeedWork.Abstractions;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate;
 global using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.Entities;
 global using Innermost.LogLife.Infrastructure.EntityConfigurations;
@@ -12,3 +13,4 @@ global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
+global using TagS.Microservices.Client.Models;

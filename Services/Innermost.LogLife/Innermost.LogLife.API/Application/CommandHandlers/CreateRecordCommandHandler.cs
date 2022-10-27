@@ -1,4 +1,6 @@
-﻿namespace Innermost.LogLife.API.Application.CommandHandlers
+﻿using Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate.ValueObjects;
+
+namespace Innermost.LogLife.API.Application.CommandHandlers
 {
     public class CreateRecordCommandHandler : IRequestHandler<CreateRecordCommand, bool>
     {

@@ -1,6 +1,4 @@
-﻿using Innemost.LogLife.API.Queries.Models;
-
-namespace Innemost.LogLife.API.Queries
+﻿namespace Innemost.LogLife.API.Queries
 {
     public class LifeRecordQueries
         : ILifeRecordQueries

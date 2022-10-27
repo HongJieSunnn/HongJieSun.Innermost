@@ -1,4 +1,4 @@
-﻿using DomainSeedWork.Abstractions;
+﻿using Innermost.IdempotentCommand.Infrastructure.EntityConfigurations;
 
 namespace Innermost.LogLife.Infrastructure
 {

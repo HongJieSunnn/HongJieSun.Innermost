@@ -1,4 +1,7 @@
 ﻿using Innermost.TagReferrers;
+using TagS.Core.Models;
+using TagS.Microservices.Client.DomainSeedWork;
+using TagS.Microservices.Client.Models;
 
 namespace Innermost.LogLife.Domain.AggregatesModels.LifeRecordAggregate
 {

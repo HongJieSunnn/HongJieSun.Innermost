@@ -18,21 +18,21 @@
     <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.0.3" />
     <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-    <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Innermost.EventBus.EventBusServiceBus" Version="0.8.0" />
+    <PackageReference Include="Innermost.Extensions.EntityFrameworkExtensions" Version="0.8.2" />
+    <PackageReference Include="Innermost.Extensions.IHostExtensions" Version="0.8.0" />
+    <PackageReference Include="Innermost.Extensions.TypeExtensions" Version="1.0.1" />
+    <PackageReference Include="Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Innermost.Utilities.Common" Version="0.0.1" />
+    <PackageReference Include="Innermost.Utilities.IdentityService" Version="0.8.0" />
+    <PackageReference Include="Innermost.Utilities.IdentityService.Microsoft.Extensions.DependencyInjection" Version="0.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
   </ItemGroup>
@@ -47,11 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventRecord\IntegrationEventRecord.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\TypeExtensions\TypeExtensions.csproj" />
     <ProjectReference Include="..\Innermost.LogLife.Infrastructure\Innermost.LogLife.Infrastructure.csproj" />
   </ItemGroup>
 
