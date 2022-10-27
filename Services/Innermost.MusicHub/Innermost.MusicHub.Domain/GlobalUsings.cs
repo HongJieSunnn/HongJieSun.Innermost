@@ -4,3 +4,6 @@ global using MongoDB.Bson;
 global using MongoDB.Bson.Serialization.Attributes;
 global using System;
 global using System.Collections.Generic;
+global using TagS.Core.Models;
+global using TagS.Microservices.Client.DomainSeedWork;
+global using TagS.Microservices.Client.Models;

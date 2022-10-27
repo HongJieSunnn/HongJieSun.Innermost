@@ -11,8 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\..\CSharpSource\TagS\TagS.Microservices.Client\TagS.Microservices.Client.csproj" />
-		<ProjectReference Include="..\..\..\BuildingBlocks\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
+	  <PackageReference Include="TagS.Microservices.Client" Version="0.8.1" />
 	</ItemGroup>
 
 </Project>
