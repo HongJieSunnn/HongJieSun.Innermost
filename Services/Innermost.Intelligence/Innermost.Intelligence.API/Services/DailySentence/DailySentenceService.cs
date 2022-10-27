@@ -1,4 +1,6 @@
-﻿namespace Innermost.Intelligence.API.Services.DailySentence
+﻿using Newtonsoft.Json.Linq;
+
+namespace Innermost.Intelligence.API.Services.DailySentence
 {
     public class DailySentenceService : IDailySentenceService
     {
