@@ -6,7 +6,7 @@
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory());
 
-            var options = EntityFrameworkFactoryService.GetDbContextOptionsMySQL<LifeRecordDbContext>(basePath, typeof(Program));
+            var options = new DbContextOptionsBuilder<LifeRecordDbContext>().BuildLocalDbContextOptionsMySQL(basePath, typeof(Program));
 
             return new LifeRecordDbContext(options);
         }

@@ -6,7 +6,7 @@
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory());
 
-            var options = EntityFrameworkFactoryService.GetDbContextOptionsMySQL<IntegrationEventRecordDbContext>(basePath, typeof(Program));
+            var options = new DbContextOptionsBuilder<IntegrationEventRecordDbContext>().BuildLocalDbContextOptionsMySQL(basePath, typeof(Program));
 
             return new IntegrationEventRecordDbContext(options);
         }
