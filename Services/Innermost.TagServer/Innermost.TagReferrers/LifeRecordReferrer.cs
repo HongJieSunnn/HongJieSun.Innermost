@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using TagS.Core.Models;
 
 namespace Innermost.TagReferrers
 {
