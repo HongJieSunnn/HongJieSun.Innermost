@@ -1,4 +1,6 @@
-﻿using MediatR.Extensions.Autofac.DependencyInjection;
+﻿using Innermost.Architecture.Consistency.MongoDB;
+using MediatR.Extensions.Autofac.DependencyInjection;
+using TagS.Microservices.Client.AutofacExtensions;
 
 namespace Innermost.Meet.API.Infrastructure.AutofacModules
 {

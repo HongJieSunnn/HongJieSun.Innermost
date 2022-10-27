@@ -1,8 +1,10 @@
 ﻿using EventBusServiceBus.Extensions;
+using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using Innermost.Identity.API.UserStatue;
 using Innermost.Meet.API.Application.IntegrationEventHandles;
 using Innermost.Meet.API.Infrastructure.AutofacModules;
 using Innermost.Meet.Infrastructure.Repositories;
+using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using IntegrationEventServiceMongoDB.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
@@ -163,7 +165,7 @@ namespace Innermost.Meet.API
 
         public static IServiceCollection AddUserIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCommonUserIdentityService(configuration.GetValue<string>("IdentityGrpcAddress"));
+            services.AddIdentityProfileService(configuration.GetValue<string>("IdentityGrpcAddress"));
 
             return services;
         }

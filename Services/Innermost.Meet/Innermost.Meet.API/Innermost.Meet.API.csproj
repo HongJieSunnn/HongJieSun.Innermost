@@ -15,20 +15,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.20.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.44.0" />
     <PackageReference Include="Grpc.Net.ClientFactory" Version="2.44.0" />
     <PackageReference Include="Grpc.Tools" Version="2.45.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Innermost.Architecture.Consistency.MongoDB" Version="0.8.0" />
+    <PackageReference Include="Innermost.Architecture.Exceptions" Version="0.0.1" />
+    <PackageReference Include="Innermost.EventBus.EventBusServiceBus" Version="0.8.0" />
+    <PackageReference Include="Innermost.EventBus.IntegrationEventServiceMongoDB" Version="0.8.0" />
+    <PackageReference Include="Innermost.Extensions.ILoggerExtensions" Version="0.2.0" />
+    <PackageReference Include="Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Innermost.Utilities.Common" Version="0.0.1" />
+    <PackageReference Include="Innermost.Utilities.IdentityService.Microsoft.Extensions.DependencyInjection" Version="0.8.0" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
@@ -36,13 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.IdempotentCommand\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection\Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\..\..\CSharpSource\Innermost.MongoDBContext\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection\Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusCommon\EventBusCommon.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventServiceMongoDB\IntegrationEventServiceMongoDB.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\Extensions\ILoggerExtensions\ILoggerExtensions.csproj" />
-    <ProjectReference Include="..\Innermost.Meet.Domain\Innermost.Meet.Domain.csproj" />
     <ProjectReference Include="..\Innermost.Meet.Infrastructure\Innermost.Meet.Infrastructure.csproj" />
   </ItemGroup>
 
