@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using Innermost.MongoDBContext.Extensions.Microsoft.DependencyInjection;
 using MediatR;
 using Serilog;
 using Serilog.Core;
