@@ -33,14 +33,14 @@ namespace IntegrationEventRecord.Services
             if (entryAssembly is null)
                 throw new InvalidOperationException($"EntryAssembly is null.");
 
-            var tagClientAssembly = entryAssembly.GetReferencedAssemblies().FirstOrDefault(a=>a.Name== "TagS.Microservices.Client");
+            var tagClientAssembly = entryAssembly.GetReferencedAssemblies().FirstOrDefault(a => a.Name == "TagS.Microservices.Client");
 
             _eventTypes = Assembly.Load(entryAssembly.FullName ?? throw new InvalidOperationException($"{entryAssembly}'s fullname is null."))
                 .GetTypes()
                 .Where(t => t.BaseType == typeof(IntegrationEvent))
                 .ToList();
 
-            if(tagClientAssembly is not null)
+            if (tagClientAssembly is not null)
             {
                 _eventTypes.AddRange(
                     Assembly.Load(tagClientAssembly.FullName)
