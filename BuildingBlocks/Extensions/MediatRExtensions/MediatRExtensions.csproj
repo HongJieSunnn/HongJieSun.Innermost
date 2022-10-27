@@ -1,18 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <Authors>HongJie Sun</Authors>
+	  <Version>0.8.0</Version>
+	  <PackageId>Innermost.Extensions.$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Innermost.DomainSeedWork" Version="1.0.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\SeedWork\DomainSeedWork\DomainSeedWork.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
