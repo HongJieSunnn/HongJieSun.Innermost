@@ -1,6 +1,8 @@
 ﻿using Innermost.Meet.Domain.AggregatesModels.UserChattingAggregate;
 using Innermost.Meet.Domain.AggregatesModels.UserConfidantAggregate;
 using Innermost.Meet.Domain.AggregatesModels.UserInteractionAggregate;
+using Innermost.MongoDBContext;
+using Innermost.MongoDBContext.Configurations;
 using MediatR;
 
 namespace Innermost.Meet.Infrastructure
