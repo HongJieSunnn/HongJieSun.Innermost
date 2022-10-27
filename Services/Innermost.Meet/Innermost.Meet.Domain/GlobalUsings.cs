@@ -9,3 +9,6 @@ global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
+global using TagS.Microservices.Client.DomainSeedWork;
+global using TagS.Core.Models;
+global using TagS.Microservices.Client.Models;
