@@ -10,11 +10,11 @@ namespace Innermost.Meet.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ISocialContactQueries _socialContactQueries;
-        private readonly IUserIdentityService _identityService;
+        private readonly IIdentityProfileService _identityService;
         private readonly ILogger<SocialContactController> _logger;
 
         private readonly static string SuccessedString = string.Empty;
-        public SocialContactController(IMediator mediator, ISocialContactQueries socialContactQueries, IUserIdentityService identityService, ILogger<SocialContactController> logger)
+        public SocialContactController(IMediator mediator, ISocialContactQueries socialContactQueries, IIdentityProfileService identityService, ILogger<SocialContactController> logger)
         {
             _mediator = mediator;
             _socialContactQueries = socialContactQueries;

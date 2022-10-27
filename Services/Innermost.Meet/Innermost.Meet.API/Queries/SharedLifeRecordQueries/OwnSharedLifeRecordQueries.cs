@@ -3,8 +3,8 @@
     public class OwnSharedLifeRecordQueries : IOwnSharedLifeRecordQueries
     {
         private readonly MeetMongoDBContext _context;
-        private readonly IUserIdentityService _identityService;
-        public OwnSharedLifeRecordQueries(MeetMongoDBContext context, IUserIdentityService identityService)
+        private readonly IIdentityProfileService _identityService;
+        public OwnSharedLifeRecordQueries(MeetMongoDBContext context, IIdentityProfileService identityService)
         {
             _context = context;
             _identityService = identityService;

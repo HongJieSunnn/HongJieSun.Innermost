@@ -9,9 +9,9 @@ namespace Innermost.Meet.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMeetSharedLifeRecordQueries _meetSharedLifeRecordQueries;
-        private readonly IUserIdentityService _identityService;
+        private readonly IIdentityProfileService _identityService;
         private readonly ILogger<SharedLifeRecordController> _logger;
-        public SharedLifeRecordController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IUserIdentityService identityService, ILogger<SharedLifeRecordController> logger)
+        public SharedLifeRecordController(IMediator mediator, IMeetSharedLifeRecordQueries meetSharedLifeRecordQueries, IIdentityProfileService identityService, ILogger<SharedLifeRecordController> logger)
         {
             _mediator = mediator;
             _meetSharedLifeRecordQueries = meetSharedLifeRecordQueries;

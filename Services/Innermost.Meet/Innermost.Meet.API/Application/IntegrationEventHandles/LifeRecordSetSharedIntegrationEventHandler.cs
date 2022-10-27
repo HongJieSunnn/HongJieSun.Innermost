@@ -6,9 +6,9 @@ namespace Innermost.Meet.API.Application.IntegrationEventHandles
     public class LifeRecordSetSharedIntegrationEventHandler : IIntegrationEventHandler<LifeRecordSetSharedIntegrationEvent>
     {
         private readonly ISharedLifeRecordRepository _sharedLifeRecordRepository;
-        private readonly IUserIdentityService _userIdentityService;
+        private readonly IIdentityProfileService _userIdentityService;
         private readonly ILogger<LifeRecordSetSharedIntegrationEventHandler> _logger;
-        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IUserIdentityService userIdentityService, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
+        public LifeRecordSetSharedIntegrationEventHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IIdentityProfileService userIdentityService, ILogger<LifeRecordSetSharedIntegrationEventHandler> logger)
         {
             _sharedLifeRecordRepository = sharedLifeRecordRepository;
             _userIdentityService = userIdentityService;

@@ -5,8 +5,8 @@ namespace Innermost.Meet.API.Queries.SharedLifeRecordQueries
     public class MeetSharedLifeRecordQueries : IMeetSharedLifeRecordQueries
     {
         private readonly MeetMongoDBContext _context;
-        private readonly IUserIdentityService _identityService;
-        public MeetSharedLifeRecordQueries(MeetMongoDBContext context, IUserIdentityService identityService)
+        private readonly IIdentityProfileService _identityService;
+        public MeetSharedLifeRecordQueries(MeetMongoDBContext context, IIdentityProfileService identityService)
         {
             _context = context;
             _identityService = identityService;

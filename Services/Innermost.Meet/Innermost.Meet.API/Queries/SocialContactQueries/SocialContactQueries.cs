@@ -3,9 +3,9 @@
     public class SocialContactQueries : ISocialContactQueries
     {
         private readonly MeetMongoDBContext _context;
-        private readonly IUserIdentityService _userIdentityService;
+        private readonly IIdentityProfileService _userIdentityService;
         private readonly IStatueQueries _statueQueries;
-        public SocialContactQueries(MeetMongoDBContext context, IUserIdentityService userIdentityService, IStatueQueries statueQueries)
+        public SocialContactQueries(MeetMongoDBContext context, IIdentityProfileService userIdentityService, IStatueQueries statueQueries)
         {
             _context = context;
             _userIdentityService = userIdentityService;

@@ -5,8 +5,8 @@ namespace Innermost.Meet.API.Application.CommandHandlersAggregate
     public class LikeSharedLifeRecordCommandHandler : IRequestHandler<LikeSharedLifeRecordCommand, bool>
     {
         private readonly ISharedLifeRecordRepository _sharedLifeRecordRepository;
-        private readonly IUserIdentityService _userIdentityService;
-        public LikeSharedLifeRecordCommandHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IUserIdentityService userIdentityService)
+        private readonly IIdentityProfileService _userIdentityService;
+        public LikeSharedLifeRecordCommandHandler(ISharedLifeRecordRepository sharedLifeRecordRepository, IIdentityProfileService userIdentityService)
         {
             _sharedLifeRecordRepository = sharedLifeRecordRepository;
             _userIdentityService = userIdentityService;
