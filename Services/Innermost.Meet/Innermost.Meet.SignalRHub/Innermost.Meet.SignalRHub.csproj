@@ -21,7 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Innermost.Architecture.Consistency.MongoDB" Version="0.8.0" />
+    <PackageReference Include="Innermost.Architecture.Consistency.MongoDB" Version="0.8.1" />
     <PackageReference Include="Innermost.EventBus.EventBusServiceBus" Version="0.8.0" />
     <PackageReference Include="Innermost.EventBus.IntegrationEventServiceMongoDB" Version="0.8.0" />
     <PackageReference Include="Innermost.Extensions.ILoggerExtensions" Version="0.2.0" />

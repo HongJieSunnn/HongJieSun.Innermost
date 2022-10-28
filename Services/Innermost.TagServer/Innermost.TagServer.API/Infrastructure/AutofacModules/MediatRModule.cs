@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using TagS.Microservices.Server.AutofacExtensions;
 
 namespace Innermost.TagServer.API.Infrastructure.AutofacModules
 {

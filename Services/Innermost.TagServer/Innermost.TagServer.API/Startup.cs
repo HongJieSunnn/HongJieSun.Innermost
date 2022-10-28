@@ -1,4 +1,5 @@
 ﻿using EventBusServiceBus.Extensions;
+using Innermost.IdempotentCommand.Extensions.Microsoft.DependencyInjection;
 using Innermost.TagReferrers;
 using Innermost.TagServer.API.Infrastructure.AutofacModules;
 using IntegrationEventServiceMongoDB.Extensions;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using System.Security.Claims;
+using TagS.Microservices.Server.Microsoft.AspNetCore.Http;
+using TagS.Microservices.Server.Microsoft.DependencyInjection;
+using TagS.Microservices.Server.Models;
 
 namespace Innermost.TagServer.API
 {

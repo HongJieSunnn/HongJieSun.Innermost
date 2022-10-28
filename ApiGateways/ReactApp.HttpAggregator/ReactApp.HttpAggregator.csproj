@@ -25,9 +25,12 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Innermost.Utilities.IdentityService" Version="0.8.0" />
+		<PackageReference Include="Innermost.Utilities.IdentityService.Microsoft.Extensions.DependencyInjection" Version="0.8.0" />
 		<PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />

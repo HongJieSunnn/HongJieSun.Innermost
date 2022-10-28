@@ -5,3 +5,5 @@ global using ReactApp.HttpAggregator.Config;
 global using ReactApp.HttpAggregator.Models.LogLife;
 global using System.ComponentModel.DataAnnotations;
 global using System.Text.Json;
+global using Innermost.IdentityService.Abstractions;
+global using Newtonsoft.Json.Linq;

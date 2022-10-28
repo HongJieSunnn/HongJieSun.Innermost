@@ -1,6 +1,4 @@
-﻿using TagS.Microservices.Client.AutofacExtensions;
-
-namespace Innermost.LogLife.API.Infrastructure.AutofacModules
+﻿namespace Innermost.LogLife.API.Infrastructure.AutofacModules
 {
     /// <summary>
     /// This Autofac module is for MediatR to use IOC by Autofac.
