@@ -1,6 +1,5 @@
 ﻿using EventBusCommon;
 using EventBusCommon.Abstractions;
-using Newtonsoft.Json;
 
 namespace EventBusServiceBus
 {
